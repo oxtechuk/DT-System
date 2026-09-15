@@ -440,6 +440,24 @@
                 <p class="brand-subtitle">تسجيل الدخول لبوابة الإدارة والاستقبال</p>
             </div>
 
+            {{-- Quick Access & Credentials --}}
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 14px; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="font-weight: 700; color: #a5b4fc;">🔑 بيانات الدخول:</span>
+                    <span style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.15rem 0.5rem; border-radius: 9999px;">Admin</span>
+                </div>
+                <div style="color: #cbd5e1; font-family: monospace; font-size: 0.8rem; line-height: 1.6;">
+                    <div>البريد: <strong>admin@workspace.local</strong></div>
+                    <div>كلمة المرور: <strong>password</strong></div>
+                </div>
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                    <a href="http://127.0.0.1:8080/" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 0.55rem; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);">
+                        <span>💻 فتح النظام المطور الجديد (Dashbourd & POS)</span>
+                        <span>←</span>
+                    </a>
+                </div>
+            </div>
+
             @if ($errors->any())
                 <div class="alert-error">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

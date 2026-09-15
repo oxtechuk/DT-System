@@ -224,7 +224,22 @@
     <div class="container">
         <div class="welcome-card">
             <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.5rem;">مرحباً بك مجدداً، {{ auth()->user()->name }} 👋</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">تم تسجيل الدخول بنجاح إلى واجهة التحكم. يمكنك الوصول لجميع خدمات النظام ومسارات الـ REST API من هنا.</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">تم تسجيل الدخول بنجاح إلى واجهة التحكم. يمكنك الوصول للشاشات المتطورة الجديدة من هنا:</p>
+            
+            <div style="display: flex; gap: 0.85rem; flex-wrap: wrap;">
+                <a href="http://127.0.0.1:8080/" target="_blank" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 0.65rem 1.25rem; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);">
+                    <span>📊 لوحة التحكم المتطورة (Dashboard)</span>
+                    <span>↗</span>
+                </a>
+                <a href="http://127.0.0.1:8080/cashier" target="_blank" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #6ee7b7; padding: 0.65rem 1.25rem; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>💻 شاشة الكاشير السريع (POS)</span>
+                    <span>↗</span>
+                </a>
+                <a href="http://127.0.0.1:8080/settings/general" target="_blank" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; padding: 0.65rem 1.25rem; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <span>⚙️ الإعدادات وتغيير اللوجو والألوان</span>
+                    <span>↗</span>
+                </a>
+            </div>
         </div>
 
         <div class="stats-grid">
