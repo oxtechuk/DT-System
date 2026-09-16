@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Deal;
+use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Room;
@@ -25,6 +26,12 @@ class CashierController extends Controller
 
         $todayCashTotal = Payment::whereDate('paid_at', today())->where('method', 'cash')->where('type', 'income')->sum('amount');
 
+        $pendingPortalOrders = Order::where('source', 'portal')
+            ->whereIn('fulfillment_status', ['pending', 'preparing'])
+            ->with(['customer', 'items.product', 'deal.room'])
+            ->latest()
+            ->get();
+
         return view('cashier.index', [
             'rooms' => $rooms,
             'products' => $products,
@@ -33,6 +40,33 @@ class CashierController extends Controller
             'currentShift' => $currentShift,
             'activeDeals' => $activeDeals,
             'todayCashTotal' => (float) $todayCashTotal,
+            'pendingPortalOrders' => $pendingPortalOrders,
+        ]);
+    }
+
+    public function getPortalOrders()
+    {
+        $orders = Order::where('source', 'portal')
+            ->whereIn('fulfillment_status', ['pending', 'preparing'])
+            ->with(['customer', 'items.product', 'deal.room'])
+            ->latest()
+            ->get();
+
+        return response()->json(['orders' => $orders]);
+    }
+
+    public function updateFulfillmentStatus(Request $request, Order $order)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,preparing,delivered,cancelled',
+        ]);
+
+        $order->update(['fulfillment_status' => $request->status]);
+
+        return response()->json([
+            'success' => true,
+            'status' => $order->fulfillment_status,
+            'message' => 'تم تحديث حالة الطلب بنجاح'
         ]);
     }
 }

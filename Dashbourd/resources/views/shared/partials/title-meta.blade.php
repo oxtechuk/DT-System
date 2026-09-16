@@ -8,9 +8,9 @@
 <!-- Apply saved primary color before paint (prevents FOUC) -->
 <script>
 (function() {
-    var c = localStorage.getItem('dt_primary_color') || '{{ $appPrimaryColor ?? "" }}';
-    if (c && /^#[0-9A-Fa-f]{6}$/.test(c)) {
-        document.documentElement.style.setProperty('--color-primary', c);
-    }
+ var c = localStorage.getItem('dt_primary_color') || '{{ $appPrimaryColor ?? "" }}';
+ if (c && /^#[0-9A-Fa-f]{6}$/.test(c)) {
+ document.documentElement.style.setProperty('--color-primary', c);
+ }
 })();
 </script>

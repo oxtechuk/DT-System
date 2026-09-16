@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Permission extends Model
 {
-    /** @use HasFactory<\Database\Factories\PermissionFactory> */
-    use HasFactory;
+ /** @use HasFactory<\Database\Factories\PermissionFactory> */
+ use HasFactory;
 }

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 90" fill="none">
+  <!-- Icon Group -->
+  <g transform="translate(10, 5)">
+    <!-- Graduation Cap -->
+    <path d="M40 6 L72 18 L40 30 L8 18 Z" fill="#FFFFFF"/>
+    <path d="M40 22 L62 30 V38 C62 45 40 50 40 50 C40 50 18 45 18 38 V30 Z" fill="#E2E8F0"/>
+    <!-- Tassel -->
+    <path d="M19 22 L13 31 V42" stroke="#79B84A" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="13" cy="43" r="2" fill="#4E8F35"/>
+    <!-- Flask -->
+    <path d="M33 34 V41 L21 61 C18 66 21 70 26 70 H54 C59 70 62 66 59 61 L47 41 V34" 
+          stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Flask Liquid -->
+    <path d="M24 59 L28 52 C33 54 47 50 52 52 L56 59 C57 62 56 67 52 67 H28 C24 67 23 62 24 59 Z" 
+          fill="url(#ddt_liquid_white)"/>
+    <!-- Bubbles -->
+    <circle cx="35" cy="58" r="2" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="45" cy="55" r="1.5" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="40" cy="62" r="1.2" fill="#FFFFFF" opacity="0.8"/>
+  </g>
+
+  <!-- Brand Typography -->
+  <!-- "DDT" Bold -->
+  <text x="95" y="44" font-family="'Cairo', 'Segoe UI', sans-serif" font-size="34" font-weight="900" fill="#FFFFFF" letter-spacing="1">DDT</text>
+  <!-- "WORKING SPACE" -->
+  <text x="96" y="62" font-family="'Cairo', 'Segoe UI', sans-serif" font-size="10.5" font-weight="800" fill="#79B84A" letter-spacing="4">WORKING SPACE</text>
+
+  <!-- Divider line -->
+  <line x1="225" y1="20" x2="225" y2="70" stroke="#4E8F35" stroke-width="1.5" stroke-opacity="0.6"/>
+
+  <!-- Right Pillars / Slogan -->
+  <g transform="translate(236, 27)" font-family="'Cairo', 'Segoe UI', sans-serif" font-size="8.5" font-weight="700" fill="#DCE8D4" letter-spacing="1.5">
+    <text x="0" y="0">PEOPLE</text>
+    <text x="0" y="13">IDEAS</text>
+    <text x="0" y="26">GROW</text>
+    <text x="0" y="39" fill="#79B84A">TOGETHER</text>
+  </g>
+
+  <defs>
+    <linearGradient id="ddt_liquid_white" x1="20" y1="52" x2="60" y2="67" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#79B84A"/>
+      <stop offset="100%" stop-color="#4E8F35"/>
+    </linearGradient>
+  </defs>
+</svg>

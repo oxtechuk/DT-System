@@ -7,45 +7,45 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-    use HasFactory;
+ use HasFactory;
 
-    protected $fillable = [
-        'name', 'code', 'capacity', 'status', 'color', 'description',
-    ];
+ protected $fillable = [
+ 'name', 'code', 'capacity', 'status', 'color', 'description',
+ ];
 
-    // ── Relationships ──
+ // ── Relationships ──
 
-    public function deals()
-    {
-        return $this->hasMany(Deal::class);
-    }
+ public function deals()
+ {
+ return $this->hasMany(Deal::class);
+ }
 
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+ public function bookings()
+ {
+ return $this->hasMany(Booking::class);
+ }
 
-    public function activeDeals()
-    {
-        return $this->hasMany(Deal::class)->where('status', 'open');
-    }
+ public function activeDeals()
+ {
+ return $this->hasMany(Deal::class)->where('status', 'open');
+ }
 
-    // ── Scopes ──
+ // ── Scopes ──
 
-    public function scopeActive($query)
-    {
-        return $query->where('status', 'active');
-    }
+ public function scopeActive($query)
+ {
+ return $query->where('status', 'active');
+ }
 
-    // ── Accessors ──
+ // ── Accessors ──
 
-    public function getIsAvailableAttribute(): bool
-    {
-        return $this->status === 'active' && $this->activeDeals()->count() === 0;
-    }
+ public function getIsAvailableAttribute(): bool
+ {
+ return $this->status === 'active' && $this->activeDeals()->count() === 0;
+ }
 
-    public function getDisplayColorAttribute(): string
-    {
-        return $this->color ?? '#6366f1';
-    }
+ public function getDisplayColorAttribute(): string
+ {
+ return $this->color ?? '#6366f1';
+ }
 }

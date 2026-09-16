@@ -7,52 +7,52 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkspaceType extends Model
 {
-    use HasFactory;
+ use HasFactory;
 
-    protected $fillable = [
-        'name', 'code', 'pricing_mode', 'active',
-    ];
+ protected $fillable = [
+ 'name', 'code', 'pricing_mode', 'active',
+ ];
 
-    protected $casts = [
-        'active' => 'boolean',
-    ];
+ protected $casts = [
+ 'active' => 'boolean',
+ ];
 
-    // ── Relationships ──
+ // ── Relationships ──
 
-    public function pricingRules()
-    {
-        return $this->hasMany(PricingRule::class);
-    }
+ public function pricingRules()
+ {
+ return $this->hasMany(PricingRule::class);
+ }
 
-    public function deals()
-    {
-        return $this->hasMany(Deal::class);
-    }
+ public function deals()
+ {
+ return $this->hasMany(Deal::class);
+ }
 
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+ public function bookings()
+ {
+ return $this->hasMany(Booking::class);
+ }
 
-    // ── Scopes ──
+ // ── Scopes ──
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
+ public function scopeActive($query)
+ {
+ return $query->where('active', true);
+ }
 
-    // ── Helpers ──
+ // ── Helpers ──
 
-    /**
-     * Get active pricing rules for this type effective on a given date.
-     */
-    public function getEffectivePricingRules(?\Carbon\Carbon $date = null)
-    {
-        $date ??= now();
-        return $this->pricingRules()
-                    ->active()
-                    ->effectiveOn($date)
-                    ->orderBy('duration_minutes')
-                    ->get();
-    }
+ /**
+ * Get active pricing rules for this type effective on a given date.
+ */
+ public function getEffectivePricingRules(?\Carbon\Carbon $date = null)
+ {
+ $date ??= now();
+ return $this->pricingRules()
+ ->active()
+ ->effectiveOn($date)
+ ->orderBy('duration_minutes')
+ ->get();
+ }
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 
 <html @yield('html_attribute') lang="en">
-    
+ 
 <head>
-    @include('shared.partials/title-meta')
+ @include('shared.partials/title-meta')
 
-    @yield('styles')
+ @yield('styles')
 
-    @include('shared.partials/head-css')
+ @include('shared.partials/head-css')
 
 </head>
 <body @yield('body_attribute')>

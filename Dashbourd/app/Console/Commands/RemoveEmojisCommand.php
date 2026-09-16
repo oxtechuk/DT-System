@@ -1,0 +1,3 @@
+<?php namespace App\Console\Commands; use Illuminate\Console\Command; class RemoveEmojisCommand extends Command
+{ /** * The name and signature of the console command. * * @var string */ protected $signature = 'site:remove-emojis'; /** * The console command description. * * @var string */ protected $description = 'إزالة وتنظيف كافة الإيموجي من ملفات الموقع واستبدالها بأيقونات SVG ونصوص نظيفة'; /** * Execute the console command. */ public function handle(): int { $this->info('جاري فحص وإزالة الإيموجي من الموقع...'); require_once base_path('remove_emojis.php'); $this->call('view:clear'); $this->info('تم إزالة كافة الإيموجي وتنظيف ملفات الموقع والكاش بنجاح!'); return Command::SUCCESS; }
+}

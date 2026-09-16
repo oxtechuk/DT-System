@@ -2,30 +2,30 @@
 
 <html lang="ar" dir="rtl" @yield('html_attribute')>
 <head>
-    @include('shared.partials/title-meta')
+ @include('shared.partials/title-meta')
 
-    @yield('styles')
+ @yield('styles')
 
-    @include('shared.partials/head-css')
+ @include('shared.partials/head-css')
 </head>
 <body>
 <div class="wrapper">
 
-    @include('shared.partials/sidenav')
+ @include('shared.partials/sidenav')
 
-    <div class="page-content">
-        
-        @include('shared.partials/topbar')
+ <div class="page-content">
+ 
+ @include('shared.partials/topbar')
 
-        <main>
+ <main>
 
-            @yield('content')
+ @yield('content')
 
-        </main>
+ </main>
 
-        @include('shared.partials/footer')
+ @include('shared.partials/footer')
 
-    </div>
+ </div>
 
 </div>
 

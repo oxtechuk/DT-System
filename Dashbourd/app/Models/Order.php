@@ -8,92 +8,97 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+ use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'order_number',
-        'customer_id',
-        'deal_id',
-        'booking_id',
-        'subtotal',
-        'discount',
-        'tax',
-        'total',
-        'paid_amount',
-        'remaining_amount',
-        'status',
-        'closed_at',
-        'created_by',
-        'closed_by',
-    ];
+ protected $fillable = [
+ 'order_number',
+ 'customer_id',
+ 'deal_id',
+ 'booking_id',
+ 'subtotal',
+ 'discount',
+ 'tax',
+ 'total',
+ 'paid_amount',
+ 'remaining_amount',
+ 'status',
+ 'closed_at',
+ 'created_by',
+ 'closed_by',
+ ];
 
-    protected $casts = [
-        'subtotal'         => 'decimal:2',
-        'discount'         => 'decimal:2',
-        'tax'              => 'decimal:2',
-        'total'            => 'decimal:2',
-        'paid_amount'      => 'decimal:2',
-        'remaining_amount' => 'decimal:2',
-        'closed_at'        => 'datetime',
-    ];
+ protected $casts = [
+ 'subtotal' => 'decimal:2',
+ 'discount' => 'decimal:2',
+ 'tax' => 'decimal:2',
+ 'total' => 'decimal:2',
+ 'paid_amount' => 'decimal:2',
+ 'remaining_amount' => 'decimal:2',
+ 'closed_at' => 'datetime',
+ ];
 
-    // ── Relationships ──
+ // ── Relationships ──
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
+ public function customer()
+ {
+ return $this->belongsTo(Customer::class);
+ }
 
-    public function deal()
-    {
-        return $this->belongsTo(Deal::class);
-    }
+ public function deal()
+ {
+ return $this->belongsTo(Deal::class);
+ }
 
-    public function items()
-    {
-        return $this->hasMany(OrderItem::class);
-    }
+ public function room()
+ {
+ return $this->hasOneThrough(Room::class, Deal::class, 'id', 'id', 'deal_id', 'room_id');
+ }
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+ public function items()
+ {
+ return $this->hasMany(OrderItem::class);
+ }
 
-    // ── Scopes ──
+ public function payments()
+ {
+ return $this->hasMany(Payment::class);
+ }
 
-    public function scopeOpen($query)
-    {
-        return $query->where('status', 'open');
-    }
+ // ── Scopes ──
 
-    public function scopeToday($query)
-    {
-        return $query->whereDate('created_at', today());
-    }
+ public function scopeOpen($query)
+ {
+ return $query->where('status', 'open');
+ }
 
-    // ── Helpers ──
+ public function scopeToday($query)
+ {
+ return $query->whereDate('created_at', today());
+ }
 
-    public static function generateNumber(): string
-    {
-        $last = static::withTrashed()->latest('id')->value('order_number');
-        $next = $last ? (intval(substr($last, 1)) + 1) : 1;
-        return 'O' . str_pad($next, 5, '0', STR_PAD_LEFT);
-    }
+ // ── Helpers ──
 
-    /**
-     * Recalculate totals from items.
-     */
-    public function recalculate(): void
-    {
-        $subtotal = $this->items()->sum('total');
-        $total    = $subtotal - $this->discount + $this->tax;
-        $remaining = max(0, $total - $this->paid_amount);
+ public static function generateNumber(): string
+ {
+ $last = static::withTrashed()->latest('id')->value('order_number');
+ $next = $last ? (intval(substr($last, 1)) + 1) : 1;
+ return 'O' . str_pad($next, 5, '0', STR_PAD_LEFT);
+ }
 
-        $this->update([
-            'subtotal'         => $subtotal,
-            'total'            => $total,
-            'remaining_amount' => $remaining,
-            'status'           => $remaining <= 0 ? 'paid' : ($this->paid_amount > 0 ? 'partially_paid' : 'open'),
-        ]);
-    }
+ /**
+ * Recalculate totals from items.
+ */
+ public function recalculate(): void
+ {
+ $subtotal = $this->items()->sum('total');
+ $total = $subtotal - $this->discount + $this->tax;
+ $remaining = max(0, $total - $this->paid_amount);
+
+ $this->update([
+ 'subtotal' => $subtotal,
+ 'total' => $total,
+ 'remaining_amount' => $remaining,
+ 'status' => $remaining <= 0 ? 'paid' : ($this->paid_amount > 0 ? 'partially_paid' : 'open'),
+ ]);
+ }
 }
