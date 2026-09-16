@@ -41,27 +41,27 @@
  <div class="page-header-container">
  <div>
  <div class="flex items-center gap-2 mb-1">
- <span class="text-xs font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">نظام إدارة المساحة</span>
- <span class="text-xs text-default-400 font-mono">DT-SYSTEM Hub</span>
+ <span class="text-xs font-bold text-[#4E8F35] bg-[#EBF4E8] px-2.5 py-0.5 rounded-full border border-[#DCE8D4]">نظام إدارة المساحة</span>
+ <span class="text-xs text-[#73777A] font-mono">DDT-SYSTEM Hub</span>
  </div>
- <h2 class="text-2xl font-extrabold text-default-900 tracking-tight">
+ <h1 class="text-2xl font-extrabold text-[#303334] tracking-tight">
  لوحة التحكم الرئيسية
- </h2>
- <p class="text-xs text-default-400 mt-1">مرحباً بك! إليك ملخص حي لنشاط مساحة العمل والعمليات المالية اليوم</p>
+ </h1>
+ <p class="text-xs text-[#73777A] mt-1">مرحباً بك! إليك ملخص حي لنشاط مساحة العمل والعمليات المالية اليوم</p>
  </div>
 
  {{-- Top Action Buttons --}}
  <div class="page-header-actions">
  <a href="{{ url('/cashier') }}" target="_blank"
- class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-emerald-600/25 gap-2">
+ class="px-4 py-2.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-bold transition-all shadow-xs gap-2 flex items-center">
  <svg width="18" height="18" class="text-white shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
  <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/><path d="m9 10 2 2 4-4"/>
  </svg>
  <span>فتح شاشة الكاشير (POS)</span>
  </a>
  <a href="{{ url('/settings/general') }}"
- class="px-3.5 py-2.5 bg-white hover:bg-default-50 border border-default-200 text-default-700 rounded-xl text-xs font-bold transition-all shadow-sm gap-2">
- <svg width="18" height="18" class="text-rose-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+ class="px-3.5 py-2.5 bg-white hover:bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] rounded-xl text-xs font-bold transition-all shadow-xs gap-2 flex items-center">
+ <svg width="18" height="18" class="text-[#73777A] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
  </svg>
  <span>تخصيص الألوان واللوجو</span>

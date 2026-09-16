@@ -4,25 +4,24 @@
 
  {{-- Page Header --}}
  <div class="page-header-container">
- <div>
- <div class="flex items-center gap-2 mb-1">
- <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">إدارة المواعيد</span>
- <span class="text-xs text-default-400 font-mono">Bookings Schedule</span>
- </div>
- <h2 class="text-2xl font-extrabold text-default-900 tracking-tight">
- جدول ومواعيد الحجوزات
- </h2>
- <p class="text-xs text-default-400 mt-1">حجوزات القاعات والمساحات المشتركة والمواعيد المؤكدة</p>
- </div>
+            <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-[#4E8F35] bg-[#EBF4E8] px-2.5 py-0.5 rounded-full border border-[#DCE8D4]">إدارة المواعيد</span>
+                <span class="text-xs text-[#73777A] font-mono">Bookings Schedule</span>
+            </div>
+            <h1 class="text-2xl font-extrabold text-[#303334] tracking-tight">
+                جدول ومواعيد الحجوزات
+            </h1>
+            <p class="text-xs text-[#73777A] mt-1">حجوزات القاعات والمساحات المشتركة والمواعيد المؤكدة</p>
+        </div>
 
- <div class="page-header-actions">
- <button type="button" onclick="document.getElementById('add-booking-modal').classList.remove('hidden')"
- class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/25 gap-2">
- <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
- <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
- </svg>
- <span>تسجيل حجز جديد</span>
- </button>
+        <div class="page-header-actions">
+            <button type="button" onclick="document.getElementById('add-booking-modal').classList.remove('hidden')"
+                    class="px-4 py-2.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-bold transition-all shadow-xs gap-2 flex items-center">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+                </svg>
+                <span>تسجيل حجز جديد</span>
+            </button>
  </div>
  </div>
 
