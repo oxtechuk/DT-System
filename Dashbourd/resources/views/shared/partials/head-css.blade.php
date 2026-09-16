@@ -6,8 +6,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- Tailwind Play CDN with Preflight disabled to generate all utility classes seamlessly -->
+<!-- Tailwind Play CDN Configuration & Warning Filter -->
 <script>
+    (function() {
+        const origWarn = console.warn;
+        console.warn = function(...args) {
+            if (args[0] && typeof args[0] === 'string' && (args[0].includes('cdn.tailwindcss.com') || args[0].includes('spacing.topbar'))) {
+                return;
+            }
+            origWarn.apply(console, args);
+        };
+    })();
     tailwind = {
         config: {
             corePlugins: {
@@ -15,6 +24,10 @@
             },
             theme: {
                 extend: {
+                    spacing: {
+                        topbar: '70px',
+                        sidenav: '265px',
+                    },
                     colors: {
                         primary: {
                             DEFAULT: '#4E8F35',
@@ -37,15 +50,15 @@
                 }
             }
         }
-    }
+    };
 </script>
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Iconify SVG Library -->
-<script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+<!-- Iconify SVG Library (Deferred to prevent render blocking) -->
+<script src="https://code.iconify.design/3/3.1.1/iconify.min.js" defer></script>
 
-<!-- ApexCharts -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<!-- ApexCharts (Deferred to prevent render blocking) -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
 
 <style>
  body, h1, h2, h3, h4, h5, h6, p, span, a, input, button, select, textarea {

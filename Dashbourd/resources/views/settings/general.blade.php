@@ -151,9 +151,9 @@
  </nav>
  <p class="text-[10px] uppercase font-bold tracking-widest text-default-400 px-2 py-2 mt-3">Workspace / المساحة</p>
  <nav class="space-y-0.5">
- <a class="settings-nav-item" href="{{ url('/settings/rooms') }}">
+ <a class="settings-nav-item" href="{{ url('/rooms') }}">
  <i class="iconify lucide--door-open size-4"></i>
- Rooms <span class="text-[10px] text-default-400">الغرف</span>
+ Rooms <span class="text-[10px] text-default-400">إدارة الغرف</span>
  </a>
  <a class="settings-nav-item" href="{{ url('/settings/workspace-types') }}">
  <i class="iconify lucide--layers size-4"></i>
@@ -166,9 +166,9 @@
  </nav>
  <p class="text-[10px] uppercase font-bold tracking-widest text-default-400 px-2 py-2 mt-3">Finance / المالية</p>
  <nav class="space-y-0.5">
- <a class="settings-nav-item" href="{{ url('/settings/payment-methods') }}">
+ <a class="settings-nav-item" href="{{ url('/payments') }}">
  <i class="iconify lucide--credit-card size-4"></i>
- Payment Methods <span class="text-[10px] text-default-400">الدفع</span>
+ Payments <span class="text-[10px] text-default-400">المدفوعات والدفع</span>
  </a>
  <a class="settings-nav-item" href="{{ url('/settings/expense-categories') }}">
  <i class="iconify lucide--folder size-4"></i>
@@ -413,10 +413,7 @@
  {{-- ── Loyalty & Affiliate Settings ── --}}
  <div class="card border-0 shadow-sm" id="loyalty-affiliate-section">
  <div class="card-body p-6">
- <div class="flex items-center gap-2 mb-1">
- <span class="text-xl"></span>
- <h5 class="text-sm font-bold text-default-800">Loyalty & Referral Program / نظام الولاء والتوصية (Affiliate)</h5>
- </div>
+
  <p class="text-xs text-default-400 mb-5">التحكم في شروط الزيارة السادسة المجانية ونسب خصم الإحالة للعملاء</p>
 
  <div class="grid md:grid-cols-2 gap-6">

@@ -9,11 +9,10 @@
             <a href="{{ url('/') }}" class="flex items-center gap-2.5">
                 <img alt="DDT Working Space" class="h-8 max-w-[150px] object-contain" src="{{ asset('images/ddt-logo.svg') }}"/>
             </a>
-            <span class="text-[10px] font-bold uppercase tracking-wider bg-[#F5F3EE] text-[#73777A] border border-[#E5E2DC] px-2 py-0.5 rounded-full">v2.0</span>
         </div>
 
         <!-- Sidenav Navigation Menu -->
-        <div class="p-3 h-[calc(100%-theme('spacing.topbar'))] flex-grow flex flex-col justify-between" data-simplebar="">
+        <div class="p-3 h-[calc(100%-70px)] flex-grow flex flex-col justify-between" data-simplebar="">
             <div>
                 <ul class="admin-menu flex w-full flex-col gap-1">
 
@@ -41,7 +40,6 @@
                                 <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/><path d="m9 10 2 2 4-4"/>
                             </svg>
                             <span>شاشة الكاشير السريع</span>
-                            <span class="ms-auto text-[10px] bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] px-2 py-0.2 rounded-full font-bold">POS</span>
                         </a>
                     </li>
 
@@ -171,7 +169,6 @@
                                 <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
                             </svg>
                             <span>تخصيص اللوجو والألوان</span>
-                            <span class="ms-auto text-[10px] bg-[#F5F3EE] text-[#73777A] border border-[#E5E2DC] px-1.5 py-0.2 rounded font-bold">الهوية</span>
                         </a>
                     </li>
 
@@ -184,37 +181,10 @@
                                 <path d="M18.8 7.3c-.6 0-1.1.4-1.3.9l-2.4-.7c.1-.4.1-.7.1-1.1 0-1.8-1.5-3.3-3.3-3.3s-3.3 1.5-3.3 3.3c0 .5.1.9.3 1.3L6.7 9.8c-.3-.2-.7-.3-1.1-.3-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5c.5 0 1-.1 1.4-.4l2.1 2.2c-.1.3-.2.6-.2 1 0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3c0-.4-.1-.8-.2-1.1l2.4-.7c.2.6.8 1 1.4 1 1 0 1.8-.8 1.8-1.8 0-1-.8-1.8-1.8-1.8-.6 0-1.1.4-1.3.9l-2.4-.7c0-.2.1-.5.1-.7 0-.4-.1-.7-.1-1.1l2.4-.7c.2.6.8 1 1.4 1 1 0 1.8-.8 1.8-1.8 0-1-.8-1.8-1.8-1.8zM11.9 4.8c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm.3 13.9c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z"/>
                             </svg>
                             <span>الربط مع HubSpot</span>
-                            <span class="ms-auto text-[10px] bg-[#F5F3EE] text-[#73777A] border border-[#E5E2DC] px-1.5 py-0.2 rounded font-bold">CRM</span>
                         </a>
                     </li>
 
                 </ul>
-            </div>
-
-            {{-- Bottom Admin Card (Quiet Unified Style) --}}
-            <div class="mt-4 pt-3 border-t border-[#E5E2DC]">
-                <div class="p-2.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <div class="size-7 rounded-lg bg-[#303334] text-white font-bold flex items-center justify-center text-[10px] shrink-0">
-                            AD
-                        </div>
-                        <div class="text-start">
-                            <p class="text-xs font-bold text-[#303334] leading-tight">{{ auth()->user()->name ?? 'مدير النظام' }}</p>
-                            <p class="text-[10px] text-[#4E8F35] font-semibold flex items-center gap-1">
-                                <span class="size-1.5 rounded-full bg-[#4E8F35] inline-block"></span>
-                                متصل الآن
-                            </p>
-                        </div>
-                    </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" title="تسجيل الخروج" class="size-7 rounded-lg text-[#73777A] hover:text-rose-600 hover:bg-white flex items-center justify-center transition-all">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
             </div>
 
         </div>

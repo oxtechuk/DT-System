@@ -27,7 +27,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Let network handle dynamic requests, fallback gracefully
+  // Only handle customer portal requests; never intercept admin, cashier, or build assets
+  const url = new URL(event.request.url);
+  if (!url.pathname.startsWith('/app') && !url.pathname.startsWith('/manifest.json')) {
+    return;
+  }
   if (event.request.method !== 'GET') return;
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))

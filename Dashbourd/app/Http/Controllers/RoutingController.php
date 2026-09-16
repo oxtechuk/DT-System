@@ -6,24 +6,45 @@ use Illuminate\Http\Request;
 
 class RoutingController extends Controller
 {
- public function root()
- {
- return view('index');
- }
+    public function root()
+    {
+        return view('index');
+    }
 
- /**
- * second level route
- */
- public function secondLevel(Request $request, $first, $second)
- {
- return view($first . '.' . $second);
- }
+    /**
+     * second level route
+     */
+    public function secondLevel(Request $request, $first, $second)
+    {
+        $view = $first . '.' . $second;
+        if (view()->exists($view)) {
+            return view($view);
+        }
 
- /**
- * third level route
- */
- public function thirdLevel(Request $request, $first, $second, $third)
- {
- return view($first . '.' . $second . '.' . $third);
- }
+        // Graceful fallbacks for settings subpages
+        if ($first === 'settings') {
+            if ($second === 'rooms') {
+                return redirect('/rooms');
+            }
+            if ($second === 'payment-methods' || $second === 'payments') {
+                return redirect('/payments');
+            }
+            return redirect('/settings/general');
+        }
+
+        abort(404);
+    }
+
+    /**
+     * third level route
+     */
+    public function thirdLevel(Request $request, $first, $second, $third)
+    {
+        $view = $first . '.' . $second . '.' . $third;
+        if (view()->exists($view)) {
+            return view($view);
+        }
+
+        abort(404);
+    }
 }

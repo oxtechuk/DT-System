@@ -40,10 +40,7 @@
  {{-- Page Header & Breadcrumb --}}
  <div class="page-header-container">
  <div>
- <div class="flex items-center gap-2 mb-1">
- <span class="text-xs font-bold text-[#4E8F35] bg-[#EBF4E8] px-2.5 py-0.5 rounded-full border border-[#DCE8D4]">نظام إدارة المساحة</span>
- <span class="text-xs text-[#73777A] font-mono">DDT-SYSTEM Hub</span>
- </div>
+
  <h1 class="text-2xl font-extrabold text-[#303334] tracking-tight">
  لوحة التحكم الرئيسية
  </h1>

@@ -5,10 +5,7 @@
  {{-- Page Header --}}
  <div class="page-header-container">
  <div>
- <div class="flex items-center gap-2 mb-1">
- <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-200">المالية والدرج</span>
- <span class="text-xs text-default-400 font-mono">Shift Management</span>
- </div>
+
  <h2 class="text-2xl font-extrabold text-default-900 tracking-tight">
  الوردية الحالية وتسليم الكاشير
  </h2>

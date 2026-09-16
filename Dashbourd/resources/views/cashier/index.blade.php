@@ -130,12 +130,7 @@
 
  {{-- Shift Status Badge --}}
  @if($currentShift)
- <a href="{{ url('/shifts/current') }}" target="_blank" title="عرض تفاصيل الوردية والدرج"
- class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-bold hover:bg-emerald-100 transition-all shadow-xs">
- <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
- <span>وردية مفتوحة #{{ $currentShift->id }}</span>
- <span class="text-emerald-700 font-bold text-[11px]">({{ $currentShift->user->name ?? 'Admin' }})</span>
- </a>
+
  @else
  <a href="{{ url('/shifts/current') }}" target="_blank"
  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-300 text-amber-800 text-xs font-bold hover:bg-amber-100 transition-all shadow-xs">
@@ -150,7 +145,7 @@
  {{-- Fast Search --}}
  <div class="relative w-56 md:w-80">
  <input type="text" id="pos-global-search" placeholder="بحث سريع عن غرفة، عميل، أو صنف..."
- class="w-full bg-slate-100/80 border border-slate-200 text-slate-900 text-xs font-semibold rounded-xl px-3.5 py-2 pe-9 focus:border-indigo-600 focus:bg-white focus:ring-2 focus:ring-indigo-100 outline-none transition-all placeholder:text-slate-400">
+ class="w-full bg-[#F5F3EE] border border-[#E5E2DC] text-[#303334] text-xs font-semibold rounded-xl px-3.5 py-2 pe-9 focus:border-[#4E8F35] focus:bg-white focus:ring-2 focus:ring-[#EBF4E8] outline-none transition-all placeholder:text-[#73777A]">
  <span class="absolute end-3 top-2.5 text-slate-400">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
  <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
@@ -159,8 +154,8 @@
  </div>
 
  {{-- Live Clock --}}
- <div class="hidden lg:flex items-center gap-2 font-mono text-xs font-black text-slate-700 bg-slate-100/80 px-3.5 py-2 rounded-xl border border-slate-200">
- <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+ <div class="hidden lg:flex items-center gap-2 font-mono text-xs font-black text-[#303334] bg-[#F5F3EE] px-3.5 py-2 rounded-xl border border-[#E5E2DC]">
+ <span class="w-2 h-2 rounded-full bg-[#4E8F35]"></span>
  <span id="pos-live-clock">--:--:--</span>
  </div>
  </div>
@@ -169,7 +164,7 @@
  <div class="flex items-center gap-2.5">
  {{-- + جلسة جديدة --}}
  <button type="button" onclick="openNewSessionModal()"
- class="btn-primary inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-extrabold transition-all shadow-md shadow-indigo-500/25 cursor-pointer">
+ class="btn-primary inline-flex items-center gap-2 px-4 py-2 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-extrabold transition-all shadow-xs cursor-pointer">
  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
  <line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/>
  </svg>
@@ -178,18 +173,18 @@
 
  {{-- طلبات المشروبات أونلاين --}}
  <button type="button" onclick="openModal('modal-portal-orders')"
- class="inline-flex items-center gap-2 px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer relative">
+ class="inline-flex items-center gap-2 px-3 py-2 bg-[#F5F3EE] hover:bg-[#EBF4E8] border border-[#E5E2DC] text-[#303334] rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer relative">
  <span class="text-base"></span>
  <span class="hidden md:inline font-extrabold">طلبات الموبايل</span>
- <span id="portal-orders-badge" class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white min-w-[20px] text-center {{ $pendingPortalOrders->count() > 0 ? '' : 'hidden' }}">
+ <span id="portal-orders-badge" class="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-[#4E8F35] text-white min-w-[20px] text-center {{ $pendingPortalOrders->count() > 0 ? '' : 'hidden' }}">
  {{ $pendingPortalOrders->count() }}
  </span>
  </button>
 
  {{-- + عميل جديد --}}
  <button type="button" onclick="openAddCustomerModal()"
- class="inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer">
- <svg width="16" height="16" class="text-indigo-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+ class="inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-[#F5F3EE] border border-[#E5E2DC] text-[#303334] rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer">
+ <svg width="16" height="16" class="text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/>
  </svg>
  <span class="hidden md:inline">عميل جديد (F3)</span>
@@ -197,7 +192,7 @@
 
  {{-- Return to Dashboard --}}
  <a href="{{ url('/') }}" title="العودة للوحة التحكم الرئيسية"
- class="p-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-600 hover:text-slate-900 transition-all shadow-xs">
+ class="p-2 rounded-xl bg-white hover:bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] transition-all shadow-xs">
  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
  <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
  </svg>
@@ -211,45 +206,66 @@
  <main class="flex-1 flex overflow-hidden">
 
  {{-- ── COLUMN 1 (RIGHT): الغرف والمساحات المباشرة ── --}}
- <section class="w-80 bg-white border-s border-slate-200 flex flex-col shrink-0">
+ <section class="w-80 bg-white border-s border-[#E5E2DC] flex flex-col shrink-0">
  {{-- Header & Filter Tabs --}}
- <div class="p-3.5 border-b border-slate-200 bg-slate-50/70">
+ <div class="p-3.5 border-b border-[#E5E2DC] bg-[#F8F7F4]">
  <div class="flex items-center justify-between mb-2.5">
- <h3 class="text-xs font-black text-slate-900 flex items-center gap-2">
- <svg width="16" height="16" class="text-indigo-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+ <h3 class="text-xs font-black text-[#303334] flex items-center gap-2">
+ <svg width="16" height="16" class="text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
  <path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h20"/><path d="M13 20V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/>
  </svg>
  <span>الغرف والمساحات</span>
  </h3>
- <span id="pos-rooms-summary" class="text-[11px] font-mono text-slate-600 font-extrabold bg-slate-200/60 px-2 py-0.5 rounded-md">
+ <span id="pos-rooms-summary" class="text-[11px] font-mono text-[#303334] font-extrabold bg-[#F5F3EE] border border-[#E5E2DC] px-2 py-0.5 rounded-md">
  {{ $rooms->where('is_available', false)->count() }} مشغولة / {{ $rooms->count() }}
  </span>
  </div>
 
- {{-- Filter Tabs --}}
- <div class="flex items-center gap-1 p-1 bg-slate-200/60 rounded-xl text-xs font-bold">
+ {{-- Mode Switch Tabs: الغرف والمساحات / غير مسددة / تم السداد --}}
+ <div class="flex items-center gap-1 p-1 bg-[#F5F3EE] border border-[#E5E2DC] rounded-xl text-xs font-bold mb-2">
+ <button type="button" onclick="switchSidebarView('rooms')" id="view-tab-rooms"
+ class="sidebar-view-tab flex-1 py-1.5 rounded-lg text-center bg-[#4E8F35] text-white shadow-xs font-extrabold transition-all cursor-pointer">
+ الغرف
+ </button>
+ <button type="button" onclick="switchSidebarView('unpaid')" id="view-tab-unpaid"
+ class="sidebar-view-tab flex-1 py-1.5 rounded-lg text-center text-[#73777A] hover:text-[#303334] font-bold transition-all cursor-pointer flex items-center justify-center gap-1">
+ <span>غير مسددة</span>
+ @if($unpaidClosedDeals->count() > 0)
+ <span class="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-rose-500 text-white">
+ {{ $unpaidClosedDeals->count() }}
+ </span>
+ @endif
+ </button>
+ <button type="button" onclick="switchSidebarView('paid')" id="view-tab-paid"
+ class="sidebar-view-tab flex-1 py-1.5 rounded-lg text-center text-[#73777A] hover:text-[#303334] font-bold transition-all cursor-pointer">
+ المسددة ({{ $paidDealsToday->count() }})
+ </button>
+ </div>
+
+ {{-- Filter Tabs (Only shown in Rooms view) --}}
+ <div id="rooms-sub-filters" class="flex items-center gap-1 p-1 bg-white border border-[#E5E2DC] rounded-xl text-[11px] font-bold">
  <button type="button" onclick="filterRooms('all')" id="tab-room-all"
- class="room-filter-tab flex-1 py-1.5 rounded-lg text-center bg-indigo-600 text-white shadow-xs font-extrabold transition-all cursor-pointer">
+ class="room-filter-tab flex-1 py-1 rounded-lg text-center bg-[#4E8F35] text-white shadow-xs font-extrabold transition-all cursor-pointer">
  الكل
  </button>
  <button type="button" onclick="filterRooms('available')" id="tab-room-available"
- class="room-filter-tab flex-1 py-1.5 rounded-lg text-center text-slate-600 hover:text-slate-900 font-bold transition-all cursor-pointer">
- متاحة
+ class="room-filter-tab flex-1 py-1 rounded-lg text-center text-[#73777A] hover:text-[#303334] font-bold transition-all cursor-pointer">
+ متاحة ({{ $rooms->where('is_available', true)->count() }})
  </button>
  <button type="button" onclick="filterRooms('occupied')" id="tab-room-occupied"
- class="room-filter-tab flex-1 py-1.5 rounded-lg text-center text-slate-600 hover:text-slate-900 font-bold transition-all cursor-pointer">
- مشغولة
+ class="room-filter-tab flex-1 py-1 rounded-lg text-center text-[#73777A] hover:text-[#303334] font-bold transition-all cursor-pointer">
+ مشغولة ({{ $rooms->where('is_available', false)->count() }})
  </button>
  </div>
  </div>
 
- {{-- Rooms List / Grid --}}
- <div class="flex-1 overflow-y-auto p-3 space-y-2.5" id="pos-rooms-list">
+ {{-- VIEW 1: Rooms List / Grid --}}
+ <div class="flex-1 overflow-y-auto p-3 space-y-2.5 sidebar-view-content" id="pos-rooms-list">
  @foreach($rooms as $room)
  @php
  $activeDeal = $room->activeDeals->first();
  @endphp
- <div class="room-card p-3.5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden {{ $activeDeal ? 'bg-amber-50/60 border-amber-300 hover:border-amber-500 shadow-sm' : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-md' }}"
+ <div class="room-card p-3.5 rounded-2xl border transition-all cursor-pointer relative overflow-hidden bg-white border-[#E5E2DC] hover:border-[#4E8F35]/70 shadow-xs"
  data-room-id="{{ $room->id }}"
  data-room-name="{{ $room->name }}"
  data-room-capacity="{{ $room->capacity }}"
@@ -260,35 +276,44 @@
  {{-- Card Header --}}
  <div class="flex items-center justify-between mb-1.5">
  <div class="flex items-center gap-2">
- <span class="w-3 h-3 rounded-full {{ $activeDeal ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500' }}"></span>
- <span class="font-extrabold text-xs text-slate-900">{{ $room->name }}</span>
+ <span class="w-2.5 h-2.5 rounded-full {{ $activeDeal ? 'bg-[#73777A]' : 'bg-[#4E8F35]' }}"></span>
+ <span class="font-extrabold text-xs text-[#303334]">{{ $room->name }}</span>
  </div>
- <span class="text-[11px] font-black px-2.5 py-0.5 rounded-full {{ $activeDeal ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
+ <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full {{ $activeDeal ? 'bg-[#F5F3EE] text-[#303334] border border-[#E5E2DC]' : 'bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4]' }}">
  {{ $activeDeal ? 'مشغولة' : 'متاحة' }}
  </span>
  </div>
 
  {{-- If Occupied: Customer & Time --}}
  @if($activeDeal)
- <div class="mt-2 pt-2 border-t border-amber-200/80 text-xs space-y-1.5">
+ <div class="mt-2 pt-2 border-t border-[#E5E2DC] text-xs space-y-1.5">
  <div class="flex items-center justify-between">
- <span class="text-slate-500 font-medium">العميل:</span>
- <strong class="text-slate-900 font-extrabold">{{ $activeDeal->customer->name ?? 'عميل مباشر' }}</strong>
+ <span class="text-[#73777A] font-medium">العميل:</span>
+ <div class="flex items-center gap-1">
+ <strong class="text-[#303334] font-extrabold">{{ $activeDeal->customer->name ?? 'عميل مباشر' }}</strong>
+ @if($activeDeal->customer_id)
+ <button type="button" onclick="event.stopPropagation(); openCustomerProfile({{ $activeDeal->customer_id }})"
+ title="عرض كارت وسجل العميل"
+ class="p-0.5 rounded bg-[#EBF4E8] text-[#4E8F35] hover:bg-[#DCE8D4] text-[10px]">
+ <svg class="size-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+ </button>
+ @endif
+ </div>
  </div>
  <div class="flex items-center justify-between font-mono">
- <span class="text-slate-500 font-medium font-sans">المدة:</span>
- <span class="text-rose-700 font-black active-deal-timer bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[11px]" data-started="{{ $activeDeal->started_at->toISOString() }}">00:00:00</span>
+ <span class="text-[#73777A] font-medium font-sans">المدة:</span>
+ <span class="text-[#303334] font-black active-deal-timer bg-[#F5F3EE] px-2 py-0.5 rounded border border-[#E5E2DC] text-[11px]" data-started="{{ $activeDeal->started_at->toISOString() }}">00:00:00</span>
  </div>
  <div class="flex items-center justify-between font-mono">
- <span class="text-slate-500 font-medium font-sans">الطلبات:</span>
- <span class="text-indigo-700 font-extrabold">{{ $activeDeal->order ? $activeDeal->order->items->count() : 0 }} أصناف</span>
+ <span class="text-[#73777A] font-medium font-sans">الطلبات:</span>
+ <span class="text-[#4E8F35] font-extrabold">{{ $activeDeal->order ? $activeDeal->order->items->count() : 0 }} أصناف</span>
  </div>
  </div>
  @else
  {{-- If Available: Capacity & Quick Start Button --}}
- <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
+ <div class="mt-2 pt-2 border-t border-[#E5E2DC] flex items-center justify-between text-xs text-[#73777A] font-medium">
  <span>سعة {{ $room->capacity }} أفراد</span>
- <span class="text-indigo-600 font-extrabold hover:underline flex items-center gap-1">
+ <span class="text-[#4E8F35] font-extrabold hover:underline flex items-center gap-1">
  <span>+ حجز جلسة</span>
  </span>
  </div>
@@ -299,32 +324,32 @@
  </section>
 
  {{-- ── COLUMN 2 (CENTER): قائمة البوفيه والمشروبات (Cafe & Products) ── --}}
- <section class="flex-1 bg-[#f8fafc] flex flex-col overflow-hidden border-s border-slate-200">
+ <section class="flex-1 bg-[#F8F7F4] flex flex-col overflow-hidden border-s border-[#E5E2DC]">
  {{-- Toolbar: Category Filters & Search --}}
- <div class="p-3.5 bg-white border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-2xs">
+ <div class="p-3.5 bg-white border-b border-[#E5E2DC] flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-2xs">
  {{-- Categories Tabs --}}
  <div class="flex items-center gap-1.5 overflow-x-auto text-xs font-bold" id="product-category-tabs">
  <button type="button" onclick="filterProductsByCode('all', this)"
- class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-extrabold shadow-sm transition-all cursor-pointer">
+ class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-[#4E8F35] text-white font-extrabold shadow-xs transition-all cursor-pointer">
  الكل
  </button>
  <button type="button" onclick="filterProductsByCode('hot_drinks', this)"
- class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold transition-all cursor-pointer flex items-center gap-1.5">
+ class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] hover:bg-[#EBF4E8] font-bold transition-all cursor-pointer flex items-center gap-1.5">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
  <span>مشروبات ساخنة</span>
  </button>
  <button type="button" onclick="filterProductsByCode('cold_drinks', this)"
- class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold transition-all cursor-pointer flex items-center gap-1.5">
+ class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] hover:bg-[#EBF4E8] font-bold transition-all cursor-pointer flex items-center gap-1.5">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 22h8"/><path d="M12 11v11"/><path d="m19 3-2 8H7L5 3Z"/></svg>
  <span>مشروبات باردة</span>
  </button>
  <button type="button" onclick="filterProductsByCode('snacks', this)"
- class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold transition-all cursor-pointer flex items-center gap-1.5">
+ class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] hover:bg-[#EBF4E8] font-bold transition-all cursor-pointer flex items-center gap-1.5">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
  <span>سناكس ومأكولات</span>
  </button>
  <button type="button" onclick="filterProductsByCode('services', this)"
- class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold transition-all cursor-pointer flex items-center gap-1.5">
+ class="prod-cat-tab px-3.5 py-1.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A] hover:text-[#303334] hover:bg-[#EBF4E8] font-bold transition-all cursor-pointer flex items-center gap-1.5">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
  <span>طباعة وخدمات</span>
  </button>
@@ -333,8 +358,8 @@
  {{-- Product Search --}}
  <div class="relative w-52">
  <input type="text" id="pos-product-search" placeholder="ابحث عن صنف في الكافيه..."
- class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl px-3 py-1.5 pe-8 focus:border-indigo-600 focus:bg-white outline-none placeholder:text-slate-400">
- <span class="absolute end-2.5 top-2 text-slate-400">
+ class="w-full bg-[#F5F3EE] border border-[#E5E2DC] text-[#303334] text-xs rounded-xl px-3 py-1.5 pe-8 focus:border-[#4E8F35] focus:bg-white outline-none placeholder:text-[#73777A]">
+ <span class="absolute end-2.5 top-2 text-[#73777A]">
  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>
  </span>
  </div>
@@ -355,7 +380,7 @@
  $iconBg = 'bg-purple-50 text-purple-600';
  }
  @endphp
- <div class="product-item-card p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 hover:border-indigo-400 transition-all flex flex-col justify-between cursor-pointer group select-none shadow-xs hover:shadow-md transform hover:-translate-y-0.5"
+ <div class="product-item-card p-3.5 rounded-2xl bg-white hover:bg-[#F8F7F4] border border-[#E5E2DC] hover:border-[#4E8F35]/70 transition-all flex flex-col justify-between cursor-pointer group select-none shadow-xs hover:shadow-xs"
  data-product-id="{{ $prod->id }}"
  data-product-name="{{ $prod->name }}"
  data-product-category="{{ $catCode }}"
@@ -374,19 +399,19 @@
  <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
  @endif
  </div>
- <h4 class="font-extrabold text-xs text-slate-900 group-hover:text-indigo-600 transition-colors leading-snug line-clamp-2">
+ <h4 class="font-extrabold text-xs text-[#303334] group-hover:text-[#4E8F35] transition-colors leading-snug line-clamp-2">
  {{ $prod->name }}
  </h4>
- <span class="text-[10px] text-slate-400 font-medium mt-0.5 block">
+ <span class="text-[10px] text-[#73777A] font-medium mt-0.5 block">
  {{ $prod->category->name ?? 'بوفيه' }}
  </span>
  </div>
 
- <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
- <span class="text-xs font-black text-emerald-700 font-mono">
- {{ number_format($prod->price, 2) }} <span class="text-[10px] font-normal text-slate-400">ج.م</span>
+ <div class="mt-3 pt-2.5 border-t border-[#E5E2DC] flex items-center justify-between">
+ <span class="text-xs font-black text-[#4E8F35] font-mono">
+ {{ number_format($prod->price, 2) }} <span class="text-[10px] font-normal text-[#73777A]">ج.م</span>
  </span>
- <span class="w-7 h-7 rounded-lg bg-indigo-50 group-hover:bg-indigo-600 text-indigo-600 group-hover:text-white flex items-center justify-center text-sm font-black transition-all shadow-2xs">
+ <span class="w-7 h-7 rounded-lg bg-[#EBF4E8] group-hover:bg-[#4E8F35] text-[#4E8F35] group-hover:text-white flex items-center justify-center text-sm font-black transition-all shadow-2xs">
  +
  </span>
  </div>
@@ -401,11 +426,11 @@
  </section>
 
  {{-- ── COLUMN 3 (LEFT): فاتورة الحساب والدفع السريع (Fast Checkout) ── --}}
- <section class="w-96 bg-white border-s border-slate-200 flex flex-col shrink-0 shadow-sm">
+ <section class="w-96 bg-white border-s border-[#E5E2DC] flex flex-col shrink-0">
 
  {{-- 1. No Session Selected Placeholder --}}
  <div id="checkout-placeholder" class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-500">
- <div class="w-20 h-20 rounded-3xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-4 shadow-sm">
+ <div class="w-20 h-20 rounded-3xl bg-[#EBF4E8] border border-[#DCE8D4] flex items-center justify-center text-[#4E8F35] mb-4 shadow-xs">
  <svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
  <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>
  </svg>
@@ -415,7 +440,7 @@
  اختر أي غرفة مشغولة من القائمة اليمنى لعرض ومتابعة الحساب، أو انقر على الزر أدناه لبدء حساب جديد.
  </p>
  <button type="button" onclick="openNewSessionModal()"
- class="btn-primary inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black transition-all shadow-md shadow-indigo-500/30 cursor-pointer">
+ class="btn-primary inline-flex items-center gap-2 px-6 py-3 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-black transition-all shadow-xs cursor-pointer">
  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
  <line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/>
  </svg>
@@ -426,17 +451,17 @@
  {{-- 2. Active Session Checkout Panel --}}
  <div id="checkout-panel" class="hidden flex-1 flex flex-col overflow-hidden">
  {{-- Session Header Banner --}}
- <div class="p-4 bg-gradient-to-r from-indigo-50/70 via-white to-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+ <div class="p-4 bg-gradient-to-r from-[#EBF4E8]/60 via-white to-[#F8F7F4] border-b border-[#E5E2DC] flex items-center justify-between shrink-0">
  <div class="flex items-center gap-3">
- <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white font-black text-base flex items-center justify-center shadow-sm shrink-0" id="co-customer-avatar">
+ <div class="w-11 h-11 rounded-2xl bg-[#4E8F35] text-white font-black text-base flex items-center justify-center shadow-xs shrink-0" id="co-customer-avatar">
  ع
  </div>
  <div>
  <h4 class="font-black text-sm text-slate-900 leading-tight" id="co-customer-name">أحمد محمد</h4>
  <div class="flex items-center gap-2 text-xs text-slate-500 mt-1">
- <span class="text-indigo-600 font-extrabold bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-100" id="co-room-name">قاعة A</span>
+ <span class="text-[#4E8F35] font-extrabold bg-[#EBF4E8] px-2 py-0.5 rounded-md border border-[#DCE8D4]" id="co-room-name">قاعة A</span>
  <span>•</span>
- <span class="font-mono text-rose-700 font-black bg-rose-50 px-2 py-0.5 rounded border border-rose-200" id="co-timer-display">00:00:00</span>
+ <span class="font-mono text-[#303334] font-black bg-[#F5F3EE] px-2 py-0.5 rounded border border-[#E5E2DC]" id="co-timer-display">00:00:00</span>
  </div>
  </div>
  </div>
@@ -469,7 +494,7 @@
 
  <div class="pt-3 border-t border-slate-200 flex items-center justify-between">
  <span class="font-black text-sm text-slate-900">المبلغ المطلوب سداده:</span>
- <span class="font-black text-2xl text-emerald-600 font-mono" id="co-total-amount">
+ <span class="font-black text-2xl text-[#4E8F35] font-mono" id="co-total-amount">
  0.00 <span class="text-xs font-normal text-slate-500">ج.م</span>
  </span>
  </div>
@@ -480,7 +505,7 @@
  {{-- Payment Method Buttons --}}
  <div class="grid grid-cols-3 gap-2 text-center text-xs font-extrabold">
  <button type="button" onclick="selectPaymentMethod('cash')" id="btn-pay-cash"
- class="pay-method-btn py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 transition-all cursor-pointer flex items-center justify-center gap-1.5">
+ class="pay-method-btn py-2.5 rounded-xl border-2 border-[#4E8F35] bg-[#EBF4E8] text-[#4E8F35] transition-all cursor-pointer flex items-center justify-center gap-1.5">
  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
  <span>كاش نقدي</span>
  </button>
@@ -507,15 +532,15 @@
  <button type="button" onclick="setReceivedCash(500)" class="py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono font-bold">500</button>
  </div>
  </div>
- <div class="flex items-center justify-between text-xs px-3 py-2 bg-emerald-50 rounded-xl border border-emerald-300">
- <span class="text-emerald-800 font-bold">الباقي للعميل:</span>
- <span class="font-black font-mono text-emerald-800" id="co-change-amount">0.00 ج.م</span>
+ <div class="flex items-center justify-between text-xs px-3 py-2 bg-[#EBF4E8] rounded-xl border border-[#DCE8D4]">
+ <span class="text-[#4E8F35] font-bold">الباقي للعميل:</span>
+ <span class="font-black font-mono text-[#4E8F35]" id="co-change-amount">0.00 ج.م</span>
  </div>
  </div>
 
  {{-- Big Close & Pay Button --}}
  <button type="button" onclick="executeCheckoutAndPay()" id="btn-submit-checkout"
- class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl transition-all shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer">
+ class="w-full py-3.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white font-black text-sm rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
  <polyline points="20 6 9 17 4 12"/>
  </svg>
@@ -551,9 +576,9 @@
  <div>
  <div class="flex items-center justify-between mb-1.5">
  <label class="text-xs font-bold text-slate-700">العميل *</label>
- <button type="button" onclick="openAddCustomerModal()" class="text-xs font-bold text-indigo-600 hover:underline">+ عميل جديد</button>
+ <button type="button" onclick="openAddCustomerModal()" class="text-xs font-bold text-[#4E8F35] hover:underline">+ عميل جديد</button>
  </div>
- <select id="ns-customer-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-indigo-600 focus:bg-white outline-none">
+ <select id="ns-customer-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#4E8F35] focus:bg-white outline-none">
  <option value="">-- اختر العميل من الدليل --</option>
  @foreach($customers as $c)
  <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->phone }})</option>
@@ -564,7 +589,7 @@
  {{-- Room Selection --}}
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">الغرفة أو المساحة *</label>
- <select id="ns-room-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-indigo-600 focus:bg-white outline-none">
+ <select id="ns-room-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#4E8F35] focus:bg-white outline-none">
  <option value="">-- اختر الغرفة --</option>
  @foreach($rooms as $r)
  <option value="{{ $r->id }}" {{ !$r->is_available ? 'disabled' : '' }}>
@@ -577,7 +602,7 @@
  {{-- Workspace Type Selection --}}
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">باقة ونوع المساحة *</label>
- <select id="ns-workspace-type-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-indigo-600 focus:bg-white outline-none">
+ <select id="ns-workspace-type-id" required class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#4E8F35] focus:bg-white outline-none">
  @foreach($workspaceTypes as $wt)
  <option value="{{ $wt->id }}">{{ $wt->name }} (تسعير تصاعدي بالمدة)</option>
  @endforeach
@@ -587,12 +612,12 @@
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">ملاحظات إضافية</label>
  <input type="text" id="ns-notes" placeholder="مثال: يفضل الجلوس بجوار النافذة..."
- class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2 text-xs focus:border-indigo-600 focus:bg-white outline-none">
+ class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2 text-xs focus:border-[#4E8F35] focus:bg-white outline-none">
  </div>
 
  <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
  <button type="button" onclick="closeModal('modal-new-session')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">إلغاء</button>
- <button type="submit" class="btn-primary px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black transition-all shadow-md shadow-indigo-500/25">
+ <button type="submit" class="btn-primary px-6 py-2.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-black transition-all shadow-xs">
  بدء الجلسة فوراً
  </button>
  </div>
@@ -616,22 +641,22 @@
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">اسم العميل *</label>
  <input type="text" id="qc-name" required placeholder="مثال: يوسف أحمد"
- class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-indigo-600 focus:bg-white outline-none">
+ class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#4E8F35] focus:bg-white outline-none">
  </div>
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">رقم الهاتف *</label>
  <input type="text" id="qc-phone" required placeholder="مثال: 01012345678" dir="ltr"
- class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-indigo-600 focus:bg-white outline-none text-start">
+ class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2.5 text-xs focus:border-[#4E8F35] focus:bg-white outline-none text-start">
  </div>
  <div>
  <label class="block text-xs font-bold text-slate-700 mb-1.5">البريد الإلكتروني (اختياري)</label>
  <input type="email" id="qc-email" placeholder="client@example.com" dir="ltr"
- class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2 text-xs focus:border-indigo-600 focus:bg-white outline-none text-start">
+ class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3.5 py-2 text-xs focus:border-[#4E8F35] focus:bg-white outline-none text-start">
  </div>
 
  <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
  <button type="button" onclick="closeModal('modal-add-customer')" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">إلغاء</button>
- <button type="submit" class="btn-primary px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black shadow-md shadow-indigo-500/25">
+ <button type="submit" class="btn-primary px-5 py-2 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl text-xs font-black shadow-xs">
  حفظ العميل
  </button>
  </div>
@@ -679,7 +704,7 @@
 
  <div class="mt-4 pt-3 border-t border-slate-200 flex items-center justify-end gap-2 no-print">
  <button type="button" onclick="closeModal('modal-receipt')" class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold">إلغاء</button>
- <button type="button" onclick="window.print()" class="btn-primary px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1 shadow-md shadow-indigo-500/25">
+ <button type="button" onclick="window.print()" class="btn-primary px-4 py-1.5 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white text-xs font-bold flex items-center gap-1 shadow-xs">
  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
  <span>طباعة الفاتورة</span>
  </button>
@@ -708,11 +733,11 @@
  <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-white transition shadow-xs flex flex-col gap-2.5" id="cashier-order-{{ $ord->id }}">
  <div class="flex items-start justify-between">
  <div>
- <span class="font-mono text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{{ $ord->order_number }}</span>
+ <span class="font-mono text-xs font-black text-[#4E8F35] bg-[#EBF4E8] px-2 py-0.5 rounded">{{ $ord->order_number }}</span>
  <span class="font-extrabold text-slate-900 text-sm mr-2">{{ $ord->customer ? $ord->customer->full_name : 'عميل' }}</span>
  <span class="text-xs text-slate-500 font-bold font-mono">({{ $ord->customer ? $ord->customer->phone : '' }})</span>
  </div>
- <span class="px-2.5 py-1 rounded-full text-xs font-black {{ $ord->fulfillment_status === 'preparing' ? 'bg-indigo-100 text-indigo-700' : 'bg-amber-100 text-amber-700' }}">
+ <span class="px-2.5 py-1 rounded-full text-xs font-black {{ $ord->fulfillment_status === 'preparing' ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'bg-[#F5F3EE] text-[#303334]' }}">
  {{ $ord->fulfillment_status === 'preparing' ? 'جاري التحضير' : 'جديد ⏳' }}
  </span>
  </div>
@@ -739,17 +764,17 @@
 
  <div class="flex items-center justify-between pt-1">
  <div class="text-xs font-bold text-slate-800">
- الإجمالي: <span class="font-mono font-black text-indigo-600 text-sm">{{ number_format($ord->total, 2) }} ج.م</span>
+ الإجمالي: <span class="font-mono font-black text-[#4E8F35] text-sm">{{ number_format($ord->total, 2) }} ج.م</span>
  </div>
  <div class="flex items-center gap-2">
  @if($ord->fulfillment_status !== 'preparing')
  <button type="button" onclick="updateOrderStatus({{ $ord->id }}, 'preparing')"
- class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs border border-indigo-200 cursor-pointer">
+ class="px-3 py-1.5 rounded-xl bg-[#EBF4E8] hover:bg-[#DCE8D4] text-[#4E8F35] font-bold text-xs border border-[#DCE8D4] cursor-pointer">
  تحضير 
  </button>
  @endif
  <button type="button" onclick="updateOrderStatus({{ $ord->id }}, 'delivered')"
- class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs cursor-pointer">
+ class="px-3.5 py-1.5 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold text-xs shadow-xs cursor-pointer">
  تم التسليم للغرفة 
  </button>
  <button type="button" onclick="updateOrderStatus({{ $ord->id }}, 'cancelled')"
@@ -767,6 +792,117 @@
  </div>
  </div>
  </div>
+
+{{-- MODAL: CUSTOMER PROFILE & HISTORY CARD --}}
+<div id="modal-customer-profile" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 border border-slate-200 animate-scale-up max-h-[90vh] flex flex-col">
+        {{-- Header --}}
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="size-11 rounded-2xl bg-[#EBF4E8] text-[#4E8F35] font-black text-lg flex items-center justify-center" id="cp-avatar">
+                    ع
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-extrabold text-base text-slate-900" id="cp-name">--</h3>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4E8] text-[#3B6E28]" id="cp-status-badge">نشط</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-slate-500 font-mono mt-0.5">
+                        <span id="cp-phone">--</span>
+                        <span id="cp-email" class="font-sans text-slate-400"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" onclick="closeModal('modal-customer-profile')" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-xl hover:bg-slate-100">
+                <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        {{-- Summary Stats & Current Presence --}}
+        <div class="grid grid-cols-3 gap-3 my-3">
+            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                <span class="text-[11px] text-slate-500 font-bold block">إجمالي الإنفاق</span>
+                <span class="text-sm font-black text-[#4E8F35] font-mono mt-0.5 block" id="cp-total-spent">0.00 ج.م</span>
+            </div>
+            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                <span class="text-[11px] text-slate-500 font-bold block">عدد الجلسات / الزيارات</span>
+                <span class="text-sm font-black text-slate-800 font-mono mt-0.5 block" id="cp-visits-count">0</span>
+            </div>
+            <div class="p-3 bg-slate-50 border border-slate-100 rounded-2xl text-center">
+                <span class="text-[11px] text-slate-500 font-bold block">الجلسة الحالية</span>
+                <span class="text-xs font-bold text-slate-700 mt-0.5 block truncate" id="cp-current-presence">غير متواجد حالياً</span>
+            </div>
+        </div>
+
+        {{-- Notes & Preferences Section --}}
+        <div class="p-3 bg-amber-50/50 border border-amber-200/70 rounded-2xl mb-3">
+            <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                    <svg class="size-3.5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <span>ملاحظات وتفضيلات العميل الخاصة (تظهر للكاشير)</span>
+                </label>
+                <button type="button" onclick="saveCustomerNotesAction()" id="btn-save-notes"
+                    class="px-3 py-1 bg-[#4E8F35] hover:bg-[#3F742B] text-white text-[11px] font-bold rounded-lg transition shadow-2xs">
+                    حفظ الملاحظات
+                </button>
+            </div>
+            <textarea id="cp-notes-input" rows="2" placeholder="اكتب هنا تفضيلات العميل، مثلاً: يفضل قهوة مضبوط بدون سكر، عميل VIP، مكان الجلوس المفضل..."
+                class="w-full bg-white border border-amber-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 focus:outline-none focus:border-[#4E8F35]"></textarea>
+            <span id="cp-notes-feedback" class="text-[10px] text-[#4E8F35] font-bold hidden">تم حفظ الملاحظات بنجاح.</span>
+        </div>
+
+        {{-- History Sub-Tabs --}}
+        <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl text-xs font-bold mb-2.5">
+            <button type="button" onclick="switchCustomerTab('orders')" id="cp-tab-orders"
+                class="cp-tab flex-1 py-1 rounded-lg text-center bg-[#4E8F35] text-white font-bold transition">
+                سجل الطلبات والمشروبات
+            </button>
+            <button type="button" onclick="switchCustomerTab('deals')" id="cp-tab-deals"
+                class="cp-tab flex-1 py-1 rounded-lg text-center text-slate-600 hover:text-slate-900 font-bold transition">
+                سجل الجلسات
+            </button>
+            <button type="button" onclick="switchCustomerTab('bookings')" id="cp-tab-bookings"
+                class="cp-tab flex-1 py-1 rounded-lg text-center text-slate-600 hover:text-slate-900 font-bold transition">
+                سجل الحجوزات
+            </button>
+        </div>
+
+        {{-- Tab Contents --}}
+        <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="cp-tab-content">
+            <div class="py-8 text-center text-slate-400 text-xs" id="cp-loading">جاري تحميل سجل العميل...</div>
+        </div>
+    </div>
+</div>
+
+{{-- LIVE PUSH TOAST NOTIFICATION CONTAINER (طلبات المشروبات المباشرة) --}}
+<div id="live-order-toast" class="fixed bottom-6 start-6 z-50 max-w-sm w-full bg-white border border-[#4E8F35] rounded-2xl shadow-2xl p-4 transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none flex flex-col gap-2">
+    <div class="flex items-start justify-between">
+        <div class="flex items-center gap-2">
+            <span class="size-8 rounded-xl bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold text-base">
+                🔔
+            </span>
+            <div>
+                <h4 class="font-extrabold text-xs text-slate-900">طلب مشروب جديد من الموبايل!</h4>
+                <p class="text-[11px] text-slate-500" id="toast-customer-info">عميل في ميتنج روم</p>
+            </div>
+        </div>
+        <button type="button" onclick="dismissLiveToast()" class="text-slate-400 hover:text-slate-600">
+            <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+    </div>
+    <div class="text-xs font-bold text-[#4E8F35] bg-[#EBF4E8]/60 p-2 rounded-xl" id="toast-items-summary">
+        2 قهوة تركي + 1 مياه معدنية
+    </div>
+    <div class="flex items-center justify-end gap-2 pt-1">
+        <button type="button" onclick="dismissLiveToast()" class="px-2.5 py-1 text-[11px] text-slate-500 hover:text-slate-700 font-bold">
+            تجاهل
+        </button>
+        <button type="button" onclick="openModal('modal-portal-orders'); dismissLiveToast();"
+            class="px-3 py-1 bg-[#4E8F35] hover:bg-[#3F742B] text-white text-[11px] font-bold rounded-lg transition shadow-2xs">
+            عرض الطلبات وتجهيزها
+        </button>
+    </div>
+</div>
 
  {{-- ════════════════════════════════════════════════════════ --}}
  {{-- 4. JAVASCRIPT STATE ENGINE & WORKFLOW --}}
@@ -874,7 +1010,7 @@
  const timeItemHtml = `
  <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
  <div class="flex items-center gap-2.5">
- <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+ <div class="w-8 h-8 rounded-lg bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold">
  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
  </div>
  <div>
@@ -882,7 +1018,7 @@
  <div class="text-[10px] text-slate-400 font-medium">${activeDeal.workspace_type || 'مكتب مشترك'}</div>
  </div>
  </div>
- <div class="font-black text-indigo-700 font-mono text-xs" id="item-time-price">-- ج.م</div>
+ <div class="font-black text-[#4E8F35] font-mono text-xs" id="item-time-price">-- ج.م</div>
  </div>
  `;
  itemsContainer.insertAdjacentHTML('beforeend', timeItemHtml);
@@ -897,7 +1033,7 @@
  itemEl.className = 'p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs';
  itemEl.innerHTML = `
  <div class="flex items-center gap-2.5 flex-1">
- <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+ <div class="w-8 h-8 rounded-lg bg-[#F5F3EE] text-[#303334] flex items-center justify-center font-bold">
  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
  </div>
  <div>
@@ -1222,13 +1358,13 @@
  // ── Filter Rooms Tabs ──
  function filterRooms(filter) {
  document.querySelectorAll('.room-filter-tab').forEach(t => {
- t.classList.remove('bg-indigo-600', 'text-white', 'shadow-xs', 'font-extrabold');
+ t.classList.remove('bg-[#4E8F35]', 'text-white', 'shadow-xs', 'font-extrabold');
  t.classList.add('text-slate-600', 'font-bold');
  });
  const activeTab = document.getElementById(`tab-room-${filter}`);
  if (activeTab) {
  activeTab.classList.remove('text-slate-600', 'font-bold');
- activeTab.classList.add('bg-indigo-600', 'text-white', 'shadow-xs', 'font-extrabold');
+ activeTab.classList.add('bg-[#4E8F35]', 'text-white', 'shadow-xs', 'font-extrabold');
  }
 
  document.querySelectorAll('.room-card').forEach(card => {
@@ -1244,12 +1380,12 @@
  // ── Filter Products Tabs by Category Code ──
  function filterProductsByCode(catCode, tabBtn) {
  document.querySelectorAll('.prod-cat-tab').forEach(t => {
- t.classList.remove('bg-indigo-600', 'text-white', 'font-extrabold', 'shadow-sm');
+ t.classList.remove('bg-[#4E8F35]', 'text-white', 'font-extrabold', 'shadow-xs');
  t.classList.add('bg-slate-100', 'text-slate-700', 'font-bold');
  });
  if (tabBtn) {
  tabBtn.classList.remove('bg-slate-100', 'text-slate-700', 'font-bold');
- tabBtn.classList.add('bg-indigo-600', 'text-white', 'font-extrabold', 'shadow-sm');
+ tabBtn.classList.add('bg-[#4E8F35]', 'text-white', 'font-extrabold', 'shadow-xs');
  }
 
  document.querySelectorAll('.product-item-card').forEach(card => {
@@ -1379,11 +1515,11 @@
  card.innerHTML = `
  <div class="flex items-start justify-between">
  <div>
- <span class="font-mono text-xs font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">${ord.order_number}</span>
+ <span class="font-mono text-xs font-black text-[#4E8F35] bg-[#EBF4E8] px-2 py-0.5 rounded">${ord.order_number}</span>
  <span class="font-extrabold text-slate-900 text-sm mr-2">${ord.customer ? ord.customer.full_name : 'عميل'}</span>
  <span class="text-xs text-slate-500 font-bold font-mono">(${ord.customer ? ord.customer.phone : ''})</span>
  </div>
- <span class="px-2.5 py-1 rounded-full text-xs font-black ${isPrep ? 'bg-indigo-100 text-indigo-700' : 'bg-amber-100 text-amber-700'}">
+ <span class="px-2.5 py-1 rounded-full text-xs font-black ${isPrep ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'bg-[#F5F3EE] text-[#303334]'}">
  ${isPrep ? 'جاري التحضير' : 'جديد ⏳'}
  </span>
  </div>
@@ -1400,17 +1536,17 @@
 
  <div class="flex items-center justify-between pt-1">
  <div class="text-xs font-bold text-slate-800">
- الإجمالي: <span class="font-mono font-black text-indigo-600 text-sm">${parseFloat(ord.total).toFixed(2)} ج.م</span>
+ الإجمالي: <span class="font-mono font-black text-[#4E8F35] text-sm">${parseFloat(ord.total).toFixed(2)} ج.م</span>
  </div>
  <div class="flex items-center gap-2">
  ${!isPrep ? `
  <button type="button" onclick="updateOrderStatus(${ord.id}, 'preparing')"
- class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs border border-indigo-200 cursor-pointer">
+ class="px-3 py-1.5 rounded-xl bg-[#EBF4E8] hover:bg-[#DCE8D4] text-[#4E8F35] font-bold text-xs border border-[#DCE8D4] cursor-pointer">
  تحضير 
  </button>
  ` : ''}
  <button type="button" onclick="updateOrderStatus(${ord.id}, 'delivered')"
- class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs cursor-pointer">
+ class="px-3.5 py-1.5 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold text-xs shadow-xs cursor-pointer">
  تم التسليم للغرفة 
  </button>
  <button type="button" onclick="updateOrderStatus(${ord.id}, 'cancelled')"
@@ -1452,7 +1588,7 @@
  }
 
  // Start polling every 8 seconds
- setInterval(pollPortalOrders, 8000);
+ setInterval(pollPortalOrders, 15000);
  </script>
 </body>
 </html>

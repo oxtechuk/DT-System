@@ -41,7 +41,13 @@ class Room extends Model
 
  public function getIsAvailableAttribute(): bool
  {
- return $this->status === 'active' && $this->activeDeals()->count() === 0;
+ if ($this->status !== 'active') {
+ return false;
+ }
+ if ($this->relationLoaded('activeDeals')) {
+ return $this->activeDeals->isEmpty();
+ }
+ return $this->activeDeals()->count() === 0;
  }
 
  public function getDisplayColorAttribute(): string

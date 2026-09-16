@@ -45,6 +45,17 @@ class DealService
  public function start(array $data): Deal
  {
  return DB::transaction(function () use ($data) {
+ // Ensure customer has only one open session at any time
+ $existing = Deal::where('customer_id', $data['customer_id'])
+ ->where('status', 'open')
+ ->with('room')
+ ->first();
+
+ if ($existing) {
+ $location = $existing->room ? $existing->room->name : 'المساحة العامة';
+ throw new \Exception("العميل لديه جلسة مفتوحة بالفعل حالياً في ({$location}) برقم [{$existing->deal_number}]. لا يمكن تسجيل أكثر من جلسة لنفس العميل في وقت واحد.");
+ }
+
  $deal = Deal::create([
  'deal_number' => Deal::generateNumber(),
  'customer_id' => $data['customer_id'],
@@ -106,6 +117,14 @@ class DealService
  ]);
  }
 
+ // Deduct raw materials from inventory if product has ingredients
+ foreach ($product->ingredients as $ingredient) {
+ if ($ingredient->rawMaterial) {
+ $deductQty = $ingredient->quantity * $quantity;
+ $ingredient->rawMaterial->decrement('current_stock', $deductQty);
+ }
+ }
+
  $order->recalculate();
 
  return $item;
@@ -120,6 +139,16 @@ class DealService
  abort_if($deal->status !== 'open', 422, 'Deal is not open.');
 
  $item = $deal->order->items()->findOrFail($orderItemId);
+
+ // Restore raw materials to inventory if item had a product with ingredients
+ if ($item->product) {
+ foreach ($item->product->ingredients as $ingredient) {
+ if ($ingredient->rawMaterial) {
+ $ingredient->rawMaterial->increment('current_stock', $ingredient->quantity * $item->quantity);
+ }
+ }
+ }
+
  $item->delete();
  $deal->order->recalculate();
  }

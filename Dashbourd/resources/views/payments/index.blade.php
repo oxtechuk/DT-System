@@ -5,10 +5,7 @@
  {{-- Page Header --}}
  <div class="page-header-container">
  <div>
- <div class="flex items-center gap-2 mb-1">
- <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">المالية والحسابات</span>
- <span class="text-xs text-default-400 font-mono">Payments & Revenue</span>
- </div>
+
  <h2 class="text-2xl font-extrabold text-default-900 tracking-tight">
  سجل المدفوعات والإيرادات
  </h2>

@@ -34,14 +34,28 @@ Route::get('customers', [WorkspaceController::class, 'customers'])->name('custom
 Route::post('customers', [WorkspaceController::class, 'storeCustomer'])->name('customers.store');
 
 Route::get('rooms', [WorkspaceController::class, 'rooms'])->name('rooms.index');
+Route::post('rooms', [WorkspaceController::class, 'storeRoom'])->name('rooms.store');
+Route::put('rooms/{room}', [WorkspaceController::class, 'updateRoom'])->name('rooms.update');
+Route::delete('rooms/{room}', [WorkspaceController::class, 'destroyRoom'])->name('rooms.destroy');
 
 Route::get('bookings', [WorkspaceController::class, 'bookings'])->name('bookings.index');
 Route::post('bookings', [WorkspaceController::class, 'storeBooking'])->name('bookings.store');
+Route::put('bookings/{booking}', [WorkspaceController::class, 'updateBooking'])->name('bookings.update');
+Route::delete('bookings/{booking}', [WorkspaceController::class, 'destroyBooking'])->name('bookings.destroy');
+Route::post('bookings/{booking}/check-in', [WorkspaceController::class, 'checkInBooking'])->name('bookings.check-in');
 
 Route::get('deals/active', [WorkspaceController::class, 'activeDeals'])->name('deals.active');
 
 Route::get('products', [WorkspaceController::class, 'products'])->name('products.index');
 Route::post('products', [WorkspaceController::class, 'storeProduct'])->name('products.store');
+Route::put('products/{product}', [WorkspaceController::class, 'updateProduct'])->name('products.update');
+Route::delete('products/{product}', [WorkspaceController::class, 'destroyProduct'])->name('products.destroy');
+Route::post('products/{product}/ingredients', [WorkspaceController::class, 'saveProductIngredients'])->name('products.ingredients.save');
+
+Route::post('raw-materials', [WorkspaceController::class, 'storeRawMaterial'])->name('raw-materials.store');
+Route::put('raw-materials/{rawMaterial}', [WorkspaceController::class, 'updateRawMaterial'])->name('raw-materials.update');
+Route::post('raw-materials/{rawMaterial}/add-stock', [WorkspaceController::class, 'addStockRawMaterial'])->name('raw-materials.add-stock');
+Route::delete('raw-materials/{rawMaterial}', [WorkspaceController::class, 'destroyRawMaterial'])->name('raw-materials.destroy');
 
 Route::get('inventory', [WorkspaceController::class, 'inventory'])->name('inventory.index');
 
@@ -52,9 +66,11 @@ Route::get('shifts/current', [ShiftController::class, 'current'])->name('shifts.
 Route::post('shifts/open', [ShiftController::class, 'open'])->name('shifts.open');
 Route::post('shifts/{shift}/close', [ShiftController::class, 'close'])->name('shifts.close');
 
-// ── Cashier Portal Orders API ──
+// ── Cashier Portal Orders & Customer History API ──
 Route::get('cashier/portal-orders', [\App\Http\Controllers\CashierController::class, 'getPortalOrders'])->name('cashier.portal-orders');
 Route::post('cashier/orders/{order}/fulfillment', [\App\Http\Controllers\CashierController::class, 'updateFulfillmentStatus'])->name('cashier.orders.fulfillment');
+Route::get('cashier/customers/{customer}/history', [\App\Http\Controllers\CashierController::class, 'getCustomerHistory'])->name('cashier.customers.history');
+Route::post('cashier/customers/{customer}/notes', [\App\Http\Controllers\CashierController::class, 'updateCustomerNotes'])->name('cashier.customers.notes');
 
 // ── Settings Save Route ──
 Route::post('settings/general', function (\Illuminate\Http\Request $request) {

@@ -5,10 +5,7 @@
     {{-- Page Header (Unified DDT Palette) --}}
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
-            <div class="flex items-center gap-2 mb-1">
-                <span class="text-xs font-bold text-[#4E8F35] bg-[#EBF4E8] px-2.5 py-0.5 rounded-full border border-[#DCE8D4]">مجتمع DDT • Community Hub</span>
-                <span class="text-xs text-[#73777A] font-mono">Customer App Events & Banners</span>
-            </div>
+          
             <h1 class="text-2xl font-extrabold text-[#303334] tracking-tight">
                 إدارة فعاليات وبانرات المجتمع
             </h1>
