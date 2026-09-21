@@ -861,7 +861,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
  try {
  const token = document.querySelector('meta[name="csrf-token"]')?.content;
- const res = await fetch('/api/v1/settings', {
+ const res = await fetch("{{ url('api/v1/settings') }}", {
  method: 'POST',
  headers: {
  'X-CSRF-TOKEN': token || '',

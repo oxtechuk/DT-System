@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#303334">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Google Fonts: Cairo (Official Brand Font) -->
@@ -319,7 +319,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW failed', err));
+                navigator.serviceWorker.register("{{ asset('sw.js') }}").catch(err => console.log('SW failed', err));
             });
         }
 

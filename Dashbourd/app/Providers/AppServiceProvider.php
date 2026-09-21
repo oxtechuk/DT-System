@@ -21,6 +21,39 @@ class AppServiceProvider extends ServiceProvider
  {
  \Illuminate\Support\Facades\Schema::defaultStringLength(191);
 
+ // Auto-detect dynamic URL Host & HTTPS / Reverse Proxy dynamically
+ if (!app()->runningInConsole() && request()->getHost()) {
+ $isHttps = request()->isSecure()
+ || request()->server('HTTP_X_FORWARDED_PROTO') === 'https'
+ || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+ || (config('app.env') === 'production' && str_starts_with(config('app.url', ''), 'https://'));
+
+ if ($isHttps) {
+ \Illuminate\Support\Facades\URL::forceScheme('https');
+ }
+
+ // Dynamically set root URL to match the accessing domain / host
+ $scheme = $isHttps ? 'https' : 'http';
+ $host = request()->getHttpHost();
+ if ($host) {
+ \Illuminate\Support\Facades\URL::forceRootUrl($scheme . '://' . $host);
+ }
+ }
+
+ // Global Gate: Super Admin & Role-based Permissions
+ \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+ if ($user instanceof \App\Models\User) {
+ if ($user->role && in_array($user->role->slug, ['owner', 'admin', 'super_admin'])) {
+ return true;
+ }
+ if ($user->id === 1 && empty($user->role_id)) {
+ return true;
+ }
+ return $user->hasPermission($ability) ? true : null;
+ }
+ return null;
+ });
+
  try {
  $settings = \Illuminate\Support\Facades\Cache::remember('site_global_settings', 1800, function () {
  return \App\Models\Setting::getAllAsArray();
