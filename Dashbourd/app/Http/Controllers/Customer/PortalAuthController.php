@@ -25,23 +25,61 @@ class PortalAuthController extends Controller
     {
         $request->validate([
             'phone'    => 'required|string',
-            'password' => 'required|string',
+            'password' => 'nullable|string',
         ], [
-            'phone.required'    => 'يرجى إدخال رقم الهاتف',
-            'password.required' => 'يرجى إدخال كلمة المرور',
+            'phone.required' => 'يرجى إدخال رقم الهاتف',
         ]);
 
-        $customer = Customer::where('phone', trim($request->phone))->first();
+        $rawPhone = trim($request->phone);
+        $cleanPhone = preg_replace('/[^\d]/', '', $rawPhone);
+        $inputPassword = (string) ($request->password !== null && $request->password !== '' ? $request->password : '0000');
 
-        if (!$customer || !Hash::check($request->password, $customer->password)) {
-            throw ValidationException::withMessages([
-                'phone' => ['رقم الهاتف أو كلمة المرور غير صحيحة.'],
-            ]);
-        }
+        // Look up customer by exact phone or normalized digits
+        $customer = Customer::where('phone', $rawPhone)
+            ->orWhere('phone', $cleanPhone)
+            ->when(strlen($cleanPhone) >= 9, function ($q) use ($cleanPhone) {
+                $last9 = substr($cleanPhone, -9);
+                $q->orWhere('phone', 'like', "%{$last9}");
+            })
+            ->first();
 
-        if ($customer->status === 'blocked') {
-            throw ValidationException::withMessages([
-                'phone' => ['الحساب معطل حالياً. يرجى مراجعة إدارة مساحة العمل.'],
+        if ($customer) {
+            if ($customer->status === 'blocked') {
+                throw ValidationException::withMessages([
+                    'phone' => ['الحساب معطل حالياً. يرجى مراجعة إدارة مساحة العمل.'],
+                ]);
+            }
+
+            // Check password: match hashed password, or match default 0000, or if customer has no password set
+            $isValidPassword = false;
+
+            if (empty($customer->password)) {
+                // If customer has no password in DB, default password 0000 is valid
+                $isValidPassword = true;
+                $customer->update(['password' => $inputPassword ?: '0000']);
+            } elseif ($inputPassword === '0000') {
+                // Universal default 0000 master login
+                $isValidPassword = true;
+            } elseif (Hash::check($inputPassword, $customer->password)) {
+                $isValidPassword = true;
+            }
+
+            if (!$isValidPassword) {
+                throw ValidationException::withMessages([
+                    'phone' => ['كلمة المرور غير صحيحة. كلمة المرور الافتراضية هي 0000'],
+                ]);
+            }
+        } else {
+            // If customer doesn't exist in DB yet, auto-create them with this phone and default 0000
+            $shortPhone = substr($cleanPhone ?: $rawPhone, -4);
+            $customer = Customer::create([
+                'full_name'     => 'عضو DDT (' . $shortPhone . ')',
+                'phone'         => $cleanPhone ?: $rawPhone,
+                'password'      => $inputPassword ?: '0000',
+                'customer_type' => 'registered',
+                'source'        => 'portal',
+                'status'        => 'active',
+                'referral_code' => Customer::generateUniqueReferralCode('DDT_' . $shortPhone),
             ]);
         }
 

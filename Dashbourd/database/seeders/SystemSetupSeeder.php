@@ -86,29 +86,37 @@ class SystemSetupSeeder extends Seeder
     private function seedRooms(): void
     {
         $rooms = [
-            ['name' => 'Room A',        'code' => 'A',   'capacity' => 4,  'color' => '#6366f1'],
-            ['name' => 'Room B',        'code' => 'B',   'capacity' => 4,  'color' => '#8b5cf6'],
-            ['name' => 'Room C',        'code' => 'C',   'capacity' => 6,  'color' => '#ec4899'],
-            ['name' => 'Room D',        'code' => 'D',   'capacity' => 6,  'color' => '#14b8a6'],
-            ['name' => 'Meeting Room',  'code' => 'MR',  'capacity' => 10, 'color' => '#f97316'],
-            ['name' => 'Open Area',     'code' => 'OA',  'capacity' => 20, 'color' => '#22c55e'],
+            ['name' => 'Room 1 (Focus)',      'code' => 'R1',  'capacity' => 4,  'color' => '#4E8F35'],
+            ['name' => 'Room 2 (Creative)',   'code' => 'R2',  'capacity' => 6,  'color' => '#79B84A'],
+            ['name' => 'Room 3 (Quiet)',      'code' => 'R3',  'capacity' => 4,  'color' => '#303334'],
+            ['name' => 'Meeting Room',        'code' => 'MR',  'capacity' => 12, 'color' => '#73777A'],
+            ['name' => 'Open Area (المساحة العامة)', 'code' => 'OA', 'capacity' => 25, 'color' => '#4E8F35'],
         ];
 
         foreach ($rooms as $room) {
-            Room::firstOrCreate(['code' => $room['code']], array_merge($room, ['status' => 'active']));
+            Room::updateOrCreate(['code' => $room['code']], array_merge($room, ['status' => 'active']));
         }
     }
 
     private function seedSettings(): void
     {
         $defaults = [
-            ['key' => 'business_name', 'value' => 'DT WorkSpace', 'type' => 'string', 'group' => 'general'],
-            ['key' => 'currency',      'value' => 'EGP',           'type' => 'string', 'group' => 'general'],
-            ['key' => 'primary_color', 'value' => '#6366f1',       'type' => 'string', 'group' => 'branding'],
+            ['key' => 'workspace_name',       'value' => 'DDT WORKING SPACE',                      'type' => 'string', 'group' => 'general'],
+            ['key' => 'workspace_slogan',     'value' => 'أكثر من مكان.. مجتمع بيكبر معاك',        'type' => 'string', 'group' => 'general'],
+            ['key' => 'receipt_footer',       'value' => 'شكراً لزيارتكم DDT - نتمنى لكم يوماً منتجاً ومليئاً بالإنجازات!', 'type' => 'string', 'group' => 'general'],
+            ['key' => 'currency',             'value' => 'EGP',                                    'type' => 'string', 'group' => 'general'],
+            ['key' => 'primary_color',        'value' => '#4E8F35',                                'type' => 'string', 'group' => 'branding'],
+            ['key' => 'loyalty_required_visits', 'value' => '5',                                   'type' => 'string', 'group' => 'general'],
+            ['key' => 'loyalty_min_duration_minutes', 'value' => '180',                           'type' => 'string', 'group' => 'general'],
+            ['key' => 'affiliate_discount_type',  'value' => 'percentage',                         'type' => 'string', 'group' => 'general'],
+            ['key' => 'affiliate_discount_value', 'value' => '20',                                 'type' => 'string', 'group' => 'general'],
+            ['key' => 'app_banner_title',     'value' => 'فعاليات وورش عمل DDT',                  'type' => 'string', 'group' => 'branding'],
+            ['key' => 'app_banner_subtitle',  'value' => 'أكثر من مكان.. مجتمع بيكبر معاك • ورش عمل وجلسات تشبيك', 'type' => 'string', 'group' => 'branding'],
+            ['key' => 'app_banner_button_text','value' => 'تصفح الفعاليات',                       'type' => 'string', 'group' => 'branding'],
         ];
 
         foreach ($defaults as $setting) {
-            Setting::firstOrCreate(['key' => $setting['key']], $setting);
+            Setting::updateOrCreate(['key' => $setting['key']], $setting);
         }
     }
 }
