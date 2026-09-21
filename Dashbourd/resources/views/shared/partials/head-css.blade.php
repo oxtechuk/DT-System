@@ -26,7 +26,7 @@
                 extend: {
                     spacing: {
                         topbar: '70px',
-                        sidenav: '265px',
+                        sidenav: '220px',
                     },
                     colors: {
                         primary: {
@@ -245,4 +245,84 @@
  .dt-table tr:hover td {
  background-color: #f8fafc;
  }
+
+  /* ══════════════════════════════════════════════════════════════
+     CRITICAL LAYOUT FIXES — Sidebar + Topbar + Page Content
+     ══════════════════════════════════════════════════════════════ */
+
+  /* Body & Root */
+  html, body { height: 100%; margin: 0; padding: 0; }
+  body { background-color: #F8F7F4 !important; overflow-x: hidden; }
+
+  /* Wrapper: flex row so sidebar and content sit side by side */
+  .wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    min-height: 100vh !important;
+    align-items: stretch !important;
+  }
+
+  /* Sidebar: fixed height, highest z-index */
+  aside#app-menu {
+    flex-shrink: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  /* Page content: takes remaining width, scrollable */
+  .page-content {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    background-color: #F8F7F4 !important;
+  }
+
+  /* Topbar: sticky within page-content, below sidebar */
+  .app-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    background: #F8F7F4 !important;
+    padding: 10px 12px 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .app-header .min-h-topbar {
+    min-height: 56px !important;
+  }
+
+  /* Main content area: proper padding */
+  main {
+    flex: 1 1 auto !important;
+    padding: 1.5rem 1.75rem !important;
+  }
+
+  /* Footer */
+  footer.footer {
+    flex-shrink: 0 !important;
+  }
+
+  /* Sidebar offset on large screens (lg = 1024px+) */
+  @media (min-width: 1024px) {
+    /* Sidebar is fixed positioned - page content needs left margin */
+    .page-content {
+      margin-inline-start: 220px !important;
+      transition: margin-inline-start 0.3s ease !important;
+    }
+    /* When sidebar is collapsed */
+    html.sidebar-collapsed .page-content {
+      margin-inline-start: 74px !important;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .page-content {
+      margin-inline-start: 0 !important;
+    }
+    main {
+      padding: 1rem 1rem !important;
+    }
+  }
 </style>

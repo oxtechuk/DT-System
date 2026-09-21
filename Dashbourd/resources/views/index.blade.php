@@ -17,21 +17,29 @@
  $occupiedRoomsCount = $totalRooms - $availableRoomsCount;
 
  $totalCustomers = \App\Models\Customer::active()->count();
- $totalProducts = \App\Models\Product::where('is_active', true)->count();
+ $totalProducts = \App\Models\Product::active()->count();
 
  $recentDeals = \App\Models\Deal::with(['customer', 'room', 'workspaceType', 'order'])
  ->latest('started_at')
  ->limit(8)
  ->get();
 
- // 7-day revenue chart data
+ // 7-day revenue chart data (Aggregated in 1 query)
+ $sevenDaysAgo = today()->subDays(6)->startOfDay();
+ $dailyPayments = \App\Models\Payment::where('paid_at', '>=', $sevenDaysAgo)
+ ->where('type', 'income')
+ ->selectRaw('DATE(paid_at) as p_date, SUM(amount) as total_amt')
+ ->groupBy('p_date')
+ ->pluck('total_amt', 'p_date')
+ ->toArray();
+
  $chartDays = [];
  $chartAmounts = [];
  for ($i = 6; $i >= 0; $i--) {
  $d = today()->subDays($i);
  $chartDays[] = $d->format('D (d/m)');
- $amt = \App\Models\Payment::whereDate('paid_at', $d)->where('type', 'income')->sum('amount');
- $chartAmounts[] = (float) $amt;
+ $key = $d->format('Y-m-d');
+ $chartAmounts[] = (float) ($dailyPayments[$key] ?? 0);
  }
 @endphp
 

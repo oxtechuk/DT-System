@@ -6,45 +6,35 @@ use Illuminate\Http\Request;
 
 class RoutingController extends Controller
 {
+    /**
+     * Display main dashboard root view
+     */
     public function root()
     {
         return view('index');
     }
 
     /**
-     * second level route
+     * Standard 404 Not Found response
      */
-    public function secondLevel(Request $request, $first, $second)
+    public function notFound()
     {
-        $view = $first . '.' . $second;
-        if (view()->exists($view)) {
-            return view($view);
-        }
-
-        // Graceful fallbacks for settings subpages
-        if ($first === 'settings') {
-            if ($second === 'rooms') {
-                return redirect('/rooms');
-            }
-            if ($second === 'payment-methods' || $second === 'payments') {
-                return redirect('/payments');
-            }
-            return redirect('/settings/general');
-        }
-
-        abort(404);
+        return response()->view('pages.404', [], 404);
     }
 
     /**
-     * third level route
+     * Redirect referral code to portal registration
      */
-    public function thirdLevel(Request $request, $first, $second, $third)
+    public function referralRedirect(string $code)
     {
-        $view = $first . '.' . $second . '.' . $third;
-        if (view()->exists($view)) {
-            return view($view);
-        }
+        return redirect()->route('portal.register', ['ref' => $code]);
+    }
 
-        abort(404);
+    /**
+     * Legacy events redirect
+     */
+    public function eventsRedirect()
+    {
+        return redirect()->route('admin.events.index');
     }
 }

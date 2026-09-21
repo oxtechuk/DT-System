@@ -1,6 +1,6 @@
 <!-- Topbar Start (Quiet Unified DDT Design) -->
-<header class="app-header sticky top-0 z-50 p-3 pb-0 bg-[#F8F7F4]/80 backdrop-blur-sm print:hidden">
-    <div class="min-h-topbar flex items-center bg-white rounded-xl shadow-xs border border-[#E5E2DC]">
+<header class="app-header sticky top-0 z-10 p-3 pb-0 bg-[#F8F7F4] print:hidden">
+    <div class="min-h-topbar flex items-center bg-white rounded-xl border border-[#E5E2DC]">
         <div class="px-4 w-full flex items-center justify-between gap-4">
 
             <!-- Left Controls: Menu Toggle & Title -->
@@ -33,6 +33,27 @@
                     <span>شاشة الكاشير</span>
                     <span class="bg-[#EBF4E8] text-[#4E8F35] text-[9px] px-1.5 py-0.2 rounded font-extrabold">POS</span>
                 </a>
+
+                {{-- 🔔 Staff Notification Bell --}}
+                <div class="hs-dropdown relative inline-flex [--placement:bottom-end]">
+                    <button type="button" id="topbar-notif-btn"
+                            class="hs-dropdown-toggle relative inline-flex items-center justify-center size-9 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] hover:bg-white text-[#73777A] hover:text-[#303334] transition-all">
+                        <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span id="topbar-notif-badge"
+                              class="hidden absolute -top-1 -end-1 size-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center"></span>
+                    </button>
+                    <div class="hs-dropdown-menu duration mt-2 w-80 rounded-2xl border border-[#E5E2DC] bg-white shadow-xl opacity-0 hidden hs-dropdown-open:opacity-100 overflow-hidden">
+                        <div class="px-4 py-3 border-b border-[#E5E2DC] flex items-center justify-between">
+                            <p class="text-xs font-black text-[#303334]">الإشعارات</p>
+                            <span id="topbar-notif-count" class="text-[10px] text-[#73777A]"></span>
+                        </div>
+                        <div id="topbar-notif-list" class="divide-y divide-[#F0EDE8] max-h-72 overflow-y-auto">
+                            <p class="p-4 text-center text-[#B0ADA8] text-xs">لا توجد إشعارات جديدة</p>
+                        </div>
+                    </div>
+                </div>
 
 
 

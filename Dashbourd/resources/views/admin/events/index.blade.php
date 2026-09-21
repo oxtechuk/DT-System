@@ -2,14 +2,13 @@
 
 @section('content')
 
-    {{-- Page Header (Unified DDT Palette) --}}
+    {{-- Page Header --}}
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
-          
             <h1 class="text-2xl font-extrabold text-[#303334] tracking-tight">
                 إدارة فعاليات وبانرات المجتمع
             </h1>
-            <p class="text-xs text-[#73777A] mt-1">التحكم في الفعاليات، ورش العمل، والبانرات الترويجية المعروضة بتطبيق العملاء (صفحة مجتمعي)</p>
+            <p class="text-xs text-[#73777A] mt-1">التحكم في الفعاليات والبانرات المميزة (★) المعروضة في الصفحة الرئيسية وتطبيق العملاء</p>
         </div>
 
         <div class="flex items-center gap-2.5">
@@ -18,23 +17,23 @@
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                 </svg>
-                <span>إضافة فعالية جديدة</span>
+                <span>إضافة فعالية وبانر جديد</span>
             </button>
-            <a href="{{ route('portal.community') }}" target="_blank"
+            <a href="{{ route('portal.home') }}" target="_blank"
                 class="px-3.5 py-2.5 bg-[#F5F3EE] hover:bg-[#EBF4E8] text-[#303334] hover:text-[#4E8F35] border border-[#E5E2DC] rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                 </svg>
-                <span>معاينة في تطبيق العملاء</span>
+                <span>معاينة في تطبيق الموبايل</span>
             </a>
         </div>
     </div>
 
-    {{-- Unified Stat Cards (Single Harmonious Palette - No Glowing Rainbows) --}}
+    {{-- Unified Stat Cards --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div class="bg-white rounded-2xl p-4 border border-[#E5E2DC] shadow-xs flex items-center justify-between">
             <div>
-                <span class="text-xs font-semibold text-[#73777A]">إجمالي الفعاليات والبانرات</span>
+                <span class="text-xs font-semibold text-[#73777A]">إجمالي الفعاليات</span>
                 <div class="text-2xl font-black text-[#303334] mt-1">{{ $totalEvents }}</div>
             </div>
             <div class="w-11 h-11 rounded-xl bg-[#F5F3EE] text-[#4E8F35] border border-[#E5E2DC] flex items-center justify-center">
@@ -58,7 +57,7 @@
 
         <div class="bg-white rounded-2xl p-4 border border-[#E5E2DC] shadow-xs flex items-center justify-between">
             <div>
-                <span class="text-xs font-semibold text-[#73777A]">نشطة في التطبيق حالياً</span>
+                <span class="text-xs font-semibold text-[#73777A]">نشطة في التطبيق</span>
                 <div class="text-2xl font-black text-[#4E8F35] mt-1">{{ $activeCount }}</div>
             </div>
             <div class="w-11 h-11 rounded-xl bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] flex items-center justify-center">
@@ -69,58 +68,87 @@
         </div>
     </div>
 
-    {{-- Events List Table / Card --}}
+    {{-- Events List Table --}}
     <div class="bg-white rounded-2xl border border-[#E5E2DC] shadow-xs overflow-hidden mb-8">
         <div class="p-4 border-b border-[#E5E2DC] flex items-center justify-between">
             <h2 class="font-bold text-xs text-[#303334]">قائمة الفعاليات والبانرات</h2>
-            <span class="text-xs text-[#73777A]">تظهر في صفحة «مجتمعي» والبانر الرئيسي بتطبيق العملاء</span>
+            <span class="text-xs text-[#73777A]">اضغط على النجمة (★) لتحديد الفعالية كبانر رئيسي في واجهة التطبيق</span>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-start text-xs">
                 <thead class="bg-[#F8F7F4] border-b border-[#E5E2DC] text-[#73777A] font-bold">
                     <tr>
-                        <th class="p-3.5 text-start">الفعالية / العنوان</th>
-                        <th class="p-3.5 text-start">التصنيف والبادج</th>
+                        <th class="p-3.5 text-center w-12">مميز (★)</th>
+                        <th class="p-3.5 text-start">الفعالية / الصورة</th>
+                        <th class="p-3.5 text-start">التصنيف</th>
                         <th class="p-3.5 text-start">الموعد والتوقيت</th>
-                        <th class="p-3.5 text-start">المحاضر / المتحدث</th>
-                        <th class="p-3.5 text-start">السعر والرمز</th>
-                        <th class="p-3.5 text-center">ظهور بالتطبيق</th>
+                        <th class="p-3.5 text-start">المحاضر</th>
+                        <th class="p-3.5 text-start">السعر</th>
+                        <th class="p-3.5 text-center">الحالة</th>
                         <th class="p-3.5 text-center">إجراءات</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[#E5E2DC] text-[#303334]">
                     @forelse($events as $ev)
-                        <tr class="hover:bg-[#F8F7F4]/80 transition">
-                            <td class="p-3.5">
-                                <div class="font-bold text-sm text-[#303334]">{{ $ev->title }}</div>
-                                <div class="text-[#73777A] text-[11px] mt-0.5 line-clamp-1">{{ $ev->location }}</div>
-                                @if($ev->is_featured)
-                                    <span class="inline-block mt-1 text-[10px] font-bold bg-[#F5F3EE] text-[#303334] border border-[#E5E2DC] px-2 py-0.5 rounded-full">
-                                        ★ بانر مميز (Featured)
-                                    </span>
-                                @endif
+                        <tr class="hover:bg-[#F8F7F4]/80 transition {{ $ev->is_featured ? 'bg-amber-50/40' : '' }}">
+                            {{-- Star Featured Button --}}
+                            <td class="p-3.5 text-center">
+                                <form action="{{ route('admin.events.toggle-featured', $ev) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" title="{{ $ev->is_featured ? 'إلغاء التمييز' : 'تمييز كبانر رئيسي (★)' }}"
+                                        class="p-1.5 rounded-full transition {{ $ev->is_featured ? 'text-amber-500 hover:scale-110' : 'text-slate-300 hover:text-amber-400' }}">
+                                        <svg width="22" height="22" fill="{{ $ev->is_featured ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                        </svg>
+                                    </button>
+                                </form>
                             </td>
+
+                            {{-- Title & Image Thumbnail --}}
                             <td class="p-3.5">
-                                <div class="flex flex-col gap-1 items-start">
-                                    <span class="px-2 py-0.5 rounded-md bg-[#F5F3EE] text-[#303334] border border-[#E5E2DC] font-medium text-[11px]">
-                                        {{ $ev->category }}
-                                    </span>
-                                    @if($ev->badge_text)
-                                        <span class="px-2 py-0.5 rounded-md bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] text-[10px] font-bold">
-                                            {{ $ev->badge_text }}
-                                        </span>
+                                <div class="flex items-center gap-3">
+                                    @if($ev->image_url)
+                                        <img src="{{ $ev->image_url }}" alt="" class="w-12 h-12 rounded-xl object-cover border border-[#E5E2DC] shrink-0"/>
+                                    @else
+                                        <div class="w-12 h-12 rounded-xl bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold text-xs border border-[#DCE8D4] shrink-0">
+                                            DDT
+                                        </div>
                                     @endif
+                                    <div>
+                                        <div class="font-bold text-sm text-[#303334] flex items-center gap-1.5">
+                                            <span>{{ $ev->title }}</span>
+                                            @if($ev->is_featured)
+                                                <span class="text-[10px] font-black bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full border border-amber-200">
+                                                    ★ بانر التطبيق
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="text-[#73777A] text-[11px] mt-0.5 line-clamp-1">{{ $ev->location }}</div>
+                                    </div>
                                 </div>
                             </td>
+
+                            {{-- Category --}}
+                            <td class="p-3.5">
+                                <span class="px-2.5 py-1 rounded-lg bg-[#F5F3EE] text-[#303334] border border-[#E5E2DC] font-bold text-[11px]">
+                                    {{ $ev->category }}
+                                </span>
+                            </td>
+
+                            {{-- Date & Time --}}
                             <td class="p-3.5">
                                 <div class="font-bold text-[#303334]">{{ \Carbon\Carbon::parse($ev->event_date)->translatedFormat('l, d F Y') }}</div>
                                 <div class="text-[#73777A] text-[11px] mt-0.5">{{ $ev->time_text }}</div>
                             </td>
+
+                            {{-- Speaker --}}
                             <td class="p-3.5">
                                 <div class="font-semibold text-[#303334]">{{ $ev->speaker_name ?: '—' }}</div>
                                 <div class="text-[#73777A] text-[11px]">{{ $ev->speaker_title }}</div>
                             </td>
+
+                            {{-- Price --}}
                             <td class="p-3.5">
                                 @if($ev->price == 0)
                                     <span class="font-bold text-[#4E8F35]">مجاناً</span>
@@ -129,6 +157,8 @@
                                 @endif
                                 <div class="text-[#73777A] text-[10px] mt-0.5">سعة: {{ $ev->capacity }} فرد</div>
                             </td>
+
+                            {{-- Status Toggle --}}
                             <td class="p-3.5 text-center">
                                 <form action="{{ route('admin.events.toggle', $ev) }}" method="POST" class="inline">
                                     @csrf
@@ -138,6 +168,8 @@
                                     </button>
                                 </form>
                             </td>
+
+                            {{-- Actions --}}
                             <td class="p-3.5 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
                                     {{-- Delete --}}
@@ -155,8 +187,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="p-8 text-center text-[#73777A]">
-                                لا توجد فعاليات مسجلة حالياً. اضغط على زر "إضافة فعالية جديدة" لإضافة أول فعالية.
+                            <td colspan="8" class="p-8 text-center text-[#73777A]">
+                                لا توجد فعاليات مسجلة حالياً. اضغط على زر "إضافة فعالية وبانر جديد" لإضافة أول فعالية.
                             </td>
                         </tr>
                     @endforelse
@@ -175,7 +207,7 @@
     <div id="createEventModal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-none flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-xl border border-[#E5E2DC] p-6">
             <div class="flex items-center justify-between pb-4 mb-4 border-b border-[#E5E2DC]">
-                <h2 class="text-sm font-bold text-[#303334]">إضافة فعالية / ورشة عمل جديدة</h2>
+                <h2 class="text-sm font-bold text-[#303334]">إضافة فعالية / بانر جديد للموبايل</h2>
                 <button type="button" onclick="document.getElementById('createEventModal').classList.add('hidden')" class="text-[#73777A] hover:text-[#303334]">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -183,13 +215,27 @@
                 </button>
             </div>
 
-            <form action="{{ route('admin.events.store') }}" method="POST" class="space-y-3.5 text-xs">
+            <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3.5 text-xs">
                 @csrf
 
                 <div>
                     <label class="block font-bold text-[#303334] mb-1">عنوان الفعالية / الورشة *</label>
-                    <input type="text" name="title" required placeholder="مثال: Masterclass: تسعير المشاريع للعمل الحر"
+                    <input type="text" name="title" required placeholder="مثال: Masterclass: تسعير المشاريع وبناء الشركات الناشئة"
                         class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] font-semibold text-[#303334]">
+                </div>
+
+                {{-- Image Upload / URL --}}
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#303334] mb-1">رفع صورة البانر (ملف)</label>
+                        <input type="file" name="image_file" accept="image/*"
+                            class="w-full px-2 py-1.5 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] text-[11px] text-[#303334]">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#303334] mb-1">أو رابط صورة خارجية (URL)</label>
+                        <input type="url" name="image" placeholder="https://..."
+                            class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -220,87 +266,79 @@
 
                     <div>
                         <label class="block font-bold text-[#303334] mb-1">التوقيت *</label>
-                        <input type="text" name="time_text" required placeholder="06:30 م - 08:30 م"
+                        <input type="text" name="time_text" required value="06:00 م - 08:30 م"
                             class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-bold text-[#303334] mb-1">اسم المتحدث / المحاضر</label>
-                        <input type="text" name="speaker_name" placeholder="م. عمر الشريف"
+                        <label class="block font-bold text-[#303334] mb-1">المحاضر / المتحدث</label>
+                        <input type="text" name="speaker_name" placeholder="مثال: م. أحمد عبد العزيز"
                             class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
                     </div>
 
                     <div>
-                        <label class="block font-bold text-[#303334] mb-1">المسمى الوظيفي للمتحدث</label>
-                        <input type="text" name="speaker_title" placeholder="Senior Product Designer"
+                        <label class="block font-bold text-[#303334] mb-1">المسمى المهني للمتحدث</label>
+                        <input type="text" name="speaker_title" placeholder="مثال: Head of Product • Founder"
                             class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block font-bold text-[#303334] mb-1">الموقع داخل المساحة *</label>
+                        <label class="block font-bold text-[#303334] mb-1">مكان الإقامة *</label>
                         <input type="text" name="location" required value="القاعة الرئيسية — DDT"
                             class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
                     </div>
 
                     <div>
-                        <label class="block font-bold text-[#303334] mb-1">السعر (0 = مجاناً)</label>
-                        <input type="number" name="price" value="0" min="0" step="1"
-                            class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-bold text-[#303334] mb-1">ثيم البانر (اللون)</label>
-                        <select name="banner_theme" class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
-                            <option value="green">أخضر DDT الرسمي (#4E8F35)</option>
-                            <option value="charcoal">رمادي فاحم Charcoal (#303334)</option>
-                            <option value="sage">أخضر زيتي فاتح Sage (#DCE8D4)</option>
-                        </select>
+                        <label class="block font-bold text-[#303334] mb-1">سعر التذكرة (ج.م)</label>
+                        <input type="number" name="price" value="0" min="0" step="0.5"
+                            class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] font-mono text-[#303334]">
                     </div>
 
                     <div>
-                        <label class="block font-bold text-[#303334] mb-1">السعة الاستيعابية (مقاعد)</label>
+                        <label class="block font-bold text-[#303334] mb-1">السعة (أفراد)</label>
                         <input type="number" name="capacity" value="25" min="1"
-                            class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
+                            class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] font-mono text-[#303334]">
                     </div>
                 </div>
+
+                <input type="hidden" name="banner_theme" value="green">
 
                 <div>
-                    <label class="block font-bold text-[#303334] mb-1">رابط التسجيل أو واتساب</label>
-                    <input type="url" name="registration_url" placeholder="https://wa.me/201000000000?text=..."
+                    <label class="block font-bold text-[#303334] mb-1">رابط التسجيل / واتساب مخصص</label>
+                    <input type="url" name="registration_url" placeholder="https://wa.me/201000000000 أو رابط فورم"
                         class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-[#303334] mb-1">نبذة وتفاصيل الفعالية</label>
-                    <textarea name="description" rows="3" placeholder="اكتب نبذة مختصرة عن أهداف الفعالية والمستفيدين..."
+                    <label class="block font-bold text-[#303334] mb-1">الوصف ومحاور الفعالية</label>
+                    <textarea name="description" rows="3" placeholder="تفاصيل ومحاور الورشة وما سيستفيده الحاضرون..."
                         class="w-full px-3 py-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] focus:outline-none focus:border-[#4E8F35] text-[#303334]"></textarea>
                 </div>
 
-                <div class="flex items-center gap-6 py-2">
-                    <label class="flex items-center gap-2 cursor-pointer font-bold text-[#303334]">
-                        <input type="checkbox" name="is_featured" value="1" class="rounded text-[#4E8F35] focus:ring-[#4E8F35] w-4 h-4 border-[#E5E2DC]">
-                        <span>بانر رئيسي مميز أعلى التطبيق</span>
+                {{-- Toggles --}}
+                <div class="flex items-center gap-6 pt-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="is_featured" value="1" checked class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500 border-[#E5E2DC]">
+                        <span class="font-bold text-[#303334]">★ تعيين كبانر رئيسي مميز بالتطبيق</span>
                     </label>
 
-                    <label class="flex items-center gap-2 cursor-pointer font-bold text-[#303334]">
-                        <input type="checkbox" name="is_active" value="1" checked class="rounded text-[#4E8F35] focus:ring-[#4E8F35] w-4 h-4 border-[#E5E2DC]">
-                        <span>تفعيل وظهور فوري بتطبيق العملاء</span>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="is_active" value="1" checked class="w-4 h-4 rounded text-[#4E8F35] focus:ring-[#4E8F35] border-[#E5E2DC]">
+                        <span class="font-bold text-[#303334]">تفعيل الظهور بالتطبيق</span>
                     </label>
                 </div>
 
-                <div class="flex items-center justify-end gap-2 pt-4 border-t border-[#E5E2DC]">
+                <div class="pt-4 border-t border-[#E5E2DC] flex items-center justify-end gap-2">
                     <button type="button" onclick="document.getElementById('createEventModal').classList.add('hidden')"
-                        class="px-4 py-2 rounded-xl bg-[#F5F3EE] hover:bg-white text-[#73777A] font-bold border border-[#E5E2DC] transition">
+                        class="px-4 py-2 bg-[#F5F3EE] text-[#73777A] hover:text-[#303334] rounded-xl font-bold transition">
                         إلغاء
                     </button>
                     <button type="submit"
-                        class="px-5 py-2 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold transition shadow-xs">
+                        class="px-5 py-2 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-xl font-bold transition shadow-xs">
                         حفظ ونشر الفعالية
                     </button>
                 </div>

@@ -21,6 +21,7 @@ class Event extends Model
         'time_text',
         'price',
         'banner_theme',
+        'image',
         'registration_url',
         'capacity',
         'is_featured',
@@ -48,5 +49,18 @@ class Event extends Model
     public function scopeFeatured($query)
     {
         return $query->active()->where('is_featured', true);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        return asset('storage/' . $this->image);
     }
 }

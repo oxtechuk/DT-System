@@ -13,15 +13,18 @@ class Customer extends Authenticatable
 
  protected $fillable = [
  'full_name',
+ 'name',
  'phone',
  'email',
  'password',
  'referral_code',
  'referred_by_id',
  'customer_type',
+ 'classification',
  'source',
  'status',
  'notes',
+ 'last_active_at',
  'hubspot_contact_id',
  'hubspot_synced_at',
  ];
@@ -34,7 +37,30 @@ class Customer extends Authenticatable
  protected $casts = [
  'password' => 'hashed',
  'hubspot_synced_at' => 'datetime',
+ 'last_active_at' => 'datetime',
  ];
+
+ public static function classifications(): array
+ {
+     return [
+         'freelancer' => 'فريلانسر / عمل حر',
+         'high_school' => 'طالب ثانوي',
+         'university' => 'طالب جامعي',
+         'lecturer' => 'محاضر / مدرب',
+         'other' => 'أخرى / عام',
+     ];
+ }
+
+ public function getClassificationLabelAttribute(): string
+ {
+     $map = static::classifications();
+     return $map[$this->classification ?? ''] ?? ($this->classification ?: 'غير محدد');
+ }
+
+ public function getIsAppOnlineAttribute(): bool
+ {
+     return $this->last_active_at !== null && $this->last_active_at->diffInMinutes(now()) <= 15;
+ }
 
  // ── Relationships ──
 
@@ -79,6 +105,11 @@ class Customer extends Authenticatable
  public function getNameAttribute(): string
  {
  return $this->full_name ?? '';
+ }
+
+ public function setNameAttribute($value): void
+ {
+ $this->attributes['full_name'] = $value;
  }
 
  public function getInitialsAttribute(): string

@@ -114,8 +114,25 @@ class Deal extends Model
 
  public static function generateNumber(): string
  {
- $last = static::withTrashed()->latest('id')->value('deal_number');
- $next = $last ? (intval(substr($last, 1)) + 1) : 1;
- return 'D' . str_pad($next, 5, '0', STR_PAD_LEFT);
+ $numbers = static::withTrashed()->pluck('deal_number');
+ $max = 0;
+ foreach ($numbers as $num) {
+ if (preg_match('/^D(\d+)$/', $num, $matches)) {
+ $val = (int) $matches[1];
+ if ($val > $max) {
+ $max = $val;
+ }
+ }
+ }
+ $next = $max + 1;
+ do {
+ $candidate = 'D' . str_pad($next, 5, '0', STR_PAD_LEFT);
+ $exists = static::withTrashed()->where('deal_number', $candidate)->exists();
+ if ($exists) {
+ $next++;
+ }
+ } while ($exists);
+
+ return $candidate;
  }
 }

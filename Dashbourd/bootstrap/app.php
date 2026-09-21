@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
+            if ($request->is('app*')) {
+                return route('portal.login');
+            }
+            return route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

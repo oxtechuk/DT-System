@@ -19,9 +19,13 @@ class AppServiceProvider extends ServiceProvider
  */
  public function boot(): void
  {
+ \Illuminate\Support\Facades\Schema::defaultStringLength(191);
+
  try {
- if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
- $settings = \App\Models\Setting::getAllAsArray();
+ $settings = \Illuminate\Support\Facades\Cache::remember('site_global_settings', 1800, function () {
+ return \App\Models\Setting::getAllAsArray();
+ });
+
  view()->share('allSettings', $settings);
 
  $logo = $settings['logo_main'] ?? null;
@@ -41,7 +45,6 @@ class AppServiceProvider extends ServiceProvider
 
  $primaryColor = $settings['primary_color'] ?? '#6366f1';
  view()->share('appPrimaryColor', $primaryColor);
- }
 
  // Register HubSpot auto-sync observers
  \App\Models\Customer::observe(\App\Observers\CustomerHubSpotObserver::class);

@@ -10,22 +10,27 @@ class Order extends Model
 {
  use HasFactory, SoftDeletes;
 
- protected $fillable = [
- 'order_number',
- 'customer_id',
- 'deal_id',
- 'booking_id',
- 'subtotal',
- 'discount',
- 'tax',
- 'total',
- 'paid_amount',
- 'remaining_amount',
- 'status',
- 'closed_at',
- 'created_by',
- 'closed_by',
- ];
+    protected $fillable = [
+        'order_number',
+        'customer_id',
+        'deal_id',
+        'booking_id',
+        'source',
+        'room_id',
+        'table_or_room_name',
+        'fulfillment_status',
+        'customer_notes',
+        'subtotal',
+        'discount',
+        'tax',
+        'total',
+        'paid_amount',
+        'remaining_amount',
+        'status',
+        'closed_at',
+        'created_by',
+        'closed_by',
+    ];
 
  protected $casts = [
  'subtotal' => 'decimal:2',
@@ -78,12 +83,29 @@ class Order extends Model
 
  // ── Helpers ──
 
- public static function generateNumber(): string
- {
- $last = static::withTrashed()->latest('id')->value('order_number');
- $next = $last ? (intval(substr($last, 1)) + 1) : 1;
- return 'O' . str_pad($next, 5, '0', STR_PAD_LEFT);
- }
+    public static function generateNumber(): string
+    {
+        $numbers = static::withTrashed()->pluck('order_number');
+        $max = 0;
+        foreach ($numbers as $num) {
+            if (preg_match('/^O(\d+)$/', $num, $matches)) {
+                $val = (int) $matches[1];
+                if ($val > $max) {
+                    $max = $val;
+                }
+            }
+        }
+        $next = $max + 1;
+        do {
+            $candidate = 'O' . str_pad($next, 5, '0', STR_PAD_LEFT);
+            $exists = static::withTrashed()->where('order_number', $candidate)->exists();
+            if ($exists) {
+                $next++;
+            }
+        } while ($exists);
+
+        return $candidate;
+    }
 
  /**
  * Recalculate totals from items.

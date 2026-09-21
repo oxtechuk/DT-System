@@ -39,19 +39,50 @@ class Room extends Model
 
  // ── Accessors ──
 
+ public function getActiveDealsListAttribute()
+ {
+ return $this->relationLoaded('activeDeals')
+ ? $this->activeDeals
+ : $this->activeDeals()->with(['customer', 'workspaceType'])->get();
+ }
+
+ public function getIsPrivateOccupiedAttribute(): bool
+ {
+ return $this->active_deals_list->contains(function ($deal) {
+ $code = $deal->workspaceType?->code;
+ return in_array($code, ['private', 'meeting']);
+ });
+ }
+
+ public function getOccupancyCountAttribute(): int
+ {
+ return $this->active_deals_list->count();
+ }
+
+ public function getRemainingCapacityAttribute(): int
+ {
+ $cap = max(1, (int) ($this->capacity ?: 1));
+ return max(0, $cap - $this->occupancy_count);
+ }
+
  public function getIsAvailableAttribute(): bool
  {
  if ($this->status !== 'active') {
  return false;
  }
- if ($this->relationLoaded('activeDeals')) {
- return $this->activeDeals->isEmpty();
+
+ // If reserved as Private or Meeting, room is completely locked even for 1 person
+ if ($this->is_private_occupied) {
+ return false;
  }
- return $this->activeDeals()->count() === 0;
+
+ // Shared area: available until capacity is fully reached
+ $cap = max(1, (int) ($this->capacity ?: 1));
+ return $this->occupancy_count < $cap;
  }
 
  public function getDisplayColorAttribute(): string
  {
- return $this->color ?? '#6366f1';
+ return $this->color ?? '#4E8F35';
  }
 }

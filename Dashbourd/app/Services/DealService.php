@@ -56,6 +56,29 @@ class DealService
  throw new \Exception("العميل لديه جلسة مفتوحة بالفعل حالياً في ({$location}) برقم [{$existing->deal_number}]. لا يمكن تسجيل أكثر من جلسة لنفس العميل في وقت واحد.");
  }
 
+ // Validate room capacity and Private vs Shared rules
+ if (!empty($data['room_id'])) {
+ $room = \App\Models\Room::with(['activeDeals.workspaceType'])->findOrFail($data['room_id']);
+ $workspaceType = \App\Models\WorkspaceType::findOrFail($data['workspace_type_id']);
+ $activeDeals = $room->activeDeals;
+
+ $isPrivateRequested = in_array($workspaceType->code, ['private', 'meeting']);
+ $hasActivePrivate = $room->is_private_occupied;
+
+ if ($hasActivePrivate) {
+ throw new \Exception("الغرفة ({$room->name}) محجوزة حالياً كغرفة خاصة (Private). لا يمكن إضافة أي جلسات جديدة إليها حتى مغادرة العميل الحالي.");
+ }
+
+ if ($isPrivateRequested && $activeDeals->isNotEmpty()) {
+ throw new \Exception("لا يمكن حجز الغرفة ({$room->name}) كغرفة خاصة لأن بها جلسات مشتركة نشطة حالياً.");
+ }
+
+ $cap = max(1, (int) ($room->capacity ?: 1));
+ if ($activeDeals->count() >= $cap) {
+ throw new \Exception("الغرفة ({$room->name}) مكتملة السعة الاستيعابية بالكامل ({$cap} من {$cap} أفراد).");
+ }
+ }
+
  $deal = Deal::create([
  'deal_number' => Deal::generateNumber(),
  'customer_id' => $data['customer_id'],

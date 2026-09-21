@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashierAlertLog;
+use App\Models\CashierAlertSchedule;
 use App\Models\Customer;
 use App\Models\Deal;
 use App\Models\Order;
@@ -16,7 +18,7 @@ class CashierController extends Controller
 {
     public function index()
     {
-        $rooms = Room::with(['activeDeals.customer', 'activeDeals.order.items.product'])->get();
+        $rooms = Room::with(['activeDeals.customer', 'activeDeals.workspaceType', 'activeDeals.order.items.product'])->get();
         $products = Product::active()->with('category')->orderBy('name')->get();
         $customers = Customer::where('status', 'active')->orderBy('full_name')->get();
         $workspaceTypes = WorkspaceType::where('active', true)->with('pricingRules')->get();
@@ -183,6 +185,122 @@ class CashierController extends Controller
             'success' => true,
             'status' => $order->fulfillment_status,
             'message' => 'تم تحديث حالة الطلب بنجاح'
+        ]);
+    }
+
+    // =========================================================================
+    // Cashier Alert System (Schedule, Snooze, Complete)
+    // =========================================================================
+
+    /**
+     * Create a new alert / reminder for the cashier.
+     * POST /cashier/alerts
+     */
+    public function createAlert(Request $request)
+    {
+        $data = $request->validate([
+            'title'        => 'required|string|max:255',
+            'description'  => 'nullable|string|max:1000',
+            'scheduled_at' => 'required|date',
+        ]);
+
+        $schedule = CashierAlertSchedule::create([
+            'title'         => $data['title'],
+            'description'   => $data['description'] ?? null,
+            'scheduled_at'  => $data['scheduled_at'],
+            'next_alert_at' => $data['scheduled_at'],
+            'status'        => 'pending',
+            'created_by'    => auth()->id(),
+        ]);
+
+        CashierAlertLog::create([
+            'schedule_id' => $schedule->id,
+            'action'      => 'created',
+            'acted_by'    => auth()->id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'id'      => $schedule->id,
+            'message' => 'تم إنشاء التنبيه بنجاح.',
+        ]);
+    }
+
+    /**
+     * Return all due alerts (next_alert_at <= now AND status = pending/snoozed).
+     * GET /cashier/alerts/pending
+     */
+    public function checkPendingAlerts()
+    {
+        $alerts = CashierAlertSchedule::dueNow()
+            ->latest('next_alert_at')
+            ->get()
+            ->map(fn ($a) => [
+                'id'             => $a->id,
+                'title'          => $a->title,
+                'description'    => $a->description,
+                'scheduled_at'   => $a->scheduled_at?->format('Y-m-d H:i'),
+                'snooze_count'   => $a->snooze_count,
+                'snooze_label'   => $a->snoozeLabel(),
+                'snooze_minutes' => $a->nextSnoozeMinutes(),
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'count'   => $alerts->count(),
+            'alerts'  => $alerts,
+        ]);
+    }
+
+    /**
+     * Mark an alert as completed ("تم").
+     * POST /cashier/alerts/{schedule}/complete
+     */
+    public function completeAlert(CashierAlertSchedule $schedule)
+    {
+        $schedule->update([
+            'status'       => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        CashierAlertLog::create([
+            'schedule_id' => $schedule->id,
+            'action'      => 'completed',
+            'acted_by'    => auth()->id(),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم إكمال التنبيه بنجاح.',
+        ]);
+    }
+
+    /**
+     * Snooze an alert (escalating: 5 → 15 → 60 minutes).
+     * POST /cashier/alerts/{schedule}/snooze
+     */
+    public function snoozeAlert(CashierAlertSchedule $schedule)
+    {
+        $minutes = $schedule->nextSnoozeMinutes();
+
+        $schedule->update([
+            'status'        => 'snoozed',
+            'snooze_count'  => $schedule->snooze_count + 1,
+            'next_alert_at' => now()->addMinutes($minutes),
+        ]);
+
+        CashierAlertLog::create([
+            'schedule_id'     => $schedule->id,
+            'action'          => 'snoozed',
+            'snoozed_minutes' => $minutes,
+            'acted_by'        => auth()->id(),
+        ]);
+
+        return response()->json([
+            'success'         => true,
+            'snoozed_minutes' => $minutes,
+            'next_alert_at'   => $schedule->fresh()->next_alert_at?->format('Y-m-d H:i:s'),
+            'message'         => "تم التأجيل لمدة {$minutes} دقيقة.",
         ]);
     }
 }

@@ -1,9 +1,121 @@
-<?php namespace App\Http\Controllers\Customer; use App\Http\Controllers\Controller;
+<?php
+
+namespace App\Http\Controllers\Customer;
+
+use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException; class PortalAuthController extends Controller
-{ public function showLogin() { if (Auth::guard('customer')->check()) { return redirect()->route('portal.home'); } return view('portal.auth.login'); } public function login(Request $request) { $request->validate([ 'phone' => 'required|string', 'password' => 'required|string', ], [ 'phone.required' => 'يرجى إدخال رقم الهاتف', 'password.required' => 'يرجى إدخال كلمة المرور', ]); $customer = Customer::where('phone', trim($request->phone))->first(); if (!$customer ||!Hash::check($request->password, $customer->password)) { throw ValidationException::withMessages([ 'phone' => ['رقم الهاتف أو كلمة المرور غير صحيحة.'], ]); } if ($customer->status === 'blocked') { throw ValidationException::withMessages([ 'phone' => ['الحساب معطل حالياً. يرجى مراجعة إدارة مساحة العمل.'], ]); } Auth::guard('customer')->login($customer, $request->boolean('remember')); $request->session()->regenerate(); return redirect()->intended(route('portal.home')); } public function showRegister(Request $request) { if (Auth::guard('customer')->check()) { return redirect()->route('portal.home'); } $referralCode = $request->query('ref', ''); return view('portal.auth.register', [ 'initialReferralCode' => $referralCode, ]); } public function register(Request $request) { $request->validate([ 'full_name' => 'required|string|max:150', 'phone' => 'required|string|max:20|unique:customers,phone', 'email' => 'nullable|email|max:150|unique:customers,email', 'password' => 'required|string|min:6|confirmed', 'referral_code' => 'nullable|string|max:32', ], [ 'full_name.required' => 'يرجى إدخال الاسم بالكامل', 'phone.required' => 'يرجى إدخال رقم الهاتف', 'phone.unique' => 'رقم الهاتف مسجل مسبقاً', 'email.unique' => 'البريد الإلكتروني مسجل مسبقاً', 'password.required' => 'يرجى إدخال كلمة المرور', 'password.min' => 'كلمة المرور يجب ألا تقل عن 6 أحرف', 'password.confirmed' => 'تأكيد كلمة المرور غير متطابق', ]); $referredById = null; if (!empty($request->referral_code)) { $referrer = Customer::where('referral_code', trim($request->referral_code))->first(); if ($referrer) { $referredById = $referrer->id; } } $myReferralCode = Customer::generateUniqueReferralCode($request->full_name); $customer = Customer::create([ 'full_name' => trim($request->full_name), 'phone' => trim($request->phone), 'email' => $request->email? trim($request->email): null, 'password' => $request->password, 'referral_code' => $myReferralCode, 'referred_by_id' => $referredById, 'customer_type' => 'registered', 'source' => $referredById? 'referral': 'portal', 'status' => 'active', ]); Auth::guard('customer')->login($customer, true); return redirect()->route('portal.home')->with('success', 'مرحباً بك! تم إنشاء حسابك بنجاح.'); } public function logout(Request $request) { Auth::guard('customer')->logout(); $request->session()->invalidate(); $request->session()->regenerateToken(); return redirect()->route('portal.login'); }
+use Illuminate\Validation\ValidationException;
+
+class PortalAuthController extends Controller
+{
+    public function showLogin()
+    {
+        if (Auth::guard('customer')->check()) {
+            return redirect()->route('portal.home');
+        }
+
+        return view('portal.auth.login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'phone'    => 'required|string',
+            'password' => 'required|string',
+        ], [
+            'phone.required'    => 'يرجى إدخال رقم الهاتف',
+            'password.required' => 'يرجى إدخال كلمة المرور',
+        ]);
+
+        $customer = Customer::where('phone', trim($request->phone))->first();
+
+        if (!$customer || !Hash::check($request->password, $customer->password)) {
+            throw ValidationException::withMessages([
+                'phone' => ['رقم الهاتف أو كلمة المرور غير صحيحة.'],
+            ]);
+        }
+
+        if ($customer->status === 'blocked') {
+            throw ValidationException::withMessages([
+                'phone' => ['الحساب معطل حالياً. يرجى مراجعة إدارة مساحة العمل.'],
+            ]);
+        }
+
+        // Login with 15-day persistent remember token
+        Auth::guard('customer')->login($customer, true);
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('portal.home'));
+    }
+
+    public function showRegister(Request $request)
+    {
+        if (Auth::guard('customer')->check()) {
+            return redirect()->route('portal.home');
+        }
+
+        $referralCode = $request->query('ref', '');
+
+        return view('portal.auth.register', [
+            'initialReferralCode' => $referralCode,
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'full_name'     => 'required|string|max:150',
+            'phone'         => 'required|string|max:20|unique:customers,phone',
+            'email'         => 'nullable|email|max:150|unique:customers,email',
+            'password'      => 'required|string|min:6|confirmed',
+            'referral_code' => 'nullable|string|max:32',
+        ], [
+            'full_name.required'     => 'يرجى إدخال الاسم بالكامل',
+            'phone.required'         => 'يرجى إدخال رقم الهاتف',
+            'phone.unique'           => 'رقم الهاتف مسجل مسبقاً',
+            'email.unique'           => 'البريد الإلكتروني مسجل مسبقاً',
+            'password.required'      => 'يرجى إدخال كلمة المرور',
+            'password.min'           => 'كلمة المرور يجب ألا تقل عن 6 أحرف',
+            'password.confirmed'     => 'تأكيد كلمة المرور غير متطابق',
+        ]);
+
+        $referredById = null;
+        if (!empty($request->referral_code)) {
+            $referrer = Customer::where('referral_code', trim($request->referral_code))->first();
+            if ($referrer) {
+                $referredById = $referrer->id;
+            }
+        }
+
+        $myReferralCode = Customer::generateUniqueReferralCode($request->full_name);
+
+        $customer = Customer::create([
+            'full_name'     => trim($request->full_name),
+            'phone'         => trim($request->phone),
+            'email'         => $request->email ? trim($request->email) : null,
+            'password'      => $request->password,
+            'referral_code' => $myReferralCode,
+            'referred_by_id'=> $referredById,
+            'customer_type' => 'registered',
+            'source'        => $referredById ? 'referral' : 'portal',
+            'status'        => 'active',
+        ]);
+
+        Auth::guard('customer')->login($customer, true);
+
+        return redirect()->route('portal.home')->with('success', 'مرحباً بك! تم إنشاء حسابك بنجاح.');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('customer')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('portal.login');
+    }
 }

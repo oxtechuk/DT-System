@@ -1,193 +1,482 @@
-<!-- Start Sidebar (Unified DDT Light Brand Architecture) -->
 <aside
-    class="w-sidenav min-w-sidenav bg-white shadow-sm border-s border-[#E5E2DC] overflow-y-auto hs-overlay fixed inset-y-0 start-0 z-60 hidden -translate-x-full transform transition-all duration-200 hs-overlay-open:translate-x-0 lg:bottom-0 lg:end-auto lg:z-30 lg:block lg:translate-x-0 rtl:translate-x-full rtl:hs-overlay-open:translate-x-0 rtl:lg:translate-x-0 print:hidden [--body-scroll:true] [--overlay-backdrop:true] lg:[--overlay-backdrop:false]"
-    id="app-menu">
+    class="w-sidenav min-w-sidenav overflow-y-auto hs-overlay fixed inset-y-0 start-0 z-[99999] hidden -translate-x-full transform transition-all duration-300 hs-overlay-open:translate-x-0 lg:bottom-0 lg:end-auto lg:z-[99999] lg:block lg:translate-x-0 rtl:translate-x-full rtl:hs-overlay-open:translate-x-0 rtl:lg:translate-x-0 print:hidden [--body-scroll:true] [--overlay-backdrop:true] lg:[--overlay-backdrop:false]"
+    id="app-menu"
+    style="background-color: #111827; border-inline-end: 1px solid #1F2937; z-index: 99999 !important;">
     <div class="flex flex-col h-full">
 
-        <!-- Sidenav Brand Logo -->
-        <div class="sticky top-0 flex h-topbar items-center justify-between px-5 border-b border-[#E5E2DC] bg-white z-10">
-            <a href="{{ url('/') }}" class="flex items-center gap-2.5">
-                <img alt="DDT Working Space" class="h-8 max-w-[150px] object-contain" src="{{ asset('images/ddt-logo.svg') }}"/>
+        <!-- Brand Logo Header -->
+        <div class="sticky top-0 z-10 flex h-topbar items-center justify-between px-3 bg-[#111827] border-b border-[#1F2937]">
+            <a href="{{ url('/') }}" class="flex items-center gap-2 overflow-hidden">
+                <!-- Full logo -->
+                <div class="sidebar-logo-full flex items-center gap-2">
+                    <div class="size-7 rounded-md flex items-center justify-center text-white font-black text-[11px] bg-[#4E8F35] flex-shrink-0">
+                        DDT
+                    </div>
+                    <div class="menu-label-block">
+                        <p class="text-white font-bold text-xs leading-none">DDT System</p>
+                        <p class="text-[10px] text-gray-400 font-medium leading-none mt-1">Working Space</p>
+                    </div>
+                </div>
+                <!-- Mini icon when collapsed -->
+                <div class="sidebar-logo-icon hidden size-7 rounded-md items-center justify-center text-white font-black text-[11px] bg-[#4E8F35]">
+                    DDT
+                </div>
             </a>
+
+            <!-- Pin Toggle -->
+            <button id="btn-pin-sidebar" type="button"
+                    title="تثبيت أو طي القائمة"
+                    class="hidden lg:inline-flex items-center justify-center size-7 rounded-md transition-colors menu-label-block hover:bg-[#1F2937] text-gray-400 hover:text-white">
+                <svg id="icon-pin-unpinned" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 17.929H6c-1.105 0-2-.895-2-2V5c0-1.105.895-2 2-2h12c1.105 0 2 .895 2 2v10c0 1.105-.895 2-2 2h-2M12 12v9m-3-3 3 3 3-3"/>
+                </svg>
+                <svg id="icon-pin-pinned" class="size-3.5 hidden text-[#4E8F35]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/>
+                </svg>
+            </button>
         </div>
 
-        <!-- Sidenav Navigation Menu -->
-        <div class="p-3 h-[calc(100%-70px)] flex-grow flex flex-col justify-between" data-simplebar="">
-            <div>
-                <ul class="admin-menu flex w-full flex-col gap-1">
+        <!-- Navigation Menu -->
+        <div class="p-2 flex-grow flex flex-col justify-between overflow-y-auto" data-simplebar="">
+            <ul class="flex w-full flex-col gap-1" id="sidebar-tree-root">
 
-                    {{-- ── الرئيسية والتشغيل ── --}}
-                    <li class="px-3 pt-2 pb-1 text-[11px] font-bold text-[#73777A] uppercase tracking-wider text-start">الرئيسية والتشغيل</li>
-
-                    {{-- لوحة التحكم --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('/') || request()->is('dashboard'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                {{-- ══ 1. العمليات والكاشير ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-ops', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">العمليات والكاشير</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>لوحة التحكم الرئيسية</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- الكاشير السريع POS --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('cashier*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/cashier') }}" target="_blank">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/><path d="m9 10 2 2 4-4"/>
+                    <div id="tree-ops" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('/') || request()->is('dashboard'); @endphp
+                            <a href="{{ url('/') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>لوحة التحكم</span>
+                                </span>
+                            </a>
+
+                            @php $isSubActive = request()->is('cashier*'); @endphp
+                            <a href="{{ url('/cashier') }}" target="_blank" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>شاشة الكاشير</span>
+                                </span>
+                                <span class="text-[8px] px-1 py-0.2 rounded font-bold bg-[#14532D] text-[#4ADE80] border border-[#166534]">POS</span>
+                            </a>
+
+                            @php $isSubActive = request()->is('deals*'); @endphp
+                            <a href="{{ url('/deals/active') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>الجلسات النشطة</span>
+                                </span>
+                            </a>
+
+                            @php $isSubActive = request()->is('bookings*'); @endphp
+                            <a href="{{ url('/bookings') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>جدول الحجوزات</span>
+                                </span>
+                            </a>
+
+                            @php $isSubActive = request()->is('rooms*'); @endphp
+                            <a href="{{ url('/rooms') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>الغرف والمساحات</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{-- ══ 2. العملاء وتطبيق الهاتف ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-crm', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">العملاء وتطبيق الهاتف</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>شاشة الكاشير السريع</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- ── إدارة العمليات ── --}}
-                    <li class="px-3 pt-3.5 pb-1 text-[11px] font-bold text-[#73777A] uppercase tracking-wider text-start">إدارة المساحة والعملاء</li>
+                    <div id="tree-crm" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('customers*'); @endphp
+                            <a href="{{ url('/customers') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>سجل وتصنيف العملاء</span>
+                                </span>
+                            </a>
 
-                    {{-- العملاء --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('customers*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/customers') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            <a href="{{ url('/app') }}" target="_blank" class="nav-sub-link">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>تطبيق الهاتف للجوال</span>
+                                </span>
+                                <span class="text-[8px] px-1 py-0.2 rounded font-bold bg-[#1E3A8A] text-[#93C5FD] border border-[#1D4ED8]">/app</span>
+                            </a>
+
+                            @php $isSubActive = request()->is('*events*'); @endphp
+                            <a href="{{ route('admin.events.index') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>فعاليات المجتمع والورش</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{-- ══ 3. الكافيه والمخزون ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-cafe', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">الكافيه والمخزون</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>دليل العملاء</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- الغرف والمساحات --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('rooms*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/rooms') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h20"/><path d="M13 20V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/><circle cx="9" cy="12" r="1"/>
+                    <div id="tree-cafe" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('products*'); @endphp
+                            <a href="{{ url('/products') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>قائمة المشروبات والمنتجات</span>
+                                </span>
+                            </a>
+
+                            @php $isSubActive = request()->is('inventory*'); @endphp
+                            <a href="{{ url('/inventory') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>حركة وجرد المخزون</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{-- ══ 4. المالية والورديات ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-fin', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">المالية والورديات</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>الغرف والمساحات</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- الحجوزات --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('bookings*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/bookings') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/>
+                    <div id="tree-fin" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('shifts*'); @endphp
+                            <a href="{{ url('/shifts/current') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>الوردية الحالية والخزينة</span>
+                                </span>
+                            </a>
+
+                            @php $isSubActive = request()->is('payments*'); @endphp
+                            <a href="{{ url('/payments') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>سجل المدفوعات والإيراد</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{-- ══ 5. التقارير والتحليلات ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-reports', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">التقارير والتحليلات</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>جدول الحجوزات</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- الجلسات النشطة --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('deals*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/deals/active') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    <div id="tree-reports" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('reports*'); @endphp
+                            <a href="{{ route('reports.index') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>التقارير وساعات الذروة</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+
+                {{-- ══ Divider ══ --}}
+                <li class="py-0.5"><div class="mx-2 border-t border-[#1F2937]"></div></li>
+
+                {{-- ══ 6. الإعدادات والربط ══ --}}
+                <li class="tree-group-item">
+                    <button type="button" onclick="toggleTreeGroup('tree-settings', this)"
+                            class="tree-group-btn w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors select-none text-gray-300 hover:bg-[#1F2937] hover:text-white">
+                        <div class="flex items-center gap-2">
+                            <span class="size-6 rounded-md flex items-center justify-center flex-shrink-0 bg-[#1F2937] text-gray-300">
+                                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                </svg>
+                            </span>
+                            <span class="menu-label text-[11px] font-bold">الإعدادات والربط</span>
+                        </div>
+                        <span class="tree-arrow-wrapper menu-label flex items-center justify-center size-4 rounded text-gray-400">
+                            <svg class="tree-arrow size-3 transition-transform duration-200"
+                                 fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="6 9 12 15 18 9"/>
                             </svg>
-                            <span>الجلسات النشطة</span>
-                        </a>
-                    </li>
+                        </span>
+                    </button>
 
-                    {{-- فعاليات المجتمع والبانرات --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('*events*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ route('admin.events.index') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-                            </svg>
-                            <span>فعاليات المجتمع والبانرات</span>
-                        </a>
-                    </li>
+                    <div id="tree-settings" class="tree-children hidden">
+                        <div class="tree-sub-list">
+                            @php $isSubActive = request()->is('settings*'); @endphp
+                            <a href="{{ url('/settings/general') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>تخصيص اللوجو والألوان</span>
+                                </span>
+                            </a>
 
-                    {{-- ── الكافيه والمخزون ── --}}
-                    <li class="px-3 pt-3.5 pb-1 text-[11px] font-bold text-[#73777A] uppercase tracking-wider text-start">الكافيه والمخزون</li>
+                            @php $isSubActive = request()->is('hubspot*'); @endphp
+                            <a href="{{ route('admin.hubspot.index') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>الربط مع HubSpot CRM</span>
+                                </span>
+                            </a>
 
-                    {{-- المنتجات والبوفيه --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('products*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/products') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/>
-                            </svg>
-                            <span>المنتجات والمشروبات</span>
-                        </a>
-                    </li>
+                            @php $isSubActive = request()->is('admin/team*'); @endphp
+                            <a href="{{ route('admin.team.index') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>الفريق والصلاحيات</span>
+                                </span>
+                                <span class="text-[8px] px-1 py-0.2 rounded font-bold bg-[#1E3A8A] text-[#93C5FD] border border-[#1D4ED8]">NEW</span>
+                            </a>
+                        </div>
+                    </div>
+                </li>
 
-                    {{-- المخزون --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('inventory*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/inventory') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
-                            </svg>
-                            <span>حركة المخزون</span>
-                        </a>
-                    </li>
-
-                    {{-- ── المالية والتحكم ── --}}
-                    <li class="px-3 pt-3.5 pb-1 text-[11px] font-bold text-[#73777A] uppercase tracking-wider text-start">المالية والنظام</li>
-
-                    {{-- المدفوعات والمالية --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('payments*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/payments') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>
-                            </svg>
-                            <span>المدفوعات والإيراد</span>
-                        </a>
-                    </li>
-
-                    {{-- الورديات --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('shifts*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/shifts/current') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/>
-                            </svg>
-                            <span>الوردية الحالية</span>
-                        </a>
-                    </li>
-
-                    {{-- تخصيص الهوية والألوان واللوجو --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('settings*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ url('/settings/general') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
-                            </svg>
-                            <span>تخصيص اللوجو والألوان</span>
-                        </a>
-                    </li>
-
-                    {{-- الربط مع HubSpot CRM --}}
-                    <li class="menu-item">
-                        @php $isActive = request()->is('hubspot*'); @endphp
-                        <a class="group flex items-center gap-x-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all {{ $isActive ? 'bg-[#EBF4E8] text-[#4E8F35] font-bold' : 'text-[#73777A] hover:bg-[#F5F3EE] hover:text-[#303334]' }}"
-                           href="{{ route('admin.hubspot.index') }}">
-                            <svg width="18" height="18" class="shrink-0 transition-colors {{ $isActive ? 'text-[#4E8F35]' : 'text-[#73777A] group-hover:text-[#4E8F35]' }}" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18.8 7.3c-.6 0-1.1.4-1.3.9l-2.4-.7c.1-.4.1-.7.1-1.1 0-1.8-1.5-3.3-3.3-3.3s-3.3 1.5-3.3 3.3c0 .5.1.9.3 1.3L6.7 9.8c-.3-.2-.7-.3-1.1-.3-1.4 0-2.5 1.1-2.5 2.5s1.1 2.5 2.5 2.5c.5 0 1-.1 1.4-.4l2.1 2.2c-.1.3-.2.6-.2 1 0 1.8 1.5 3.3 3.3 3.3s3.3-1.5 3.3-3.3c0-.4-.1-.8-.2-1.1l2.4-.7c.2.6.8 1 1.4 1 1 0 1.8-.8 1.8-1.8 0-1-.8-1.8-1.8-1.8-.6 0-1.1.4-1.3.9l-2.4-.7c0-.2.1-.5.1-.7 0-.4-.1-.7-.1-1.1l2.4-.7c.2.6.8 1 1.4 1 1 0 1.8-.8 1.8-1.8 0-1-.8-1.8-1.8-1.8zM11.9 4.8c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5.7-1.5 1.5-1.5zm.3 13.9c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z"/>
-                            </svg>
-                            <span>الربط مع HubSpot</span>
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-
+            </ul>
         </div>
+
+        <!-- Sidenav Footer -->
+        <div class="px-3 py-2.5 flex items-center gap-2 menu-label-block border-t border-[#1F2937]">
+            <span class="size-2 rounded-full flex-shrink-0 bg-[#22C55E]"></span>
+            <span class="text-[10px] font-medium text-gray-400">قاعدة البيانات: <strong class="text-gray-300 font-bold">MySQL</strong></span>
+        </div>
+
     </div>
 </aside>
 <!-- End Sidebar -->
+
+<style>
+/* ── Clean Solid Sub List & Connecting Line ─────────────────────────────── */
+.tree-sub-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-inline-start: 14px;
+    padding-inline-start: 10px;
+    border-inline-start: 2px solid #1F2937;
+}
+
+/* ── Clean Solid Sub Links ──────────────────────────────────────────────── */
+.nav-sub-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: #9CA3AF;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+.nav-sub-link .sub-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #4B5563;
+    flex-shrink: 0;
+}
+.nav-sub-link:hover {
+    background-color: #1F2937;
+    color: #FFFFFF;
+}
+.nav-sub-link:hover .sub-dot {
+    background-color: #9CA3AF;
+}
+
+/* Active Sub Link (Solid Card, Crisp & Bright Green) */
+.nav-sub-link.nav-sub-active {
+    background-color: #4E8F35 !important;
+    color: #FFFFFF !important;
+    font-weight: 800 !important;
+    border-radius: 6px !important;
+}
+.nav-sub-link.nav-sub-active .sub-dot {
+    background-color: #FFFFFF !important;
+}
+
+/* ── Clean Accordion ────────────────────────────────────────────────────── */
+.tree-children {
+    overflow: hidden;
+}
+
+/* ── Sidebar scrollbar ──────────────────────────────────────────────────── */
+aside#app-menu::-webkit-scrollbar { width: 4px; }
+aside#app-menu::-webkit-scrollbar-track { background: transparent; }
+aside#app-menu::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 4px; }
+
+/* ── Collapsed Mode Fixes ───────────────────────────────────────────────── */
+html.sidebar-collapsed aside#app-menu {
+    width: 68px !important;
+    min-width: 68px !important;
+}
+html.sidebar-collapsed aside#app-menu:hover {
+    width: 220px !important;
+    min-width: 220px !important;
+}
+html.sidebar-collapsed aside#app-menu .sidebar-logo-full { display: none !important; }
+html.sidebar-collapsed aside#app-menu .sidebar-logo-icon { display: flex !important; }
+html.sidebar-collapsed aside#app-menu:hover .sidebar-logo-full { display: flex !important; }
+html.sidebar-collapsed aside#app-menu:hover .sidebar-logo-icon { display: none !important; }
+
+html.sidebar-collapsed aside#app-menu .menu-label,
+html.sidebar-collapsed aside#app-menu .menu-label-block,
+html.sidebar-collapsed aside#app-menu .tree-arrow-wrapper,
+html.sidebar-collapsed aside#app-menu .tree-children {
+    display: none !important;
+}
+
+html.sidebar-collapsed aside#app-menu:hover .menu-label {
+    display: inline-block !important;
+}
+html.sidebar-collapsed aside#app-menu:hover .menu-label-block {
+    display: block !important;
+}
+html.sidebar-collapsed aside#app-menu:hover .tree-arrow-wrapper {
+    display: flex !important;
+}
+html.sidebar-collapsed aside#app-menu:hover .tree-children:not(.tree-manually-closed) {
+    display: block !important;
+}
+
+html.sidebar-collapsed .page-content {
+    margin-inline-start: 68px !important;
+    transition: margin-inline-start 0.3s ease;
+}
+@media (max-width: 1023px) {
+    html.sidebar-collapsed .page-content { margin-inline-start: 0 !important; }
+}
+</style>
+
+<script>
+function toggleTreeGroup(groupId, btn) {
+    const container = document.getElementById(groupId);
+    if (!container) return;
+    const isHidden = container.classList.contains('hidden');
+    const arrow = btn.querySelector('.tree-arrow');
+    if (isHidden) {
+        container.classList.remove('hidden', 'tree-manually-closed');
+        arrow?.classList.add('rotate-180');
+    } else {
+        container.classList.add('hidden', 'tree-manually-closed');
+        arrow?.classList.remove('rotate-180');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const pinBtn       = document.getElementById('btn-pin-sidebar');
+    const iconUnpinned = document.getElementById('icon-pin-unpinned');
+    const iconPinned   = document.getElementById('icon-pin-pinned');
+
+    if (localStorage.getItem('dt_sidebar_pinned') === 'true') {
+        document.documentElement.classList.add('sidebar-collapsed');
+        iconUnpinned?.classList.add('hidden');
+        iconPinned?.classList.remove('hidden');
+    }
+
+    pinBtn?.addEventListener('click', function () {
+        const collapsed = document.documentElement.classList.toggle('sidebar-collapsed');
+        localStorage.setItem('dt_sidebar_pinned', collapsed ? 'true' : 'false');
+        if (collapsed) {
+            iconUnpinned?.classList.add('hidden');
+            iconPinned?.classList.remove('hidden');
+        } else {
+            iconUnpinned?.classList.remove('hidden');
+            iconPinned?.classList.add('hidden');
+        }
+    });
+});
+</script>

@@ -58,10 +58,27 @@ class Payment extends Model
 
  // ── Helpers ──
 
- public static function generateNumber(): string
- {
- $last = static::latest('id')->value('payment_number');
- $next = $last ? (intval(substr($last, 1)) + 1) : 1;
- return 'P' . str_pad($next, 5, '0', STR_PAD_LEFT);
- }
+    public static function generateNumber(): string
+    {
+        $numbers = static::pluck('payment_number');
+        $max = 0;
+        foreach ($numbers as $num) {
+            if (preg_match('/^P(\d+)$/', $num, $matches)) {
+                $val = (int) $matches[1];
+                if ($val > $max) {
+                    $max = $val;
+                }
+            }
+        }
+        $next = $max + 1;
+        do {
+            $candidate = 'P' . str_pad($next, 5, '0', STR_PAD_LEFT);
+            $exists = static::where('payment_number', $candidate)->exists();
+            if ($exists) {
+                $next++;
+            }
+        } while ($exists);
+
+        return $candidate;
+    }
 }

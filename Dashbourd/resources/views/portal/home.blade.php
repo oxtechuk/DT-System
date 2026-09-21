@@ -4,262 +4,291 @@
 
 @section('content')
 
-    <!-- 1. Hero Brand Banner (Solid Light Card with DDT Green Identity) -->
-    <div class="solid-card rounded-2xl p-5 relative overflow-hidden">
-        <div class="flex items-start justify-between">
-            <div class="space-y-1.5 max-w-[80%]">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4]">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#4E8F35]"></span>
-                    مستقل.. مش لوحدك
-                </span>
-                <h1 class="text-base font-extrabold text-[#303334] leading-snug">
-                    أكثر من مكان.. <span class="text-[#4E8F35]">مجتمع بيكبر معاك</span>
-                </h1>
-                <p class="text-[11px] text-[#73777A] leading-relaxed">
-                    مرحباً بك في DDT Working Space، مساحتك الهادئة للإبداع والإنتاجية وتبادل الخبرات.
-                </p>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] flex items-center justify-center p-2.5 flex-shrink-0">
-                <img src="{{ asset('images/ddt-flask-icon.svg') }}" alt="DDT Icon" class="w-full h-full object-contain"/>
-            </div>
-        </div>
-
-        <!-- 4 Core Brand Pillars (Crisp Vector SVGs - Zero Emojis) -->
-        <div class="grid grid-cols-4 gap-2 pt-4 mt-3.5 border-t border-[#E5E2DC] text-center">
-            <div class="p-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC]/60 flex flex-col items-center">
-                <svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                </svg>
-                <div class="text-[10px] font-bold text-[#303334] mt-1">مجتمع حقيقي</div>
-                <div class="text-[8px] text-[#73777A]">Community</div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC]/60 flex flex-col items-center">
-                <svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <rect width="18" height="12" x="3" y="4" rx="2"/><line x1="2" x2="22" y1="20" y2="20"/>
-                </svg>
-                <div class="text-[10px] font-bold text-[#303334] mt-1">إنتاجية أعلى</div>
-                <div class="text-[8px] text-[#73777A]">Productivity</div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC]/60 flex flex-col items-center">
-                <svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
-                </svg>
-                <div class="text-[10px] font-bold text-[#303334] mt-1">أجواء هادئة</div>
-                <div class="text-[8px] text-[#73777A]">Better Vibes</div>
-            </div>
-            <div class="p-2 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC]/60 flex flex-col items-center">
-                <svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                </svg>
-                <div class="text-[10px] font-bold text-[#303334] mt-1">فرص أكبر</div>
-                <div class="text-[8px] text-[#73777A]">Opportunities</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2. Active Session Status (If Checked In) -->
+    <!-- 1. Hero Card: Active Session or Guest Check-in (Solid Charcoal & Primary Green Theme) -->
     @if($activeDeal)
-        <div class="solid-card rounded-2xl p-4 border-r-4 border-r-[#4E8F35] relative overflow-hidden">
+        <div class="solid-card-charcoal rounded-[28px] p-5 relative overflow-hidden shadow-[0_8px_24px_rgba(48,51,52,0.18)]">
             <div class="flex items-start justify-between">
-                <div class="flex items-center gap-2.5">
-                    <span class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#79B84A] opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-[#4E8F35]"></span>
-                    </span>
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-12 h-12 rounded-full bg-[#4E8F35] border-2 border-white/20 flex items-center justify-center text-white font-black text-sm">
+                            {{ mb_substr($activeDeal->room ? $activeDeal->room->name : 'DDT', 0, 2) }}
+                        </div>
+                        <span class="absolute -bottom-1 -left-1 px-2 py-0.5 rounded-full bg-white text-[#4E8F35] text-[10px] font-black shadow-sm flex items-center justify-center border border-[#DCE8D4]">
+                            {{ \Carbon\Carbon::parse($activeDeal->started_at)->format('H:i') }}
+                        </span>
+                    </div>
+
                     <div>
-                        <h2 class="text-xs font-bold text-[#303334] flex items-center gap-1.5">
-                            <span>جلستك الحالية نشطة</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#EBF4E8] text-[#4E8F35] font-semibold">بالفرع الآن</span>
-                        </h2>
-                        <p class="text-xs text-[#73777A] mt-0.5">
-                            {{ $activeDeal->room ? $activeDeal->room->name : 'المساحة المشتركة' }} • 
-                            <span class="font-mono font-bold text-[#4E8F35]">{{ \Carbon\Carbon::parse($activeDeal->started_at)->format('h:i A') }}</span>
-                        </p>
+                        <div class="flex items-center gap-1.5">
+                            <h3 class="text-sm font-extrabold text-white">
+                                {{ $activeDeal->room ? $activeDeal->room->name : 'المساحة العامة' }}
+                            </h3>
+                            <svg class="w-3.5 h-3.5 text-[#79B84A]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </div>
+                        <div class="flex items-center gap-1.5 mt-0.5">
+                            <span class="text-[11px] font-bold text-[#DCE8D4]">جلستك نشطة بالفرع</span>
+                            <span class="flex items-center gap-1 mr-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#79B84A]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#79B84A]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#79B84A]"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#79B84A]"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <a href="{{ route('portal.menu') }}" class="px-3.5 py-2 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold text-xs shadow-sm transition active:scale-95 flex items-center gap-1">
-                    <span>اطلب مشروبك</span>
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                </a>
+                <span class="px-3 py-1 rounded-full bg-white/15 text-[#DCE8D4] text-[11px] font-bold border border-white/10">
+                    {{ $activeDeal->workspaceType ? $activeDeal->workspaceType->name : 'مكتب عمل' }}
+                </span>
             </div>
 
-            <div class="mt-3 pt-2.5 border-t border-[#E5E2DC] flex items-center justify-between text-[11px] text-[#73777A]">
-                <span>نوع الباقة: <strong class="text-[#303334]">{{ $activeDeal->workspaceType ? $activeDeal->workspaceType->name : 'مكتب عمل' }}</strong></span>
-                <span class="text-[#4E8F35] font-semibold flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    <span>طلبات الكافيه تصل لطاولتك</span>
+            <!-- Brand Slogan Tagline -->
+            <div class="mt-4">
+                <p class="text-xs font-bold text-[#EBF4E8]">
+                    أكثر من مكان.. مجتمع بيكبر معاك • طلبات الكافيه تصل لطاولتك
+                </p>
+            </div>
+
+            <!-- Chips Row -->
+            <div class="flex flex-wrap gap-1.5 mt-3">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/10 text-[#DCE8D4] text-[10px] font-semibold border border-white/10">
+                    <svg class="w-3 h-3 text-[#79B84A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    فايبر عالي السرعة
                 </span>
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/10 text-[#DCE8D4] text-[10px] font-semibold border border-white/10">
+                    <svg class="w-3 h-3 text-[#79B84A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    جلسة مفتوحة
+                </span>
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/10 text-[#DCE8D4] text-[10px] font-semibold border border-white/10">
+                    <svg class="w-3 h-3 text-[#79B84A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
+                    أجواء ملهمة
+                </span>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="mt-5 pt-3.5 border-t border-white/15 flex items-center justify-between">
+                <span class="text-xs text-[#DCE8D4]/90 font-bold">
+                    بدأت: {{ \Carbon\Carbon::parse($activeDeal->started_at)->format('h:i A') }}
+                </span>
+
+                <a href="{{ route('portal.menu') }}" class="pill-btn-white px-5 py-2 text-xs flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-3.5 h-3.5 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span>اطلب مشروبك</span>
+                </a>
             </div>
         </div>
     @else
-        <!-- Guest / Not checked in banner -->
-        <div class="solid-card rounded-2xl p-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-[#F5F3EE] border border-[#E5E2DC] flex items-center justify-center text-[#73777A] flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold text-[#303334]">لست في جلسة عمل حالياً؟</h2>
-                    <p class="text-[11px] text-[#73777A] mt-0.5">سجل دخولك عند الاستقبال بالريسبشن لاحتساب زيارات بطاقة الولاء.</p>
+        @php
+            $bannerImg = \App\Models\Setting::get('app_banner_image');
+            $bannerUrl = \App\Models\Setting::get('app_banner_url');
+            $bannerSrc = null;
+            if (!empty($bannerImg)) {
+                $bannerSrc = asset('storage/' . $bannerImg);
+            } elseif (!empty($bannerUrl)) {
+                $bannerSrc = $bannerUrl;
+            }
+            $bannerLink = \App\Models\Setting::get('app_banner_link') ?: route('portal.community');
+            $bannerBtnText = \App\Models\Setting::get('app_banner_button_text') ?: 'تصفح الفعاليات';
+        @endphp
+
+        <!-- Clean Dynamic Image Banner (Configured from Settings / الإعدادات) -->
+        <div class="solid-card rounded-[28px] overflow-hidden border border-[#E5E2DC] shadow-[0_8px_24px_rgba(48,51,52,0.14)] relative group">
+            <div class="relative w-full h-48 sm:h-56 overflow-hidden bg-[#303334]">
+                @if($bannerSrc)
+                    <img src="{{ $bannerSrc }}" alt="DDT Banner" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>
+                @else
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80" alt="DDT Space" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90"/>
+                @endif
+                <div class="absolute inset-0 bg-gradient-to-t from-[#303334]/85 via-transparent to-black/20"></div>
+
+                <!-- Floating Bottom Actions Bar (Linked to Settings) -->
+                <div class="absolute bottom-3.5 right-3.5 left-3.5 flex items-center justify-between">
+                    <a href="{{ route('portal.menu') }}" class="pill-btn-white px-4 py-2 text-xs flex items-center gap-1.5 shadow-md hover:bg-white/90 transition active:scale-95">
+                        <svg class="w-3.5 h-3.5 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+                        </svg>
+                        <span>الكافيه</span>
+                    </a>
+
+                    <a href="{{ $bannerLink }}" {{ str_starts_with($bannerLink, 'http') ? 'target="_blank"' : '' }} class="pill-btn-primary px-5 py-2 text-xs flex items-center gap-1.5 shadow-md active:scale-95">
+                        <span>{{ $bannerBtnText }}</span>
+                        <svg class="w-3.5 h-3.5 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
-            <a href="{{ route('portal.menu') }}" class="px-3 py-1.5 rounded-xl bg-[#F5F3EE] hover:bg-[#EBF4E8] text-[#303334] hover:text-[#4E8F35] border border-[#E5E2DC] font-bold text-xs flex-shrink-0 transition">
-                تصفح المنيو
-            </a>
         </div>
     @endif
 
-    <!-- 3. Community Events Teaser Banner (Connecting to مجتمعي) -->
-    @if(isset($upcomingEvents) && $upcomingEvents->isNotEmpty())
-        @php $nextEvent = $upcomingEvents->first(); @endphp
-        <div class="solid-card-sage rounded-2xl p-4 relative overflow-hidden">
-            <div class="flex items-center justify-between mb-2">
+    <!-- 2. FEATURED EVENT BANNER (البانر المميز بالنجمة ★) -->
+    @if($featuredEvent)
+        <div class="space-y-2">
+            <div class="flex items-center justify-between px-1">
                 <div class="flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#4E8F35]"></span>
-                    <span class="text-[10px] font-bold text-[#4E8F35] uppercase">فعالية قادمة في مجتمع DDT</span>
+                    <span class="text-amber-500 text-sm">★</span>
+                    <h2 class="text-xs font-bold text-[#303334]">الفعالية المميزة في DDT</h2>
                 </div>
-                <a href="{{ route('portal.community') }}" class="text-[11px] font-bold text-[#4E8F35] hover:underline flex items-center gap-0.5">
-                    <span>عرض الكل</span>
-                    <svg class="w-3 h-3 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                    </svg>
-                </a>
+                <button type="button" onclick="openAllEventsModal()" class="text-[11px] font-bold text-[#4E8F35] hover:underline flex items-center gap-1">
+                    <span>تصفح الكل ({{ count($upcomingEvents) }})</span>
+                    <svg class="w-3 h-3 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
             </div>
 
-            <div class="flex items-start justify-between gap-3">
-                <div class="flex-1 min-w-0">
-                    <h3 class="text-xs font-extrabold text-[#303334] leading-snug line-clamp-1">
-                        {{ $nextEvent->title }}
-                    </h3>
-                    <div class="text-[10px] text-[#73777A] mt-1 flex items-center gap-3">
-                        <span class="font-bold text-[#4E8F35]">{{ \Carbon\Carbon::parse($nextEvent->event_date)->translatedFormat('d F') }}</span>
-                        <span>•</span>
-                        <span>{{ $nextEvent->time_text }}</span>
-                        @if($nextEvent->speaker_name)
-                            <span>•</span>
-                            <span>{{ $nextEvent->speaker_name }}</span>
-                        @endif
+            <!-- Luxury Featured Event Banner Card -->
+            <div class="solid-card rounded-[26px] overflow-hidden border border-[#E5E2DC] shadow-sm relative group">
+                @if($featuredEvent->image_url)
+                    <!-- Event Cover Image with Dark Charcoal Overlay -->
+                    <div class="relative h-44 w-full overflow-hidden bg-[#303334]">
+                        <img src="{{ $featuredEvent->image_url }}" alt="{{ $featuredEvent->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#303334] via-[#303334]/50 to-transparent"></div>
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-400 text-slate-900 shadow-md flex items-center gap-1">
+                                <span>★</span> بانر مميز
+                            </span>
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/95 backdrop-blur-sm text-[#4E8F35]">
+                                {{ $featuredEvent->category }}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 right-3 left-3 text-white">
+                            <h3 class="text-sm font-black leading-snug drop-shadow-sm">{{ $featuredEvent->title }}</h3>
+                            <p class="text-[11px] text-[#DCE8D4] mt-0.5 flex items-center gap-2 font-medium">
+                                <span>📅 {{ \Carbon\Carbon::parse($featuredEvent->event_date)->translatedFormat('d M') }}</span>
+                                <span>⏰ {{ $featuredEvent->time_text }}</span>
+                            </p>
+                        </div>
+                    </div>
+                @else
+                    <!-- Fallback Solid Charcoal Header when no image is uploaded -->
+                    <div class="p-5 bg-gradient-to-br from-[#303334] to-[#222425] text-white relative">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-400 text-slate-900 flex items-center gap-1">
+                                <span>★</span> بانر مميز
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-[#DCE8D4]">
+                                {{ $featuredEvent->category }}
+                            </span>
+                        </div>
+                        <h3 class="text-sm font-black leading-snug">{{ $featuredEvent->title }}</h3>
+                        <p class="text-[11px] text-[#DCE8D4] mt-1 flex items-center gap-2 font-medium">
+                            <span>📅 {{ \Carbon\Carbon::parse($featuredEvent->event_date)->translatedFormat('l, d F') }}</span>
+                            <span>⏰ {{ $featuredEvent->time_text }}</span>
+                        </p>
+                    </div>
+                @endif
+
+                <!-- Event Details & CTA Body -->
+                <div class="p-4 bg-white space-y-3">
+                    @if($featuredEvent->description)
+                        <p class="text-[11px] text-[#73777A] leading-relaxed line-clamp-2">
+                            {{ $featuredEvent->description }}
+                        </p>
+                    @endif
+
+                    <div class="flex items-center justify-between pt-2 border-t border-[#E5E2DC]">
+                        <div>
+                            <span class="text-[10px] text-[#73777A] block">رسوم الحضور:</span>
+                            <span class="text-xs font-black text-[#4E8F35]">
+                                {{ $featuredEvent->price == 0 ? 'مجاناً للأعضاء' : number_format($featuredEvent->price, 0) . ' ج.م' }}
+                            </span>
+                        </div>
+
+                        @php
+                            $waText = urlencode("مرحباً، أرغب في تأكيد حجز مقعد في فعالية: " . $featuredEvent->title);
+                            $regUrl = $featuredEvent->registration_url ?: "https://wa.me/201000000000?text={$waText}";
+                        @endphp
+                        <a href="{{ $regUrl }}" target="_blank" class="pill-btn-primary px-5 py-2 text-xs flex items-center gap-1.5 shadow-sm active:scale-95">
+                            <span>حجز مقعد الآن</span>
+                            <svg class="w-3.5 h-3.5 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        </a>
                     </div>
                 </div>
-
-                <a href="{{ route('portal.community') }}" class="px-3 py-1.5 rounded-xl bg-[#4E8F35] text-white text-[11px] font-bold flex-shrink-0 shadow-sm hover:bg-[#3F742B] transition">
-                    تفاصيل الفعالية
-                </a>
             </div>
         </div>
     @endif
 
-    <!-- 4. Loyalty Stamp Card Widget (Solid Light Card) -->
-    <div class="solid-card rounded-2xl p-4.5 relative overflow-hidden">
-        <div class="flex items-center justify-between mb-3 pb-2 border-b border-[#E5E2DC]">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold">
-                    <img src="{{ asset('images/ddt-flask-icon.svg') }}" class="w-4 h-4" alt="DDT Flask"/>
+    <!-- 3. Loyalty Stamp Card Widget (Official Brand Green & Sage) -->
+    <div class="solid-card rounded-[24px] p-5 relative overflow-hidden">
+        <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-[#E5E2DC]">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
+                    </svg>
                 </div>
                 <div>
-                    <h2 class="text-xs font-bold text-[#303334]">بطاقة ختم ولاء DDT</h2>
-                    <p class="text-[10px] text-[#73777A]">5 زيارات + جلسة 3 ساعات فأكثر = السادسة مجاناً</p>
+                    <h2 class="text-xs font-bold text-[#303334]">بطاقة ولاء DDT للزيارات</h2>
+                    <p class="text-[10px] text-[#73777A]">5 زيارات مكتملة = الجلسة السادسة مجانية بالكامل</p>
                 </div>
             </div>
-            <a href="{{ route('portal.loyalty') }}" class="text-[11px] font-bold text-[#4E8F35] hover:text-[#3F742B] flex items-center gap-0.5">
+            <a href="{{ route('portal.loyalty') }}" class="text-[11px] font-bold text-[#4E8F35] flex items-center gap-0.5">
                 <span>التفاصيل</span>
                 <svg class="w-3 h-3 rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </a>
         </div>
 
-        <!-- 5 Stamps Row with DDT Flask Icons -->
+        <!-- Stamps Row -->
         <div class="grid grid-cols-6 gap-2 py-1">
             @for($i = 1; $i <= 5; $i++)
                 @php $isCompleted = $loyalty['current_visits'] >= $i; @endphp
-                <div class="flex flex-col items-center gap-1">
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 {{ $isCompleted ? 'bg-[#EBF4E8] border border-[#4E8F35] text-[#4E8F35] shadow-sm' : 'bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A]' }}">
+                <div class="flex flex-col items-center gap-1.5">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 {{ $isCompleted ? 'bg-[#4E8F35] text-white shadow-sm' : 'bg-[#F5F3EE] border border-[#E5E2DC] text-[#73777A]' }}">
                         @if($isCompleted)
-                            <img src="{{ asset('images/ddt-flask-icon.svg') }}" class="w-5 h-5" alt="Completed Stamp"/>
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                            </svg>
                         @else
                             <span class="text-xs font-bold font-mono">{{ $i }}</span>
                         @endif
                     </div>
-                    <span class="text-[9px] {{ $isCompleted ? 'text-[#4E8F35] font-bold' : 'text-[#73777A]' }}">زيارة {{ $i }}</span>
+                    <span class="text-[9px] font-semibold {{ $isCompleted ? 'text-[#4E8F35]' : 'text-[#73777A]' }}">{{ $i }}</span>
                 </div>
             @endfor
 
             <!-- 6th Free Reward Stamp -->
-            <div class="flex flex-col items-center gap-1">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-dashed transition-all duration-300 {{ $loyalty['reward_ready'] ? 'bg-[#4E8F35] text-white border-[#4E8F35] shadow-md scale-105' : 'bg-[#F5F3EE] border-[#DCE8D4] text-[#4E8F35]' }}">
-                    <svg class="w-5 h-5 {{ $loyalty['reward_ready'] ? 'text-white' : 'text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <div class="flex flex-col items-center gap-1.5">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center border-2 border-dashed transition-all duration-200 {{ $loyalty['reward_ready'] ? 'bg-[#4E8F35] text-white border-[#4E8F35] shadow-md scale-105' : 'bg-[#EBF4E8] border-[#DCE8D4] text-[#4E8F35]' }}">
+                    <svg class="w-4 h-4 {{ $loyalty['reward_ready'] ? 'text-white' : 'text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
                     </svg>
                 </div>
-                <span class="text-[9px] font-bold {{ $loyalty['reward_ready'] ? 'text-[#4E8F35]' : 'text-[#73777A]' }}">هدية مجاناً</span>
+                <span class="text-[9px] font-bold text-[#4E8F35]">مجاناً</span>
             </div>
-        </div>
-
-        <!-- 3h Condition Status Pill -->
-        <div class="mt-2.5 pt-2.5 border-t border-[#E5E2DC] flex items-center justify-between text-[11px]">
-            <span class="text-[#73777A]">شرط قضاء جلسة 3 ساعات أو أكثر:</span>
-            @if($loyalty['has_long_session'])
-                <span class="text-[#4E8F35] font-bold flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                    محقّق بالكامل
-                </span>
-            @else
-                <span class="text-[#D97706] font-medium">بانتظار إتمام 3 ساعات في جلسة</span>
-            @endif
         </div>
     </div>
 
-    <!-- 5. Quick Actions Grid (Solid Cards) -->
+    <!-- 4. Quick Actions Row -->
     <div class="grid grid-cols-2 gap-3">
-        <a href="{{ route('portal.menu') }}" class="solid-card rounded-2xl p-4 flex flex-col items-start gap-2 hover:border-[#4E8F35] transition group active:scale-95">
-            <div class="w-10 h-10 rounded-xl bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center border border-[#DCE8D4]">
+        <a href="{{ route('portal.menu') }}" class="solid-card rounded-[22px] p-4 flex flex-col items-start gap-2 hover:border-[#4E8F35] transition group active:scale-95">
+            <div class="w-10 h-10 rounded-full bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center border border-[#DCE8D4]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
                 </svg>
             </div>
             <div>
-                <h2 class="text-xs font-bold text-[#303334]">منيو المشروبات</h2>
-                <p class="text-[10px] text-[#73777A]">قهوة مختصة، شاي، وسناكس</p>
+                <h3 class="text-xs font-bold text-[#303334]">منيو المشروبات</h3>
+                <p class="text-[10px] text-[#73777A]">قهوة وسناكس لطاولتك</p>
             </div>
         </a>
 
-        <a href="{{ route('portal.community') }}" class="solid-card rounded-2xl p-4 flex flex-col items-start gap-2 hover:border-[#4E8F35] transition group active:scale-95">
-            <div class="w-10 h-10 rounded-xl bg-[#F5F3EE] text-[#303334] flex items-center justify-center border border-[#E5E2DC]">
+        <a href="{{ route('portal.community') }}" class="solid-card rounded-[22px] p-4 flex flex-col items-start gap-2 hover:border-[#4E8F35] transition group active:scale-95">
+            <div class="w-10 h-10 rounded-full bg-[#F5F3EE] text-[#303334] flex items-center justify-center border border-[#E5E2DC]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                 </svg>
             </div>
             <div>
-                <h2 class="text-xs font-bold text-[#303334]">مجتمع DDT</h2>
-                <p class="text-[10px] text-[#73777A]">ورش العمل والبانرات</p>
+                <h3 class="text-xs font-bold text-[#303334]">مجتمع DDT</h3>
+                <p class="text-[10px] text-[#73777A]">أكثر من مكان.. بيكبر معاك</p>
             </div>
         </a>
     </div>
 
-    <!-- 6. Affiliate & Community Referral Card (Solid Light Card) -->
-    <div class="solid-card rounded-2xl p-4">
-        <div class="flex items-center justify-between mb-1.5">
-            <div>
-                <h2 class="text-xs font-bold text-[#303334]">ادعُ صديقاً لمجتمع DDT واكسب خصم</h2>
-                <p class="text-[10px] text-[#73777A]">صديقك يربح خصم {{ $referralDiscount }}{{ $referralType === 'percentage' ? '%' : ' ج.م' }} على أول زيارة وأنت تكسب نقاط ومكافآت.</p>
-            </div>
-        </div>
-        <div class="mt-3 flex items-center gap-2">
-            <div class="flex-1 bg-[#F5F3EE] border border-[#E5E2DC] rounded-xl px-3 py-2 flex items-center justify-between text-xs font-mono font-bold text-[#303334]">
-                <span>{{ $customer->referral_code }}</span>
-                <button type="button" onclick="navigator.clipboard.writeText('{{ $customer->referral_code }}'); alert('تم نسخ كود الإحالة بنجاح!');" class="text-[#73777A] hover:text-[#303334] text-[10px] bg-white border border-[#E5E2DC] px-2 py-0.5 rounded transition">نسخ</button>
-            </div>
-            <a href="https://wa.me/?text={{ urlencode('أنا في مساحة العمل DDT Working Space! سجل بكود الخصم بتاعي واستمتع بخصم '. $referralDiscount. ($referralType === 'percentage'? '%': ' ج.م'). ' على أول زيارة: '. url('/ref/'. $customer->referral_code)) }}" target="_blank" class="px-3.5 py-2 rounded-xl bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition">
-                <span>واتساب</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- 7. Recent Orders Snippet -->
+    <!-- 5. Recent Orders Card -->
     @if($recentOrders->isNotEmpty())
         <div>
             <div class="flex items-center justify-between mb-2 px-1">
@@ -268,16 +297,16 @@
             </div>
             <div class="space-y-2">
                 @foreach($recentOrders as $ord)
-                    <div class="solid-card rounded-xl p-3 flex items-center justify-between text-xs">
+                    <div class="solid-card rounded-[20px] p-3.5 flex items-center justify-between text-xs">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-[#F5F3EE] text-[#4E8F35] flex items-center justify-center font-bold border border-[#E5E2DC]">
+                            <div class="w-9 h-9 rounded-full bg-[#F5F3EE] text-[#4E8F35] flex items-center justify-center font-bold border border-[#E5E2DC]">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
                                 </svg>
                             </div>
                             <div>
                                 <div class="font-bold text-[#303334]">
-                                    {{ $ord->items->pluck('name')->join('، ') ?: 'طلب مشروبات' }}
+                                    {{ $ord->items->pluck('name')->join('، ') ?: 'طلب كافيه' }}
                                 </div>
                                 <div class="text-[10px] text-[#73777A]">
                                     {{ $ord->created_at->diffForHumans() }} • {{ $ord->table_or_room_name ?: 'المساحة' }}
@@ -285,7 +314,7 @@
                             </div>
                         </div>
                         <div class="text-left">
-                            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold @if($ord->fulfillment_status === 'pending') bg-amber-50 text-amber-700 border border-amber-200 @elseif($ord->fulfillment_status === 'preparing') bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] @elseif($ord->fulfillment_status === 'delivered') bg-emerald-50 text-emerald-700 border border-emerald-200 @else bg-rose-50 text-rose-700 @endif">
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold @if($ord->fulfillment_status === 'pending') bg-amber-50 text-amber-800 border border-amber-200 @elseif($ord->fulfillment_status === 'preparing') bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] @elseif($ord->fulfillment_status === 'delivered') bg-[#EBF4E8] text-[#4E8F35] border border-[#DCE8D4] @else bg-rose-50 text-rose-700 @endif">
                                 @if($ord->fulfillment_status === 'pending') قيد الانتظار @elseif($ord->fulfillment_status === 'preparing') جاري التحضير @elseif($ord->fulfillment_status === 'delivered') تم التسليم @else ملغي @endif
                             </span>
                             <div class="text-[11px] font-mono font-bold text-[#303334] mt-0.5">
@@ -298,4 +327,82 @@
         </div>
     @endif
 
+    <!-- ALL EVENTS BOTTOM SHEET MODAL -->
+    <div id="allEventsModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-end justify-center p-0 sm:p-4">
+        <div class="w-full max-w-md bg-white rounded-t-[32px] sm:rounded-[32px] border border-[#E5E2DC] p-6 max-h-[85vh] flex flex-col shadow-2xl animate-fade-in">
+            <!-- Sheet Drag Handle -->
+            <div class="w-12 h-1.5 rounded-full bg-[#E5E2DC] mx-auto mb-4"></div>
+
+            <div class="flex items-center justify-between pb-3 border-b border-[#E5E2DC]">
+                <div class="flex items-center gap-2">
+                    <span class="text-amber-500 text-base">★</span>
+                    <h2 class="text-sm font-black text-[#303334]">كافة فعاليات وورش عمل DDT</h2>
+                </div>
+                <button type="button" onclick="closeAllEventsModal()" class="text-[#73777A] hover:text-[#303334] p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Events Scrollable List -->
+            <div class="my-4 space-y-3 overflow-y-auto max-h-[60vh] no-scrollbar">
+                @forelse($upcomingEvents as $event)
+                    <div class="solid-card rounded-[22px] p-4 flex flex-col gap-2.5 relative border border-[#E5E2DC]">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-10 h-10 rounded-2xl bg-[#EBF4E8] text-[#4E8F35] flex flex-col items-center justify-center font-black leading-tight border border-[#DCE8D4]">
+                                    <span class="text-[9px] uppercase">{{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('D') }}</span>
+                                    <span class="text-xs font-mono">{{ \Carbon\Carbon::parse($event->event_date)->format('d') }}</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs font-black text-[#303334]">{{ $event->title }}</h3>
+                                    <p class="text-[10px] text-[#73777A] mt-0.5">⏰ {{ $event->time_text }} • 📍 {{ $event->location }}</p>
+                                </div>
+                            </div>
+                            @if($event->is_featured)
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-100 text-amber-900 border border-amber-200">
+                                    ★ مميز
+                                </span>
+                            @endif
+                        </div>
+
+                        @if($event->description)
+                            <p class="text-[10px] text-[#73777A] leading-relaxed line-clamp-2">
+                                {{ $event->description }}
+                            </p>
+                        @endif
+
+                        <div class="flex items-center justify-between pt-2 border-t border-[#E5E2DC] text-xs">
+                            <span class="text-xs font-black text-[#4E8F35]">
+                                {{ $event->price == 0 ? 'مجاناً للأعضاء' : number_format($event->price, 0) . ' ج.م' }}
+                            </span>
+                            @php
+                                $waText = urlencode("مرحباً، أرغب في حجز مقعد في فعالية: " . $event->title);
+                                $regUrl = $event->registration_url ?: "https://wa.me/201000000000?text={$waText}";
+                            @endphp
+                            <a href="{{ $regUrl }}" target="_blank" class="px-4 py-1.5 rounded-full bg-[#4E8F35] hover:bg-[#3F742B] text-white font-bold text-[10px] transition active:scale-95 shadow-xs">
+                                حجز مقعد
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-8 text-center text-xs text-[#73777A]">
+                        لا توجد فعاليات قادمة حالياً. ترقبوا فعالياتنا الجديدة قريباً!
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+@endsection
+
+@section('scripts')
+<script>
+    function openAllEventsModal() {
+        document.getElementById('allEventsModal').classList.remove('hidden');
+    }
+
+    function closeAllEventsModal() {
+        document.getElementById('allEventsModal').classList.add('hidden');
+    }
+</script>
 @endsection

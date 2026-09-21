@@ -1,7 +1,6 @@
 /* */
-/* _sidenav.scss */
+/* _general.css */
 /* */
-
 
 html {
     position: relative;
@@ -12,16 +11,13 @@ html {
 @layer components {
     body {
         overflow-x: hidden;
-        /* font-family: "Montserrat", sans-serif; */
+        background-color: #F8F7F4;
         @apply font-body;
-        @apply antialiased font-normal text-sm leading-normal bg-default-100 text-default-600 h-full w-full;
+        @apply antialiased font-normal text-sm leading-normal text-default-600 h-full w-full;
     }
 }
 
-
-
 @layer base {
-
     button:not(:disabled),
     [role="button"]:not(:disabled) {
         cursor: pointer;
@@ -37,15 +33,31 @@ code {
 }
 
 .wrapper {
-    @apply flex flex-col min-h-full;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
-/* Page Content */
+/* Page Content — offset from the 265px sidebar on large screens */
 .page-content {
-    @apply flex flex-col flex-auto relative transition-all duration-200 h-screen overflow-y-auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    position: relative;
+    min-height: 100vh;
+    overflow-y: auto;
+    transition: margin-inline-start 0.2s ease;
+    background-color: #F8F7F4;
 }
 
+/* main inner padding */
 main {
-    @apply flex-grow py-6 px-6;
-    /* @apply flex-grow container py-6; */
+    flex-grow: 1;
+    padding: 1.5rem 1.75rem;
+}
+
+@media (max-width: 1023px) {
+    main {
+        padding: 1rem 1rem;
+    }
 }

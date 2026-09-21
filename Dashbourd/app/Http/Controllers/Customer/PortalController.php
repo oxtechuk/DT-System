@@ -20,7 +20,13 @@ class PortalController extends Controller
 {
  protected function currentCustomer(): Customer
  {
- return Auth::guard('customer')->user();
+     /** @var Customer $customer */
+     $customer = Auth::guard('customer')->user();
+     if ($customer && (!$customer->last_active_at || $customer->last_active_at->diffInMinutes(now()) >= 2)) {
+         Customer::where('id', $customer->id)->update(['last_active_at' => now()]);
+         $customer->last_active_at = now();
+     }
+     return $customer;
  }
 
  public function home()
@@ -44,35 +50,37 @@ class PortalController extends Controller
  ->take(3)
  ->get();
 
- // Upcoming community events banner teaser
- $upcomingEvents = Event::upcoming()->take(3)->get();
+        // Featured Star Event (البانر المميز بالنجمة)
+        $featuredEvent = Event::featured()->upcoming()->first() ?? Event::upcoming()->first();
+        $upcomingEvents = Event::upcoming()->get();
 
- $referralDiscount = Setting::get('affiliate_discount_value', 20);
- $referralType = Setting::get('affiliate_discount_type', 'percentage');
+        $referralDiscount = Setting::get('affiliate_discount_value', 20);
+        $referralType = Setting::get('affiliate_discount_type', 'percentage');
 
- return view('portal.home', [
- 'customer' => $customer,
- 'activeDeal' => $activeDeal,
- 'loyalty' => $loyalty,
- 'recentOrders' => $recentOrders,
- 'upcomingEvents' => $upcomingEvents,
- 'referralDiscount' => $referralDiscount,
- 'referralType' => $referralType,
- ]);
+        return view('portal.home', [
+            'customer' => $customer,
+            'activeDeal' => $activeDeal,
+            'loyalty' => $loyalty,
+            'recentOrders' => $recentOrders,
+            'featuredEvent' => $featuredEvent,
+            'upcomingEvents' => $upcomingEvents,
+            'referralDiscount' => $referralDiscount,
+            'referralType' => $referralType,
+        ]);
  }
 
- public function community()
- {
- $customer = $this->currentCustomer();
- $featuredEvents = Event::featured()->upcoming()->get();
- $upcomingEvents = Event::upcoming()->get();
+    public function community()
+    {
+        $customer = $this->currentCustomer();
+        $events = Event::active()->orderBy('event_date', 'asc')->get();
+        $featuredEvent = Event::featured()->upcoming()->first();
 
- return view('portal.community', [
- 'customer' => $customer,
- 'featuredEvents' => $featuredEvents,
- 'upcomingEvents' => $upcomingEvents,
- ]);
- }
+        return view('portal.community', [
+            'customer' => $customer,
+            'events' => $events,
+            'featuredEvent' => $featuredEvent,
+        ]);
+    }
 
  public function menu()
  {

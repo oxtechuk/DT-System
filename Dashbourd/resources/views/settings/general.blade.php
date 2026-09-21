@@ -259,6 +259,134 @@
  </div>
  </div>
 
+        {{-- ── App & Community Banner Section ── --}}
+        <div class="card border-0 shadow-sm" id="app-banner-section">
+            <div class="card-body p-6">
+                <div class="flex items-center justify-between mb-1">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <h5 class="text-sm font-bold text-default-800">App Banner / بانر تطبيق الموبايل وصفحة الفعاليات</h5>
+                    </div>
+                    <span class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-full font-bold">
+                        يظهر في رأس صفحة الفعاليات (/app/community)
+                    </span>
+                </div>
+                <p class="text-xs text-default-400 mb-5">
+                    قم برفع صورة بانر ترويجية للفعاليات أو الإعلانات لتظهر مباشرة في تطبيق الموبايل وصفحة الفعاليات للأعضاء.
+                </p>
+
+                <div class="grid lg:grid-cols-12 gap-6 items-start">
+                    {{-- Upload & Inputs (Left 7 Cols) --}}
+                    <div class="lg:col-span-7 space-y-4">
+                        {{-- Drag & Drop Upload Zone --}}
+                        <div>
+                            <label class="block text-xs font-semibold text-default-600 mb-2 uppercase tracking-wide">
+                                Upload Banner Image / رفع صورة البانر
+                            </label>
+                            <div class="logo-upload-zone relative group" id="logo-banner-zone" onclick="document.getElementById('app-banner-input').click()">
+                                <div id="logo-banner-preview">
+                                    @php
+                                        $currBanner = $settings['app_banner_image'] ?? '';
+                                        $currBannerUrl = $settings['app_banner_url'] ?? '';
+                                        $hasBanner = !empty($currBanner) || !empty($currBannerUrl);
+                                        $displaySrc = !empty($currBanner) ? asset('storage/'.$currBanner) : $currBannerUrl;
+                                    @endphp
+                                    @if($hasBanner)
+                                        <div class="relative max-w-sm mx-auto mb-2 rounded-xl overflow-hidden border border-default-200 shadow-sm">
+                                            <img src="{{ $displaySrc }}" alt="App Banner" class="w-full h-32 object-cover" id="banner-img-preview"/>
+                                        </div>
+                                    @else
+                                        <i class="iconify lucide--image-plus text-default-300 size-12 mx-auto mb-2 group-hover:scale-110 transition duration-200 text-emerald-500"></i>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-default-600 font-bold">اسحب صورة البانر هنا أو <span class="text-primary underline">تصفح ملفاتك</span></p>
+                                <p class="text-[10px] text-default-400 mt-1">المقاس الموصى به: 1200×600 px أو 16:9 • بصيغة JPG, PNG, WEBP (حتى 5MB)</p>
+                                <input accept="image/*" class="hidden" id="app-banner-input" name="app_banner_image" type="file"/>
+                            </div>
+
+                            <div class="flex items-center justify-between mt-2">
+                                <button type="button" id="btn-remove-banner" class="text-xs text-rose-600 hover:text-rose-800 font-bold inline-flex items-center gap-1 {{ $hasBanner ? '' : 'hidden' }}">
+                                    <i class="iconify lucide--trash-2 size-3.5"></i>
+                                    حذف صورة البانر الحالية
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Or External URL --}}
+                        <div>
+                            <label class="block text-xs font-semibold text-default-600 mb-1.5 uppercase tracking-wide">
+                                Or Direct Image URL / أو رابط صورة خارجي (اختياري)
+                            </label>
+                            <input type="url" id="setting-app-banner-url" class="form-input text-xs" 
+                                   placeholder="https://images.unsplash.com/photo-..." 
+                                   value="{{ $settings['app_banner_url'] ?? '' }}"/>
+                        </div>
+
+                        {{-- Banner Text & Link Inputs --}}
+                        <div class="grid md:grid-cols-2 gap-3 pt-2">
+                            <div>
+                                <label class="block text-xs font-semibold text-default-600 mb-1.5">عنوان البانر (اختياري)</label>
+                                <input type="text" id="setting-app-banner-title" class="form-input text-xs" 
+                                       placeholder="مثال: فعاليات وورش عمل DDT" 
+                                       value="{{ $settings['app_banner_title'] ?? '' }}"/>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-default-600 mb-1.5">نص وصفي أو شعار فرعي</label>
+                                <input type="text" id="setting-app-banner-subtitle" class="form-input text-xs" 
+                                       placeholder="مثال: أكثر من مكان.. مجتمع بيكبر معاك" 
+                                       value="{{ $settings['app_banner_subtitle'] ?? '' }}"/>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-default-600 mb-1.5">نص زر البانر (Button Text)</label>
+                                <input type="text" id="setting-app-banner-btn-text" class="form-input text-xs" 
+                                       placeholder="مثال: تصفح الفعاليات أو اطلب مشروبك" 
+                                       value="{{ $settings['app_banner_button_text'] ?? '' }}"/>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-default-600 mb-1.5">رابط التحويل عند النقر (Link URL)</label>
+                                <input type="url" id="setting-app-banner-link" class="form-input text-xs" 
+                                       placeholder="https://wa.me/201000000000 أو رابط التسجيل" 
+                                       value="{{ $settings['app_banner_link'] ?? '' }}"/>
+                                <span class="text-[10px] text-default-400">عند الضغط على البانر أو الزر سيتم توجيه العضو لهذا الرابط</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Mobile Live Mockup Preview (Right 5 Cols) --}}
+                    <div class="lg:col-span-5 bg-[#F5F3EE] p-4 rounded-2xl border border-[#E5E2DC]">
+                        <p class="text-xs font-bold text-[#303334] mb-3 flex items-center gap-1.5">
+                            <i class="iconify lucide--smartphone size-4 text-[#4E8F35]"></i>
+                            معاينة ظهور البانر في تطبيق الموبايل
+                        </p>
+                        
+                        {{-- Mockup Screen Card --}}
+                        <div class="bg-white rounded-2xl border border-[#E5E2DC] overflow-hidden shadow-sm">
+                            <div class="h-32 bg-[#303334] relative overflow-hidden flex items-end p-3" id="mockup-banner-container">
+                                <img src="{{ $displaySrc ?: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80' }}" 
+                                     alt="Banner Preview" 
+                                     id="mockup-banner-img" 
+                                     class="absolute inset-0 w-full h-full object-cover opacity-80"/>
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#303334] via-[#303334]/40 to-transparent"></div>
+                                <div class="relative text-white z-10">
+                                    <span class="text-[9px] font-bold text-[#79B84A] block uppercase tracking-wider">DDT COMMUNITY</span>
+                                    <h6 class="text-xs font-black drop-shadow-sm" id="mockup-banner-title">
+                                        {{ $settings['app_banner_title'] ?? 'فعاليات وورش عمل DDT' }}
+                                    </h6>
+                                    <p class="text-[10px] text-[#DCE8D4] line-clamp-1 mt-0.5" id="mockup-banner-sub">
+                                        {{ $settings['app_banner_subtitle'] ?? 'أكثر من مكان.. مجتمع بيكبر معاك' }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-white flex items-center justify-between text-[10px] text-[#73777A]">
+                                <span class="font-bold text-[#4E8F35]">● فعاليات متاحة</span>
+                                <span class="font-bold text-[#303334]">مجاناً للأعضاء</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
  {{-- ── Colors Section ── --}}
  <div class="card border-0 shadow-sm">
  <div class="card-body p-6">
@@ -556,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function () {
  });
 
  // ── Drag & Drop ──
- ['logo-main-zone', 'logo-sm-zone', 'logo-fav-zone'].forEach(function(id) {
+ ['logo-main-zone', 'logo-sm-zone', 'logo-fav-zone', 'logo-banner-zone'].forEach(function(id) {
  const zone = document.getElementById(id);
  if (!zone) return;
  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragging'); });
@@ -567,6 +695,7 @@ document.addEventListener('DOMContentLoaded', function () {
  let inputId = 'logo-main-input';
  if (id === 'logo-sm-zone') inputId = 'logo-sm-input';
  if (id === 'logo-fav-zone') inputId = 'favicon-input';
+            if (id === 'logo-banner-zone') inputId = 'app-banner-input';
  const input = document.getElementById(inputId);
  input.files = e.dataTransfer.files;
  input.dispatchEvent(new Event('change'));
@@ -574,7 +703,75 @@ document.addEventListener('DOMContentLoaded', function () {
  });
 
  // ── Save Settings ──
- document.getElementById('btn-save-settings').addEventListener('click', async function() {
+ 
+    // ── App Banner Image Preview & Sync ──
+    let removeBannerFlag = false;
+    const bannerInput = document.getElementById('app-banner-input');
+    if (bannerInput) {
+        bannerInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            removeBannerFlag = false;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                document.getElementById('logo-banner-preview').innerHTML =
+                    '<div class="relative max-w-sm mx-auto mb-2 rounded-xl overflow-hidden border border-default-200 shadow-sm">' +
+                    '<img src="' + ev.target.result + '" alt="Banner" class="w-full h-32 object-cover" id="banner-img-preview"/>' +
+                    '</div>';
+                const mockImg = document.getElementById('mockup-banner-img');
+                if (mockImg) mockImg.src = ev.target.result;
+                const removeBtn = document.getElementById('btn-remove-banner');
+                if (removeBtn) removeBtn.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    const removeBannerBtn = document.getElementById('btn-remove-banner');
+    if (removeBannerBtn) {
+        removeBannerBtn.addEventListener('click', function() {
+            removeBannerFlag = true;
+            if (bannerInput) bannerInput.value = '';
+            document.getElementById('logo-banner-preview').innerHTML = 
+                '<i class="iconify lucide--image-plus text-default-300 size-12 mx-auto mb-2 group-hover:scale-110 transition duration-200 text-emerald-500"></i>';
+            const mockImg = document.getElementById('mockup-banner-img');
+            if (mockImg) mockImg.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80';
+            this.classList.add('hidden');
+            const urlInp = document.getElementById('setting-app-banner-url');
+            if (urlInp) urlInp.value = '';
+        });
+    }
+
+    // Live sync banner texts
+    const titleInp = document.getElementById('setting-app-banner-title');
+    if (titleInp) {
+        titleInp.addEventListener('input', function() {
+            const mockTitle = document.getElementById('mockup-banner-title');
+            if (mockTitle) mockTitle.textContent = this.value || 'فعاليات وورش عمل DDT';
+        });
+    }
+
+    const subInp = document.getElementById('setting-app-banner-subtitle');
+    if (subInp) {
+        subInp.addEventListener('input', function() {
+            const mockSub = document.getElementById('mockup-banner-sub');
+            if (mockSub) mockSub.textContent = this.value || 'أكثر من مكان.. مجتمع بيكبر معاك';
+        });
+    }
+
+    const bannerUrlInp = document.getElementById('setting-app-banner-url');
+    if (bannerUrlInp) {
+        bannerUrlInp.addEventListener('input', function() {
+            if (this.value) {
+                const mockImg = document.getElementById('mockup-banner-img');
+                if (mockImg) mockImg.src = this.value;
+                const removeBtn = document.getElementById('btn-remove-banner');
+                if (removeBtn) removeBtn.classList.remove('hidden');
+            }
+        });
+    }
+
+    document.getElementById('btn-save-settings').addEventListener('click', async function() {
  const btn = this;
  const color = document.getElementById('custom-color-hex').value;
  localStorage.setItem('dt_primary_color', color);
@@ -629,6 +826,32 @@ document.addEventListener('DOMContentLoaded', function () {
  }
 
  const favInput = document.getElementById('favicon-input');
+        if (favInput && favInput.files[0]) {
+            formData.append('favicon', favInput.files[0]);
+        }
+
+        const bannerInp = document.getElementById('app-banner-input');
+        if (bannerInp && bannerInp.files[0]) {
+            formData.append('app_banner_image', bannerInp.files[0]);
+        } else if (removeBannerFlag) {
+            formData.append('remove_app_banner', '1');
+        }
+
+        const appBannerUrl = document.getElementById('setting-app-banner-url');
+        if (appBannerUrl) formData.append('app_banner_url', appBannerUrl.value);
+
+        const appBannerTitle = document.getElementById('setting-app-banner-title');
+        if (appBannerTitle) formData.append('app_banner_title', appBannerTitle.value);
+
+        const appBannerSub = document.getElementById('setting-app-banner-subtitle');
+        if (appBannerSub) formData.append('app_banner_subtitle', appBannerSub.value);
+
+        const appBannerLink = document.getElementById('setting-app-banner-link');
+        if (appBannerLink) formData.append('app_banner_link', appBannerLink.value);
+
+        const appBannerBtnText = document.getElementById('setting-app-banner-btn-text');
+        if (appBannerBtnText) formData.append('app_banner_button_text', appBannerBtnText.value);
+    
  if (favInput && favInput.files[0]) {
  formData.append('favicon', favInput.files[0]);
  }
