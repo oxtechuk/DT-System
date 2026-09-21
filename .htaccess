@@ -1,15 +1,14 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
-
     RewriteEngine On
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # Prevent rewrite loop
+    RewriteRule ^Dashbourd/public/ - [L]
 
-    # Internal Rewrite to Dashbourd/public without changing the browser URL
-    RewriteCond %{REQUEST_URI} !^/Dashbourd/public/
-    RewriteRule ^(.*)$ Dashbourd/public/$1 [L,QSA]
+    # If file or folder exists at root, serve it directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Forward everything else directly to Dashbourd front controller
+    RewriteRule ^(.*)$ Dashbourd/public/index.php [L,QSA]
 </IfModule>
