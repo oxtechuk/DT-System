@@ -1,4 +1,15 @@
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
-    RewriteRule ^$ /DDt/DT-System/Dashbourd/public/ [L,R=301]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Internal Rewrite to Dashbourd/public without changing the browser URL
+    RewriteCond %{REQUEST_URI} !^/Dashbourd/public/
+    RewriteRule ^(.*)$ Dashbourd/public/$1 [L,QSA]
 </IfModule>
