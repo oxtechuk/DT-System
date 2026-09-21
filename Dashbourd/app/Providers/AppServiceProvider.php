@@ -22,22 +22,19 @@ class AppServiceProvider extends ServiceProvider
  \Illuminate\Support\Facades\Schema::defaultStringLength(191);
 
  // Auto-detect dynamic URL Host & HTTPS / Reverse Proxy dynamically
- if (!app()->runningInConsole() && request()->getHost()) {
- $isHttps = request()->isSecure()
- || request()->server('HTTP_X_FORWARDED_PROTO') === 'https'
- || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
- || (config('app.env') === 'production' && str_starts_with(config('app.url', ''), 'https://'));
+ if (!app()->runningInConsole() && !empty($_SERVER['HTTP_HOST'])) {
+ $host = $_SERVER['HTTP_HOST'];
+ $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+ || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+ || (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+ || (config('app.env') === 'production' && str_starts_with((string) config('app.url', ''), 'https://'));
 
  if ($isHttps) {
  \Illuminate\Support\Facades\URL::forceScheme('https');
  }
 
- // Dynamically set root URL to match the accessing domain / host
  $scheme = $isHttps ? 'https' : 'http';
- $host = request()->getHttpHost();
- if ($host) {
  \Illuminate\Support\Facades\URL::forceRootUrl($scheme . '://' . $host);
- }
  }
 
  // Global Gate: Super Admin & Role-based Permissions
