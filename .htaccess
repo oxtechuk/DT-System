@@ -1,14 +1,5 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-
-    # Prevent rewrite loop
-    RewriteRule ^Dashbourd/public/ - [L]
-
-    # If file or folder exists at root, serve it directly
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # Forward everything else directly to Dashbourd front controller
-    RewriteRule ^(.*)$ Dashbourd/public/index.php [L,QSA]
+    RewriteRule ^$ public/index.php [L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L]
 </IfModule>

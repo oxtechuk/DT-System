@@ -2,20 +2,24 @@
 
 namespace App\Models;
 
-use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
+ use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'order_number',
         'customer_id',
         'deal_id',
+        'booking_id',
+        'source',
+        'room_id',
+        'table_or_room_name',
+        'fulfillment_status',
+        'customer_notes',
         'subtotal',
         'discount',
         'tax',
@@ -23,77 +27,100 @@ class Order extends Model
         'paid_amount',
         'remaining_amount',
         'status',
+        'closed_at',
         'created_by',
         'closed_by',
-        'closed_at',
     ];
 
-    protected $casts = [
-        'status'     => OrderStatus::class,
-        'subtotal'   => 'decimal:2',
-        'discount'   => 'decimal:2',
-        'tax'        => 'decimal:2',
-        'total'      => 'decimal:2',
-        'paid_amount'      => 'decimal:2',
-        'remaining_amount' => 'decimal:2',
-        'closed_at'  => 'datetime',
-    ];
+ protected $casts = [
+ 'subtotal' => 'decimal:2',
+ 'discount' => 'decimal:2',
+ 'tax' => 'decimal:2',
+ 'total' => 'decimal:2',
+ 'paid_amount' => 'decimal:2',
+ 'remaining_amount' => 'decimal:2',
+ 'closed_at' => 'datetime',
+ ];
 
-    // ─── Relationships ───────────────────────────────────────────────────────────
+ // ── Relationships ──
 
-    public function customer(): BelongsTo
+ public function customer()
+ {
+ return $this->belongsTo(Customer::class);
+ }
+
+ public function deal()
+ {
+ return $this->belongsTo(Deal::class);
+ }
+
+ public function room()
+ {
+ return $this->hasOneThrough(Room::class, Deal::class, 'id', 'id', 'deal_id', 'room_id');
+ }
+
+ public function items()
+ {
+ return $this->hasMany(OrderItem::class);
+ }
+
+ public function payments()
+ {
+ return $this->hasMany(Payment::class);
+ }
+
+ // ── Scopes ──
+
+ public function scopeOpen($query)
+ {
+ return $query->where('status', 'open');
+ }
+
+ public function scopeToday($query)
+ {
+ return $query->whereDate('created_at', today());
+ }
+
+ // ── Helpers ──
+
+    public static function generateNumber(): string
     {
-        return $this->belongsTo(Customer::class);
-    }
-
-    public function deal(): BelongsTo
-    {
-        return $this->belongsTo(Deal::class);
-    }
-
-    public function items(): HasMany
-    {
-        return $this->hasMany(OrderItem::class);
-    }
-
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
-    }
-
-    public function createdBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function closedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'closed_by');
-    }
-
-    // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-    public function isPaid(): bool
-    {
-        return $this->status === OrderStatus::Paid;
-    }
-
-    public function isOpen(): bool
-    {
-        return $this->status === OrderStatus::Open;
-    }
-
-    public function recalculate(): void
-    {
-        $this->subtotal         = $this->items->sum('total');
-        $this->total            = $this->subtotal - $this->discount + $this->tax;
-        $this->paid_amount      = $this->payments->sum('amount');
-        $this->remaining_amount = max(0, $this->total - $this->paid_amount);
-
-        if ($this->remaining_amount <= 0) {
-            $this->status = OrderStatus::Paid;
-        } elseif ($this->paid_amount > 0) {
-            $this->status = OrderStatus::PartiallyPaid;
+        $numbers = static::withTrashed()->pluck('order_number');
+        $max = 0;
+        foreach ($numbers as $num) {
+            if (preg_match('/^O(\d+)$/', $num, $matches)) {
+                $val = (int) $matches[1];
+                if ($val > $max) {
+                    $max = $val;
+                }
+            }
         }
+        $next = $max + 1;
+        do {
+            $candidate = 'O' . str_pad($next, 5, '0', STR_PAD_LEFT);
+            $exists = static::withTrashed()->where('order_number', $candidate)->exists();
+            if ($exists) {
+                $next++;
+            }
+        } while ($exists);
+
+        return $candidate;
     }
+
+ /**
+ * Recalculate totals from items.
+ */
+ public function recalculate(): void
+ {
+ $subtotal = $this->items()->sum('total');
+ $total = $subtotal - $this->discount + $this->tax;
+ $remaining = max(0, $total - $this->paid_amount);
+
+ $this->update([
+ 'subtotal' => $subtotal,
+ 'total' => $total,
+ 'remaining_amount' => $remaining,
+ 'status' => $remaining <= 0 ? 'paid' : ($this->paid_amount > 0 ? 'partially_paid' : 'open'),
+ ]);
+ }
 }

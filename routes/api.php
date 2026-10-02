@@ -2,73 +2,70 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DealController;
-use App\Http\Controllers\Api\V1\OrderController;
+use App\Http\Controllers\Api\V1\ProductController;
+use App\Http\Controllers\Api\V1\RoomController;
+use App\Http\Controllers\Api\V1\SettingController;
+use App\Http\Controllers\Api\V1\ShiftController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes — /api/v1/
+| API Routes — DT-System Primary Mobile & Workspace API
+| Version: V1
+| Base URL: /api/v1/
 |--------------------------------------------------------------------------
-|
-| All routes are versioned under /api/v1/
-| Authentication: Laravel Sanctum (token-based)
-|
 */
 
-Route::prefix('v1')->name('v1.')->group(function () {
+Route::prefix('v1')->name('api.v1.')->group(function () {
 
-    // ── Public: Auth ─────────────────────────────────────────────────────────
+    // ── Public Auth ────────────────────────────────────────────────────────
     Route::prefix('auth')->name('auth.')->group(function () {
-        Route::post('login',  [AuthController::class, 'login'])->name('login');
+        Route::post('login', [AuthController::class, 'login'])->name('login');
     });
 
-    // ── Protected ─────────────────────────────────────────────────────────────
+    // ── Public Settings & Branding ─────────────────────────────────────────
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+
+    // ── Protected API Endpoints ────────────────────────────────────────────
     Route::middleware('auth:sanctum')->group(function () {
 
-        // Auth
+        // Auth management
         Route::prefix('auth')->name('auth.')->group(function () {
+            Route::get('me',      [AuthController::class, 'me'])->name('me');
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-            Route::get('me',     [AuthController::class, 'me'])->name('me');
         });
+
+        // Dashboard & Overview
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Customers
-        Route::prefix('customers')->name('customers.')->group(function () {
-            Route::get('/',         [CustomerController::class, 'index'])->name('index');
-            Route::post('/',        [CustomerController::class, 'store'])->name('store');
-            Route::get('/{customer}',    [CustomerController::class, 'show'])->name('show');
-            Route::put('/{customer}',    [CustomerController::class, 'update'])->name('update');
+        Route::apiResource('customers', CustomerController::class)->only(['index', 'store', 'show', 'update']);
+
+        // Rooms & Workspaces
+        Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
+
+        // Deals (Active Sessions)
+        Route::get('deals/active',               [DealController::class, 'active'])->name('deals.active');
+        Route::apiResource('deals', DealController::class)->only(['index', 'store', 'show']);
+        Route::post('deals/{deal}/close',        [DealController::class, 'close'])->name('deals.close');
+        Route::post('deals/{deal}/pay',          [DealController::class, 'pay'])->name('deals.pay');
+        Route::post('deals/{deal}/items',        [DealController::class, 'addItem'])->name('deals.add-item');
+        Route::delete('deals/{deal}/items/{item}', [DealController::class, 'removeItem'])->name('deals.remove-item');
+
+        // Products & Cafe Catalog
+        Route::get('products', [ProductController::class, 'index'])->name('products.index');
+
+        // Cashier Shifts
+        Route::prefix('shifts')->name('shifts.')->group(function () {
+            Route::get('current',        [ShiftController::class, 'current'])->name('current');
+            Route::post('open',          [ShiftController::class, 'open'])->name('open');
+            Route::post('{shift}/close', [ShiftController::class, 'close'])->name('close');
         });
 
-        // Deals (Sessions)
-        Route::prefix('deals')->name('deals.')->group(function () {
-            Route::get('/',               [DealController::class, 'index'])->name('index');
-            Route::post('/',              [DealController::class, 'store'])->name('store');
-            Route::get('/{deal}',         [DealController::class, 'show'])->name('show');
-            Route::post('/{deal}/close',  [DealController::class, 'close'])->name('close');
-            Route::patch('/{deal}/time',  [DealController::class, 'adjustTime'])->name('adjust-time');
-        });
-
-        // Orders
-        Route::prefix('orders')->name('orders.')->group(function () {
-            Route::get('/{order}',                     [OrderController::class, 'show'])->name('show');
-            Route::post('/{order}/items',              [OrderController::class, 'addItem'])->name('add-item');
-            Route::delete('/{order}/items/{item}',     [OrderController::class, 'removeItem'])->name('remove-item');
-            Route::post('/{order}/payments',           [OrderController::class, 'addPayment'])->name('add-payment');
-            Route::post('/{order}/close',              [OrderController::class, 'close'])->name('close');
-        });
-
-        // Rooms (read-only in Phase 1)
-        Route::get('rooms', fn() => response()->json(\App\Models\Room::active()->get()))->name('rooms.index');
-
-        // Workspace Types (read-only)
-        Route::get('workspace-types', fn() => response()->json(\App\Models\WorkspaceType::active()->get()))->name('workspace-types.index');
-
-        // Products (read-only listing in Phase 1)
-        Route::get('products', fn() => response()->json(
-            \App\Models\Product::with('category')->active()->orderBy('name')->get()
-        ))->name('products.index');
-
+        // Settings updates
+        Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
     });
 
 });

@@ -2,61 +2,83 @@
 
 namespace App\Models;
 
-use App\Enums\PaymentMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
-    use HasFactory;
+ use HasFactory;
 
-    protected $fillable = [
-        'payment_number',
-        'order_id',
-        'customer_id',
-        'type',
-        'method',
-        'amount',
-        'reference',
-        'paid_at',
-        'received_by',
-        'notes',
-    ];
+ protected $fillable = [
+ 'payment_number',
+ 'order_id',
+ 'customer_id',
+ 'type',
+ 'method',
+ 'amount',
+ 'reference',
+ 'paid_at',
+ 'received_by',
+ 'notes',
+ ];
 
-    protected $casts = [
-        'method'   => PaymentMethod::class,
-        'amount'   => 'decimal:2',
-        'paid_at'  => 'datetime',
-    ];
+ protected $casts = [
+ 'amount' => 'decimal:2',
+ 'paid_at' => 'datetime',
+ ];
 
-    public function order(): BelongsTo
+ // ── Relationships ──
+
+ public function order()
+ {
+ return $this->belongsTo(Order::class);
+ }
+
+ public function customer()
+ {
+ return $this->belongsTo(Customer::class);
+ }
+
+ public function deal()
+ {
+ return $this->hasOneThrough(Deal::class, Order::class, 'id', 'id', 'order_id', 'deal_id');
+ }
+
+ // ── Scopes ──
+
+ public function scopeToday($query)
+ {
+ return $query->whereDate('paid_at', today());
+ }
+
+ public function scopeByMethod($query, string $method)
+ {
+ return $query->where('method', $method);
+ }
+
+ // ── Helpers ──
+
+    public static function generateNumber(): string
     {
-        return $this->belongsTo(Order::class);
-    }
+        $numbers = static::pluck('payment_number');
+        $max = 0;
+        foreach ($numbers as $num) {
+            if (preg_match('/^P(\d+)$/', $num, $matches)) {
+                $val = (int) $matches[1];
+                if ($val > $max) {
+                    $max = $val;
+                }
+            }
+        }
+        $next = $max + 1;
+        do {
+            $candidate = 'P' . str_pad($next, 5, '0', STR_PAD_LEFT);
+            $exists = static::where('payment_number', $candidate)->exists();
+            if ($exists) {
+                $next++;
+            }
+        } while ($exists);
 
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class);
-    }
-
-    public function receivedBy(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'received_by');
-    }
-
-    public function isPhysicalCash(): bool
-    {
-        return $this->method === PaymentMethod::Cash;
-    }
-
-    public function scopeByMethod($query, PaymentMethod $method)
-    {
-        return $query->where('method', $method->value);
-    }
-
-    public function scopeInDateRange($query, $from, $to)
-    {
-        return $query->whereBetween('paid_at', [$from, $to]);
+        return $candidate;
     }
 }

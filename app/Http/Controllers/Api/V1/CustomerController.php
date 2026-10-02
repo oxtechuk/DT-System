@@ -4,86 +4,129 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use App\Services\Customer\CustomerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    public function __construct(
-        private CustomerService $customerService
-    ) {}
-
     /**
      * GET /api/v1/customers
+     * List customers with optional search — used by Cashier POS.
      */
     public function index(Request $request): JsonResponse
     {
-        $this->authorize('customers.view');
+        $query = Customer::active()
+            ->withCount(['deals as active_deals_count' => fn ($q) => $q->open()]);
 
-        $customers = Customer::query()
-            ->when($request->search, fn($q, $s) => $q->where('full_name', 'like', "%{$s}%")
-                ->orWhere('phone', 'like', "%{$s}%"))
-            ->when($request->status, fn($q, $s) => $q->where('status', $s))
-            ->when($request->type, fn($q, $t) => $q->where('customer_type', $t))
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        if ($search = $request->get('search')) {
+            $query->search($search);
+        }
 
-        return response()->json($customers);
+        $customers = $query
+            ->orderBy('full_name')
+            ->limit($request->get('limit', 50))
+            ->get(['id', 'full_name', 'phone', 'email', 'customer_type', 'status']);
+
+        return response()->json([
+            'data' => $customers->map(fn ($c) => [
+                'id' => $c->id,
+                'full_name' => $c->full_name,
+                'phone' => $c->phone,
+                'email' => $c->email,
+                'initials' => $c->initials,
+                'type' => $c->customer_type,
+                'active_deals' => $c->active_deals_count,
+            ]),
+            'total' => $customers->count(),
+        ]);
     }
 
     /**
      * POST /api/v1/customers
+     * Quick-create a customer from the Cashier POS.
      */
     public function store(Request $request): JsonResponse
     {
-        $this->authorize('customers.create');
-
-        $data = $request->validate([
-            'full_name'     => 'required|string|max:255',
-            'phone'         => 'required|string|max:30|unique:customers,phone',
-            'email'         => 'nullable|email|unique:customers,email',
-            'customer_type' => 'nullable|in:registered,guest',
-            'source'        => 'nullable|string|max:100',
-            'notes'         => 'nullable|string',
+        // Fallback: frontend sends 'name', model expects 'full_name'
+        $request->merge([
+            'full_name' => $request->input('full_name', $request->input('name')),
         ]);
 
-        $customer = $this->customerService->create($data);
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'phone' => ['required', 'string', 'regex:/^(010|011|012|015)[0-9]{8}$/', 'unique:customers,phone'],
+            'email' => 'nullable|email|unique:customers,email',
+            'customer_type' => 'nullable|in:registered,guest',
+            'classification' => 'nullable|string|max:50',
+            'source' => 'nullable|string|max:100',
+            'notes' => 'nullable|string',
+        ], [
+            'phone.regex' => 'رقم الهاتف يجب أن يكون رقم مصري صحيح (11 رقم يبدأ بـ 010, 011, 012, أو 015)',
+            'phone.unique' => 'رقم الهاتف هذا مسجل بالفعل.',
+            'email.unique' => 'البريد الإلكتروني هذا مسجل بالفعل.',
+        ]);
 
-        return response()->json($customer, 201);
+        $validated['customer_type'] ??= 'registered';
+
+        $customer = Customer::create($validated);
+
+        return response()->json([
+            'message' => 'Customer created successfully.',
+            'data' => [
+                'id' => $customer->id,
+                'full_name' => $customer->full_name,
+                'name' => $customer->full_name,
+                'phone' => $customer->phone,
+                'initials' => $customer->initials,
+            ],
+        ], 201);
     }
 
     /**
-     * GET /api/v1/customers/{customer}
+     * GET /api/v1/customers/{id}
+     * Customer details + history.
      */
     public function show(Customer $customer): JsonResponse
     {
-        $this->authorize('customers.view');
+        $customer->load([
+            'deals' => fn ($q) => $q->latest()->limit(10),
+            'deals.room',
+            'deals.workspaceType',
+        ]);
 
-        $customer->load(['deals' => fn($q) => $q->latest()->limit(10), 'orders' => fn($q) => $q->latest()->limit(10)]);
-
-        return response()->json($customer);
+        return response()->json([
+            'data' => array_merge($customer->toArray(), [
+                'initials' => $customer->initials,
+                'active_deals' => $customer->deals->where('status', 'open')->count(),
+            ]),
+        ]);
     }
 
     /**
-     * PUT /api/v1/customers/{customer}
+     * PUT /api/v1/customers/{id}
+     * Update customer details.
      */
     public function update(Request $request, Customer $customer): JsonResponse
     {
-        $this->authorize('customers.edit');
+        if ($request->has('name') && ! $request->has('full_name')) {
+            $request->merge(['full_name' => $request->input('name')]);
+        }
 
-        $data = $request->validate([
-            'full_name'     => 'sometimes|required|string|max:255',
-            'phone'         => "sometimes|required|string|max:30|unique:customers,phone,{$customer->id}",
-            'email'         => "nullable|email|unique:customers,email,{$customer->id}",
+        $validated = $request->validate([
+            'full_name' => 'sometimes|required|string|max:255',
+            'phone' => ['sometimes', 'required', 'string', 'regex:/^(010|011|012|015)[0-9]{8}$/', 'unique:customers,phone,'.$customer->id],
+            'email' => 'nullable|email|unique:customers,email,'.$customer->id,
             'customer_type' => 'nullable|in:registered,guest',
-            'source'        => 'nullable|string|max:100',
-            'status'        => 'nullable|in:active,inactive,blocked',
-            'notes'         => 'nullable|string',
+            'classification' => 'nullable|string|max:50',
+            'notes' => 'nullable|string',
         ]);
 
-        $customer = $this->customerService->update($customer, $data);
+        $customer->update($validated);
 
-        return response()->json($customer);
+        return response()->json([
+            'success' => true,
+            'message' => 'تم تحديث بيانات العميل بنجاح.',
+            'data' => $customer,
+        ]);
     }
 }
