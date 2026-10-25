@@ -2,76 +2,24 @@
 
 @section('title', 'قائمة المشروبات — DDT WORKING SPACE')
 
-@php
-    function getCategorySvg($code, $name) {
-        $code = strtolower($code ?? '');
-        $name = mb_strtolower($name ?? '');
-        if (str_contains($code, 'hot') || str_contains($name, 'ساخن') || str_contains($name, 'قهوة') || str_contains($name, 'شاي')) {
-            return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>';
+    @php
+        function getCategorySvg($code, $name) {
+            $code = strtolower($code ?? '');
+            $name = mb_strtolower($name ?? '');
+            if (str_contains($code, 'hot') || str_contains($name, 'ساخن') || str_contains($name, 'قهوة') || str_contains($name, 'شاي')) {
+                return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>';
+            }
+            if (str_contains($code, 'cold') || str_contains($name, 'بارد') || str_contains($name, 'عصير') || str_contains($name, 'مياه') || str_contains($name, 'آيس')) {
+                return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h1a4 4 0 010 8h-1m-2 4H8a2 2 0 01-2-2V4h10v14a2 2 0 01-2 2zM9 1v3M15 1v3"/></svg>';
+            }
+            if (str_contains($code, 'snack') || str_contains($name, 'سناك') || str_contains($name, 'أكل') || str_contains($name, 'حلو')) {
+                return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>';
+            }
+            return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/></svg>';
         }
-        if (str_contains($code, 'cold') || str_contains($name, 'بارد') || str_contains($name, 'عصير') || str_contains($name, 'مياه')) {
-            return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>';
-        }
-        if (str_contains($code, 'snack') || str_contains($name, 'سناك') || str_contains($name, 'أكل') || str_contains($name, 'حلو')) {
-            return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>';
-        }
-        return '<svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/></svg>';
-    }
-@endphp
+    @endphp
 
-@section('content')
-
-    <!-- Header & Room Location Indicator (Solid White Card) -->
-    <div class="solid-card rounded-[24px] p-4.5">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-sm font-extrabold text-[#303334] flex items-center gap-2">
-                    <span>قائمة المشروبات — DDT Cafe</span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EBF4E8] text-[#4E8F35]">
-                        طلب مباشر
-                    </span>
-                </h1>
-                <p class="text-[11px] text-[#738276] mt-0.5">اطلب مشروبك وسيصلك فوراً إلى مكان جلوسك في DDT</p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center p-2.5 flex-shrink-0">
-                <svg class="w-full h-full" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
-            </div>
-        </div>
-
-        <!-- Location Selector -->
-        <div class="mt-3.5 pt-3 border-t border-[#E5E2DC]">
-            <label class="text-[11px] font-bold text-[#303334] mb-1.5 flex items-center justify-between">
-                <span class="flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5 text-[#4E8F35]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    مكان تسليم الطلب:
-                </span>
-                @if($activeDeal && $activeDeal->room)
-                    <span class="text-[#4E8F35] text-[10px] font-bold flex items-center gap-1 bg-[#EBF4E8] px-2.5 py-0.5 rounded-full">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#4E8F35]"></span>
-                        مرتبط بجلستك الحالية
-                    </span>
-                @endif
-            </label>
-            <div class="flex gap-2">
-                <select id="order-room-select" class="flex-1 bg-[#F5F3EE] border border-[#E5E2DC] rounded-full px-3 py-2 text-xs text-[#303334] focus:outline-none focus:border-[#4E8F35] font-bold">
-                    @if($activeDeal && $activeDeal->room)
-                        <option value="{{ $activeDeal->room->id }}" selected>{{ $activeDeal->room->name }} (مكانك الحالي)</option>
-                    @endif
-                    @foreach($rooms as $room)
-                        @if(!$activeDeal || $activeDeal->room_id != $room->id)
-                            <option value="{{ $room->id }}">{{ $room->name }}</option>
-                        @endif
-                    @endforeach
-                    <option value="">مكان آخر (يدوي)</option>
-                </select>
-                <input type="text" id="order-table-input" placeholder="رقم الطاولة أو المكان" 
-                    value="{{ $activeDeal && $activeDeal->room ? $activeDeal->room->name : '' }}"
-                    class="w-1/2 bg-[#F5F3EE] border border-[#E5E2DC] rounded-full px-3 py-2 text-xs text-[#303334] placeholder-[#738276] focus:outline-none focus:border-[#4E8F35]">
-            </div>
-        </div>
-    </div>
+    @section('content')
 
     <!-- Search, Filter & Categories Navigation Section -->
     <div class="space-y-2.5 sticky top-[57px] z-30 pt-1 pb-2 bg-[#F5F3EE]">
@@ -80,18 +28,18 @@
         <div class="flex items-center gap-2">
             <div class="relative flex-1">
                 <input type="text" id="menu-search-input" placeholder="ابحث باسم المشروب أو الصنف..." 
-                    class="w-full bg-white border border-[#E5E2DC] rounded-full pr-9 pl-8 py-2 text-xs text-[#303334] placeholder-[#738276] focus:outline-none focus:border-[#4E8F35] shadow-xs">
-                <svg class="w-4 h-4 text-[#738276] absolute right-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="w-full bg-white border border-[#E5E2DC] rounded-2xl pr-9 pl-8 py-2.5 text-xs text-[#303334] placeholder-[#738276] focus:outline-none focus:border-[#4E8F35] shadow-xs">
+                <svg class="w-4 h-4 text-[#738276] absolute right-3 top-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute left-2.5 top-2 text-[#738276] hover:text-[#303334] p-0.5 rounded-full transition">
+                <button type="button" id="clear-search-btn" onclick="clearSearch()" class="hidden absolute left-2.5 top-2.5 text-[#738276] hover:text-[#303334] p-0.5 rounded-full transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             <!-- Sort dropdown -->
             <div class="relative flex-shrink-0">
-                <select id="menu-sort-select" onchange="applyFilters()" class="bg-white border border-[#E5E2DC] rounded-full px-3 py-2 text-xs text-[#303334] font-bold focus:outline-none focus:border-[#4E8F35] shadow-xs">
+                <select id="menu-sort-select" onchange="applyFilters()" class="bg-white border border-[#E5E2DC] rounded-2xl px-3.5 py-2.5 text-xs text-[#303334] font-bold focus:outline-none focus:border-[#4E8F35] shadow-xs">
                     <option value="default">الترتيب</option>
                     <option value="price_asc">الأقل سعراً</option>
                     <option value="price_desc">الأعلى سعراً</option>
@@ -149,7 +97,7 @@
                 $categoryName = $product->category ? $product->category->name : 'أخرى';
                 $catId = $product->category_id ? 'cat-' . $product->category_id : 'cat-none';
             @endphp
-            <div class="product-card solid-card rounded-[22px] p-3.5 flex items-center justify-between transition-all duration-200 hover:border-[#4E8F35]/50"
+            <div class="product-card solid-card rounded-2xl p-3.5 flex items-center justify-between gap-3 bg-white border border-[#E5E2DC] transition-all duration-200 hover:border-[#4E8F35]/50 shadow-xs"
                 data-id="{{ $product->id }}"
                 data-category="{{ $catId }}"
                 data-category-name="{{ $categoryName }}"
@@ -159,36 +107,36 @@
                 id="product-row-{{ $product->id }}">
                 
                 <div class="flex items-center gap-3 flex-1 min-w-0">
-                    <div class="w-11 h-11 rounded-2xl bg-[#F5F3EE] border border-[#E5E2DC] flex items-center justify-center flex-shrink-0 text-[#4E8F35]">
+                    <div class="w-12 h-12 rounded-2xl bg-[#F5F3EE] border border-[#E5E2DC] flex items-center justify-center flex-shrink-0 text-[#4E8F35] shadow-xs">
                         {!! $itemSvg !!}
                     </div>
-                    <div class="min-w-0 flex-1 pr-1">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <h2 class="text-xs font-bold text-[#303334] truncate">{{ $product->name }}</h2>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-xs font-black text-[#303334] truncate leading-tight">{{ $product->name }}</h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-xs font-black text-[#4E8F35] font-mono leading-none">
+                                {{ number_format($product->selling_price, 2) }} <span class="text-[9px] font-bold text-[#73777A]">ج.م</span>
+                            </span>
                             <button type="button" onclick="quickFilterCategory('{{ $catId }}')" 
-                                class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#F5F3EE] text-[#738276] hover:text-[#4E8F35] transition">
+                                class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#F5F3EE] text-[#73777A] hover:text-[#4E8F35] border border-[#E5E2DC]/70 transition leading-none">
                                 {{ $categoryName }}
                             </button>
                         </div>
                         @if($product->description)
-                            <p class="text-[10px] text-[#738276] mt-0.5 line-clamp-1">{{ $product->description }}</p>
+                            <p class="text-[10px] text-[#73777A] mt-1 line-clamp-1 leading-tight">{{ $product->description }}</p>
                         @endif
-                        <div class="text-xs font-black text-[#4E8F35] font-mono mt-1">
-                            {{ number_format($product->selling_price, 2) }} <span class="text-[10px] text-[#738276] font-normal">ج.م</span>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Add / Quantity Controls (Pill Stepper) -->
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <div class="flex items-center bg-[#F5F3EE] border border-[#E5E2DC] rounded-full p-0.5" id="stepper-box-{{ $product->id }}">
+                    <div class="flex items-center bg-[#F5F3EE] border border-[#E5E2DC] rounded-full p-1 gap-0.5 shadow-xs" id="stepper-box-{{ $product->id }}">
                         <button type="button" onclick="changeQty({{ $product->id }}, -1, '{{ addslashes($product->name) }}', {{ $product->selling_price }})"
-                            class="w-7 h-7 rounded-full bg-white hover:bg-[#E5E2DC] active:scale-90 text-[#303334] font-bold text-xs flex items-center justify-center transition shadow-xs">
+                            class="w-7 h-7 rounded-full bg-white hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 border border-[#E5E2DC] active:scale-90 text-[#303334] font-bold text-xs flex items-center justify-center transition shadow-xs">
                             -
                         </button>
-                        <span id="qty-{{ $product->id }}" class="w-7 text-center text-xs font-bold font-mono text-[#303334] select-none">0</span>
+                        <span id="qty-{{ $product->id }}" class="w-6 text-center text-xs font-black font-mono text-[#303334] select-none">0</span>
                         <button type="button" onclick="changeQty({{ $product->id }}, 1, '{{ addslashes($product->name) }}', {{ $product->selling_price }})"
-                            class="w-7 h-7 rounded-full bg-[#4E8F35] hover:bg-[#0F2B1E] active:scale-90 text-white font-bold text-xs flex items-center justify-center transition shadow-xs">
+                            class="w-7 h-7 rounded-full bg-[#4E8F35] hover:bg-[#3F742B] active:scale-90 text-white font-bold text-xs flex items-center justify-center transition shadow-xs">
                             +
                         </button>
                     </div>

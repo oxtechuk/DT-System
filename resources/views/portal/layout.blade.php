@@ -169,17 +169,29 @@
         <header class="sticky top-0 z-40 bg-[#F5F3EE]/95 backdrop-blur-md px-4 py-3 border-b border-[#E5E2DC] flex items-center justify-between">
             <!-- Left/Start: Location & Edit Context -->
             <div class="flex items-center gap-2">
-                <!-- Quick Drink Order Action Button -->
-                <a href="{{ route('portal.menu') }}" 
-                   title="اطلب مشروبك الآن ليصلك إلى مكان جلوسك"
-                   class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#4E8F35] hover:bg-[#3F742B] text-white text-xs font-black shadow-[0_2px_10px_rgba(78,143,53,0.25)] transition duration-150 active:scale-95 group">
-                    <div class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+                @if(request()->routeIs('portal.menu'))
+                    <!-- Back to Home Button when on Menu -->
+                    <a href="{{ route('portal.home') }}" 
+                       title="العودة للرئيسية"
+                       class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E5E2DC] text-[#303334] text-xs font-bold hover:border-[#4E8F35] transition shadow-xs active:scale-95">
+                        <svg class="w-4 h-4 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                         </svg>
-                    </div>
-                    <span>طلب مشروب سريع</span>
-                </a>
+                        <span>الرئيسية</span>
+                    </a>
+                @else
+                    <!-- Quick Drink Order Action Button -->
+                    <a href="{{ route('portal.menu') }}" 
+                       title="اطلب مشروبك الآن ليصلك إلى مكان جلوسك"
+                       class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#4E8F35] hover:bg-[#3F742B] text-white text-xs font-black shadow-[0_2px_10px_rgba(78,143,53,0.25)] transition duration-150 active:scale-95 group">
+                        <div class="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
+                            </svg>
+                        </div>
+                        <span>طلب مشروب سريع</span>
+                    </a>
+                @endif
             </div>
 
             <!-- Right/End: Status Counter Badge + Saved/Orders Icon + Avatar -->
@@ -248,7 +260,10 @@
         @endif
 
         @if(session('error'))
-            <div class="mx-4 mt-3 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5 shadow-xs">
+            @php
+                $isCustomerTeacher = auth('customer')->check() && auth('customer')->user()->isTeacher();
+            @endphp
+            <div class="mx-4 mt-3 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5 shadow-xs" @if(!$isCustomerTeacher) style="display: none !important;" @endif>
                 <svg class="w-4.5 h-4.5 flex-shrink-0 text-rose-700" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>

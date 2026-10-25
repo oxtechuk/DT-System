@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "DDT Workspace",
+    "slug": "oxtech",
+    "owner": "oxtech",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#F5F3EE",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.ddt.workspace",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "DDT Workspace",
+        "NSCameraUsageDescription": "يطلب التطبيق إذن الكاميرا لمسح باركود الطاولة وبطاقة العضوية."
+      }
+    },
+    "android": {
+      "package": "com.ddt.workspace",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#4E8F35",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4c69b7ac-8aec-4f00-b6e4-c255567fadf8"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+export const colors = {
+  primary: '#4E8F35',
+  primaryDark: '#386A26',
+  primaryLight: '#79B84A',
+  sage: '#DCE8D4',
+  sageLight: '#EBF4E8',
+  charcoal: '#303334',
+  charcoalLight: '#46494A',
+  offWhite: '#F5F3EE',
+  white: '#FFFFFF',
+  gray: '#73777A',
+  grayLight: '#A2A5A7',
+  border: '#E5E2DC',
+  rose: '#BE123C',
+  roseLight: '#FFE4E6',
+  amber: '#B45309',
+  amberLight: '#FEF3C7',
+};

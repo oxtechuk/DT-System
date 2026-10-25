@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\CustomerPortalApiController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DealController;
 use App\Http\Controllers\Api\V1\ProductController;
@@ -23,6 +24,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     // ── Public Auth ────────────────────────────────────────────────────────
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->name('login');
+        Route::post('register', [AuthController::class, 'register'])->name('register');
     });
 
     // ── Public Settings & Branding ─────────────────────────────────────────
@@ -66,6 +68,17 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         // Settings updates
         Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+
+        // ── Customer Portal & Native Mobile App Endpoints ──
+        Route::prefix('portal')->name('portal.')->group(function () {
+            Route::get('dashboard', [CustomerPortalApiController::class, 'dashboard'])->name('dashboard');
+            Route::get('categories', [CustomerPortalApiController::class, 'categories'])->name('categories');
+            Route::get('products', [CustomerPortalApiController::class, 'products'])->name('products');
+            Route::post('orders', [CustomerPortalApiController::class, 'createOrder'])->name('orders.create');
+            Route::get('orders', [CustomerPortalApiController::class, 'myOrders'])->name('orders.index');
+            Route::get('teacher', [CustomerPortalApiController::class, 'teacherPortal'])->name('teacher');
+            Route::get('loyalty', [CustomerPortalApiController::class, 'loyalty'])->name('loyalty');
+        });
     });
 
 });

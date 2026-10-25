@@ -356,8 +356,7 @@ class PortalController extends Controller
         $teacher = $customer->teacher();
 
         if (! $teacher) {
-            return redirect()->route('portal.home')
-                ->with('error', 'هذه الصفحة مخصصة للمدرسين المعتمدين في مساحة العمل فقط.');
+            return redirect()->route('portal.home');
         }
 
         $search = trim((string) $request->input('q', ''));
