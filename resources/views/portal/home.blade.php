@@ -12,7 +12,7 @@
             $tTotal = $tPaid + $tPending;
             $tStudents = $teacherProfile->totalVisits();
             $tQrUrl = $teacherProfile->qrUrl();
-            $tShareMsg = urlencode("مرحباً بكم يا شباب! 🎓\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tQrUrl);
+            $tShareMsg = urlencode("مرحباً بكم يا شباب!\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tQrUrl);
             $tWhatsappUrl = "https://api.whatsapp.com/send?text={$tShareMsg}";
         @endphp
         <!-- Teacher Earnings & Boost Card (شاشة أرباح المدرس وزرار زيادة أرباحك) -->
@@ -23,7 +23,7 @@
             <div class="flex items-start justify-between relative z-10">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-[#4E8F35] text-white flex items-center justify-center font-black text-base shadow-sm flex-shrink-0">
-                        🎓
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5"/></svg>
                     </div>
                     <div>
                         <div class="flex items-center gap-1.5">
@@ -39,7 +39,7 @@
                 <!-- زرار زيادة أرباحك -->
                 <button type="button" onclick="openBoostModal()"
                         class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-[#4E8F35] to-[#79B84A] text-white text-xs font-black shadow-[0_3px_12px_rgba(78,143,53,0.3)] hover:opacity-95 active:scale-95 transition">
-                    <span>🚀</span>
+                    <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
                     <span>زيادة أرباحك</span>
                 </button>
             </div>
@@ -73,7 +73,7 @@
                 <!-- 3. إجمالي ما حققته -->
                 <div class="p-2.5 rounded-2xl bg-[#EBF4E8] border border-[#DCE8D4] flex flex-col justify-between shadow-2xs">
                     <span class="text-[10px] text-[#4E8F35] font-black flex items-center gap-1">
-                        <span>💰</span>
+                        <svg class="w-3.5 h-3.5 text-[#4E8F35]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <span>إجمالي كسبت</span>
                     </span>
                     <div class="mt-1">
@@ -723,7 +723,7 @@
     @php
         $teacherObj = Auth::guard('customer')->user()->teacher();
         $tUrl = $teacherObj->qrUrl();
-        $tMsg = urlencode("مرحباً بكم يا شباب! 🎓\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tUrl);
+        $tMsg = urlencode("مرحباً بكم يا شباب!\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tUrl);
         $tWhatsapp = "https://api.whatsapp.com/send?text={$tMsg}";
     @endphp
     <!-- Boost Earnings Modal (طرق زيادة أرباحك) -->
@@ -736,8 +736,8 @@
                 </svg>
             </button>
 
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#4E8F35] to-[#79B84A] text-white flex items-center justify-center mx-auto mb-2.5 text-2xl shadow-sm">
-                🚀
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#4E8F35] to-[#79B84A] text-white flex items-center justify-center mx-auto mb-2.5 shadow-sm">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             </div>
 
             <h3 class="text-sm font-black text-[#303334]">خطة زيادة أرباحك مع DDT</h3>
@@ -784,7 +784,7 @@
 
     <!-- Quick Toast -->
     <div id="teacher-toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-[#303334] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg transition-all duration-300 opacity-0 pointer-events-none">
-        تم نسخ رابط الحضور بنجاح 📋
+        تم نسخ رابط الحضور بنجاح
     </div>
 @endif
 @endsection

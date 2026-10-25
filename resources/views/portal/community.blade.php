@@ -70,7 +70,7 @@
             </div>
         </div>
     @else
-       
+        
     @endif
 
     <!-- 2. Search & Category Filter Bar (Sticky) -->
