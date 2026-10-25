@@ -1,5 +1,5 @@
 <meta charset="utf-8"/>
-<title>{{ $title }} | DT-System — Workspace Management</title>
+<title>@yield('title', $title ?? 'لوحة التحكم') | DT-System — Workspace Management</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="DT-System — Workspace Management System" name="description"/>
 <meta name="csrf-token" content="{{ csrf_token() }}"/>

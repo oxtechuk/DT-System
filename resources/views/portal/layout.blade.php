@@ -185,6 +185,15 @@
             <!-- Right/End: Status Counter Badge + Saved/Orders Icon + Avatar -->
             <div class="flex items-center gap-2">
                 @auth('customer')
+                    @if(Auth::guard('customer')->user()->isTeacher())
+                        <!-- Teacher Portal Shortcut -->
+                        <a href="{{ route('portal.teacher') }}" title="لوحة المدرس والكوميشن"
+                            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full {{ request()->routeIs('portal.teacher') ? 'bg-[#4E8F35] text-white shadow-xs' : 'bg-white border border-[#E5E2DC] text-[#4E8F35] hover:border-[#4E8F35]' }} text-xs font-black transition active:scale-95 shadow-xs">
+                            <svg class="w-3.5 h-3.5 {{ request()->routeIs('portal.teacher') ? 'text-white' : 'text-[#4E8F35]' }}" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5"/></svg>
+                            <span>أرباحي</span>
+                        </a>
+                    @endif
+
                     <!-- Status / Visits Counter Pill -->
                     <a href="{{ route('portal.loyalty') }}" title="زيارات الولاء"
                         class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EBF4E8] border border-[#DCE8D4] text-[#4E8F35] text-xs font-black transition active:scale-95 shadow-xs">
@@ -259,55 +268,74 @@
                     
                     <!-- 1. الرئيسية -->
                     <a href="{{ route('portal.home') }}" 
-                       class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.home') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
-                        <svg class="w-6 h-6 mb-1 {{ request()->routeIs('portal.home') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.home') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                       class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.home') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                        <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.home') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.home') ? '2.5' : '2' }}" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
-                        <span class="text-xs font-black tracking-tight">الرئيسية</span>
+                        <span class="text-[11px] sm:text-xs font-black tracking-tight">الرئيسية</span>
                     </a>
 
                     <!-- 2. الكافيه -->
                     <a href="{{ route('portal.menu') }}" 
-                       class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.menu') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
-                        <svg class="w-6 h-6 mb-1 {{ request()->routeIs('portal.menu') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.menu') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                       class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.menu') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                        <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.menu') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.menu') ? '2.5' : '2' }}" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"/>
                         </svg>
-                        <span class="text-xs font-black tracking-tight">الكافيه</span>
+                        <span class="text-[11px] sm:text-xs font-black tracking-tight">الكافيه</span>
                     </a>
 
                     <!-- 3. الفعاليات -->
                     <a href="{{ route('portal.community') }}" 
-                       class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.community') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
-                        <svg class="w-6 h-6 mb-1 {{ request()->routeIs('portal.community') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.community') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                       class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.community') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                        <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.community') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.community') ? '2.5' : '2' }}" viewBox="0 0 24 24">
                             <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
                         </svg>
-                        <span class="text-xs font-black tracking-tight">الفعاليات</span>
+                        <span class="text-[11px] sm:text-xs font-black tracking-tight">الفعاليات</span>
                     </a>
 
                     <!-- 4. طلباتي -->
                     <a href="{{ route('portal.orders') }}" 
-                       class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-200 active:scale-95 relative {{ request()->routeIs('portal.orders') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
-                        <svg class="w-6 h-6 mb-1 {{ request()->routeIs('portal.orders') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.orders') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                       class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 relative {{ request()->routeIs('portal.orders') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                        <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.orders') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.orders') ? '2.5' : '2' }}" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                         </svg>
-                        <span class="text-xs font-black tracking-tight">طلباتي</span>
+                        <span class="text-[11px] sm:text-xs font-black tracking-tight">طلباتي</span>
                         @php
                             $openOrdersCount = \App\Models\Order::where('customer_id', Auth::guard('customer')->id())
                                 ->whereIn('fulfillment_status', ['pending', 'preparing'])
                                 ->count();
                         @endphp
                         @if($openOrdersCount > 0)
-                            <span class="absolute top-1.5 right-3 w-2.5 h-2.5 rounded-full bg-[#4E8F35] ring-2 ring-white animate-pulse"></span>
+                            <span class="absolute top-1 right-2 sm:right-3 w-2.5 h-2.5 rounded-full bg-[#4E8F35] ring-2 ring-white animate-pulse"></span>
                         @endif
                     </a>
 
-                    <!-- 5. الولاء -->
+                    @if(Auth::guard('customer')->user()->isTeacher())
+                        <!-- 5. أرباحك (يظهر فقط في حالة المدرس) -->
+                        <a href="{{ route('portal.teacher') }}" 
+                           class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 relative {{ request()->routeIs('portal.teacher') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                            <div class="relative">
+                                <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.teacher') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.teacher') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                @php
+                                    $hasPendingCommission = (Auth::guard('customer')->user()->teacher()?->pendingCommission() ?? 0) > 0;
+                                @endphp
+                                @if($hasPendingCommission)
+                                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-500 ring-2 ring-white animate-pulse"></span>
+                                @endif
+                            </div>
+                            <span class="text-[11px] sm:text-xs font-black tracking-tight">أرباحك</span>
+                        </a>
+                    @endif
+
+                    <!-- 6. الولاء -->
                     <a href="{{ route('portal.loyalty') }}" 
-                       class="flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.loyalty') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
-                        <svg class="w-6 h-6 mb-1 {{ request()->routeIs('portal.loyalty') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.loyalty') ? '2.5' : '2' }}" viewBox="0 0 24 24">
+                       class="flex-1 flex flex-col items-center justify-center py-1.5 px-0.5 sm:py-2 sm:px-1 rounded-2xl transition-all duration-200 active:scale-95 {{ request()->routeIs('portal.loyalty') ? 'bg-[#EBF4E8] text-[#4E8F35]' : 'text-[#73777A] hover:text-[#303334]' }}">
+                        <svg class="w-5.5 h-5.5 sm:w-6 sm:h-6 mb-1 {{ request()->routeIs('portal.loyalty') ? 'stroke-[#4E8F35]' : 'stroke-current' }}" fill="none" stroke-width="{{ request()->routeIs('portal.loyalty') ? '2.5' : '2' }}" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
                         </svg>
-                        <span class="text-xs font-black tracking-tight">الولاء</span>
+                        <span class="text-[11px] sm:text-xs font-black tracking-tight">الولاء</span>
                     </a>
 
                 </nav>

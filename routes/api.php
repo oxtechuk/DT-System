@@ -29,11 +29,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
 
     // ── Protected API Endpoints ────────────────────────────────────────────
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum,web'])->group(function () {
 
         // Auth management
         Route::prefix('auth')->name('auth.')->group(function () {
-            Route::get('me',      [AuthController::class, 'me'])->name('me');
+            Route::get('me', [AuthController::class, 'me'])->name('me');
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         });
 
@@ -47,11 +47,11 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('rooms', [RoomController::class, 'index'])->name('rooms.index');
 
         // Deals (Active Sessions)
-        Route::get('deals/active',               [DealController::class, 'active'])->name('deals.active');
+        Route::get('deals/active', [DealController::class, 'active'])->name('deals.active');
         Route::apiResource('deals', DealController::class)->only(['index', 'store', 'show']);
-        Route::post('deals/{deal}/close',        [DealController::class, 'close'])->name('deals.close');
-        Route::post('deals/{deal}/pay',          [DealController::class, 'pay'])->name('deals.pay');
-        Route::post('deals/{deal}/items',        [DealController::class, 'addItem'])->name('deals.add-item');
+        Route::post('deals/{deal}/close', [DealController::class, 'close'])->name('deals.close');
+        Route::post('deals/{deal}/pay', [DealController::class, 'pay'])->name('deals.pay');
+        Route::post('deals/{deal}/items', [DealController::class, 'addItem'])->name('deals.add-item');
         Route::delete('deals/{deal}/items/{item}', [DealController::class, 'removeItem'])->name('deals.remove-item');
 
         // Products & Cafe Catalog
@@ -59,8 +59,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
         // Cashier Shifts
         Route::prefix('shifts')->name('shifts.')->group(function () {
-            Route::get('current',        [ShiftController::class, 'current'])->name('current');
-            Route::post('open',          [ShiftController::class, 'open'])->name('open');
+            Route::get('current', [ShiftController::class, 'current'])->name('current');
+            Route::post('open', [ShiftController::class, 'open'])->name('open');
             Route::post('{shift}/close', [ShiftController::class, 'close'])->name('close');
         });
 

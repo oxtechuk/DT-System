@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Room;
+use App\Models\WorkspaceType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -21,262 +23,314 @@ use Illuminate\Support\Facades\DB;
  */
 class DealService
 {
- public function __construct(
- protected DealPricingService $pricing
- ) {}
+    public function __construct(
+        protected DealPricingService $pricing
+    ) {}
 
- // ──────────────────────────────────────────────────
- // 1. START DEAL
- // ──────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────
+    // 1. START DEAL
+    // ──────────────────────────────────────────────────
 
- /**
- * Start a new deal for a customer.
- *
- * @param array{
- * customer_id: int,
- * workspace_type_id: int,
- * room_id: ?int,
- * booking_id: ?int,
- * started_at: ?string, // override if allowed
- * notes: ?string,
- * created_by: ?int,
- * } $data
- */
- public function start(array $data): Deal
- {
- return DB::transaction(function () use ($data) {
- // Ensure customer has only one open session at any time
- $existing = Deal::where('customer_id', $data['customer_id'])
- ->where('status', 'open')
- ->with('room')
- ->first();
+    /**
+     * Start a new deal for a customer.
+     *
+     * @param array{
+     * customer_id: int,
+     * workspace_type_id: int,
+     * room_id: ?int,
+     * booking_id: ?int,
+     * started_at: ?string, // override if allowed
+     * notes: ?string,
+     * created_by: ?int,
+     * } $data
+     */
+    public function start(array $data): Deal
+    {
+        return DB::transaction(function () use ($data) {
+            // Ensure customer has only one open session at any time
+            $existing = Deal::where('customer_id', $data['customer_id'])
+                ->where('status', 'open')
+                ->with('room')
+                ->first();
 
- if ($existing) {
- $location = $existing->room ? $existing->room->name : 'المساحة العامة';
- throw new \Exception("العميل لديه جلسة مفتوحة بالفعل حالياً في ({$location}) برقم [{$existing->deal_number}]. لا يمكن تسجيل أكثر من جلسة لنفس العميل في وقت واحد.");
- }
+            if ($existing) {
+                $location = $existing->room ? $existing->room->name : 'المساحة العامة';
+                throw new \Exception("العميل لديه جلسة مفتوحة بالفعل حالياً في ({$location}) برقم [{$existing->deal_number}]. لا يمكن تسجيل أكثر من جلسة لنفس العميل في وقت واحد.");
+            }
 
- // Validate room capacity and Private vs Shared rules
- if (!empty($data['room_id'])) {
- $room = \App\Models\Room::with(['activeDeals.workspaceType'])->findOrFail($data['room_id']);
- $workspaceType = \App\Models\WorkspaceType::findOrFail($data['workspace_type_id']);
- $activeDeals = $room->activeDeals;
+            // Validate room capacity and Private vs Shared rules
+            if (! empty($data['room_id'])) {
+                $room = Room::with(['activeDeals.workspaceType'])->findOrFail($data['room_id']);
+                $workspaceType = WorkspaceType::findOrFail($data['workspace_type_id']);
+                $activeDeals = $room->activeDeals;
 
- $isPrivateRequested = in_array($workspaceType->code, ['private', 'meeting']);
- $hasActivePrivate = $room->is_private_occupied;
+                $isPrivateRequested = in_array($workspaceType->code, ['private', 'meeting']);
+                $hasActivePrivate = $room->is_private_occupied;
 
- if ($hasActivePrivate) {
- throw new \Exception("الغرفة ({$room->name}) محجوزة حالياً كغرفة خاصة (Private). لا يمكن إضافة أي جلسات جديدة إليها حتى مغادرة العميل الحالي.");
- }
+                if ($hasActivePrivate) {
+                    throw new \Exception("الغرفة ({$room->name}) محجوزة حالياً كغرفة خاصة (Private). لا يمكن إضافة أي جلسات جديدة إليها حتى مغادرة العميل الحالي.");
+                }
 
- if ($isPrivateRequested && $activeDeals->isNotEmpty()) {
- throw new \Exception("لا يمكن حجز الغرفة ({$room->name}) كغرفة خاصة لأن بها جلسات مشتركة نشطة حالياً.");
- }
+                if ($isPrivateRequested && $activeDeals->isNotEmpty()) {
+                    throw new \Exception("لا يمكن حجز الغرفة ({$room->name}) كغرفة خاصة لأن بها جلسات مشتركة نشطة حالياً.");
+                }
 
- $cap = max(1, (int) ($room->capacity ?: 1));
- if ($activeDeals->count() >= $cap) {
- throw new \Exception("الغرفة ({$room->name}) مكتملة السعة الاستيعابية بالكامل ({$cap} من {$cap} أفراد).");
- }
- }
+                $cap = max(1, (int) ($room->capacity ?: 1));
+                if ($activeDeals->count() >= $cap) {
+                    throw new \Exception("الغرفة ({$room->name}) مكتملة السعة الاستيعابية بالكامل ({$cap} من {$cap} أفراد).");
+                }
+            }
 
- $deal = Deal::create([
- 'deal_number' => Deal::generateNumber(),
- 'customer_id' => $data['customer_id'],
- 'workspace_type_id' => $data['workspace_type_id'],
- 'room_id' => $data['room_id'] ?? null,
- 'booking_id' => $data['booking_id'] ?? null,
- 'started_at' => $data['started_at'] ?? now(),
- 'status' => 'open',
- 'notes' => $data['notes'] ?? null,
- 'created_by' => $data['created_by'] ?? auth()->id(),
- ]);
+            $deal = Deal::create([
+                'deal_number' => Deal::generateNumber(),
+                'customer_id' => $data['customer_id'],
+                'workspace_type_id' => $data['workspace_type_id'],
+                'room_id' => $data['room_id'] ?? null,
+                'booking_id' => $data['booking_id'] ?? null,
+                'started_at' => $data['started_at'] ?? now(),
+                'status' => 'open',
+                'notes' => $data['notes'] ?? null,
+                'created_by' => $data['created_by'] ?? auth()->id(),
+            ]);
 
- // Create an empty order for this deal immediately
- Order::create([
- 'order_number' => Order::generateNumber(),
- 'customer_id' => $deal->customer_id,
- 'deal_id' => $deal->id,
- 'status' => 'open',
- 'created_by' => $deal->created_by,
- ]);
+            // Create an empty order for this deal immediately
+            Order::create([
+                'order_number' => Order::generateNumber(),
+                'customer_id' => $deal->customer_id,
+                'deal_id' => $deal->id,
+                'status' => 'open',
+                'created_by' => $deal->created_by,
+            ]);
 
- return $deal->load('customer', 'room', 'workspaceType', 'order');
- });
- }
+            return $deal->load('customer', 'room', 'workspaceType', 'order');
+        });
+    }
 
- // ──────────────────────────────────────────────────
- // 2. ADD PRODUCT TO DEAL
- // ──────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────
+    // 2. ADD PRODUCT TO DEAL
+    // ──────────────────────────────────────────────────
 
- /**
- * Add a product to the active deal's order.
- */
- public function addProduct(Deal $deal, int $productId, int $quantity = 1): OrderItem
- {
- abort_if($deal->status !== 'open', 422, 'Deal is not open.');
+    /**
+     * Add a product to the active deal's order.
+     */
+    public function addProduct(Deal $deal, int $productId, int $quantity = 1): OrderItem
+    {
+        abort_if($deal->status !== 'open', 422, 'Deal is not open.');
 
- $product = Product::findOrFail($productId);
- $order = $deal->order;
+        $product = Product::findOrFail($productId);
+        $order = $deal->order;
 
- return DB::transaction(function () use ($order, $product, $quantity) {
- // Check if already in order — increase quantity
- $existing = $order->items()
- ->where('product_id', $product->id)
- ->where('item_type', 'product')
- ->first();
+        return DB::transaction(function () use ($order, $product, $quantity) {
+            // Check if already in order — increase quantity
+            $existing = $order->items()
+                ->where('product_id', $product->id)
+                ->where('item_type', 'product')
+                ->first();
 
- if ($existing) {
- $existing->increment('quantity', $quantity);
- $existing->update(['total' => $existing->unit_price * $existing->quantity]);
- $item = $existing->fresh();
- } else {
- $item = $order->items()->create([
- 'product_id' => $product->id,
- 'item_type' => 'product',
- 'name' => $product->name, // snapshot
- 'quantity' => $quantity,
- 'unit_price' => $product->selling_price, // snapshot
- 'total' => $product->selling_price * $quantity,
- ]);
- }
+            if ($existing) {
+                $existing->increment('quantity', $quantity);
+                $existing->update(['total' => max(0, ($existing->unit_price * $existing->quantity) - ($existing->discount_amount ?: 0))]);
+                $item = $existing->fresh();
+            } else {
+                $item = $order->items()->create([
+                    'product_id' => $product->id,
+                    'item_type' => 'product',
+                    'name' => $product->name, // snapshot
+                    'quantity' => $quantity,
+                    'unit_price' => $product->selling_price, // snapshot
+                    'total' => $product->selling_price * $quantity,
+                ]);
+            }
 
- // Deduct raw materials from inventory if product has ingredients
- foreach ($product->ingredients as $ingredient) {
- if ($ingredient->rawMaterial) {
- $deductQty = $ingredient->quantity * $quantity;
- $ingredient->rawMaterial->decrement('current_stock', $deductQty);
- }
- }
+            // Deduct raw materials from inventory if product has ingredients
+            foreach ($product->ingredients as $ingredient) {
+                if ($ingredient->rawMaterial) {
+                    $deductQty = $ingredient->quantity * $quantity;
+                    $ingredient->rawMaterial->decrement('current_stock', $deductQty);
+                }
+            }
 
- $order->recalculate();
+            $order->recalculate();
 
- return $item;
- });
- }
+            return $item;
+        });
+    }
 
- /**
- * Remove a product item from the deal's order.
- */
- public function removeItem(Deal $deal, int $orderItemId): void
- {
- abort_if($deal->status !== 'open', 422, 'Deal is not open.');
+    /**
+     * Remove a product item from the deal's order.
+     */
+    public function removeItem(Deal $deal, int $orderItemId): void
+    {
+        abort_if($deal->status !== 'open', 422, 'Deal is not open.');
 
- $item = $deal->order->items()->findOrFail($orderItemId);
+        $item = $deal->order->items()->findOrFail($orderItemId);
 
- // Restore raw materials to inventory if item had a product with ingredients
- if ($item->product) {
- foreach ($item->product->ingredients as $ingredient) {
- if ($ingredient->rawMaterial) {
- $ingredient->rawMaterial->increment('current_stock', $ingredient->quantity * $item->quantity);
- }
- }
- }
+        // Restore raw materials to inventory if item had a product with ingredients
+        if ($item->product) {
+            foreach ($item->product->ingredients as $ingredient) {
+                if ($ingredient->rawMaterial) {
+                    $ingredient->rawMaterial->increment('current_stock', $ingredient->quantity * $item->quantity);
+                }
+            }
+        }
 
- $item->delete();
- $deal->order->recalculate();
- }
+        $item->delete();
+        $deal->order->recalculate();
+    }
 
- // ──────────────────────────────────────────────────
- // 3. CLOSE DEAL
- // ──────────────────────────────────────────────────
+    /**
+     * Update quantity of an existing item in the deal's order.
+     */
+    public function updateItemQuantity(Deal $deal, int $orderItemId, int $newQuantity): OrderItem
+    {
+        abort_if($deal->status !== 'open', 422, 'Deal is not open.');
+        $order = $deal->order;
+        $item = $order->items()->findOrFail($orderItemId);
 
- /**
- * Close the deal:
- * - Record end time
- * - Run pricing engine
- * - Add session charge to the order
- * - Update deal & order status
- */
- public function close(Deal $deal, array $data = []): Deal
- {
- abort_if($deal->status !== 'open', 422, 'Deal is already closed or cancelled.');
+        if ($newQuantity <= 0) {
+            $this->removeItem($deal, $orderItemId);
 
- return DB::transaction(function () use ($deal, $data) {
- $endedAt = isset($data['ended_at'])
- ? Carbon::parse($data['ended_at'])
- : now();
+            return $item;
+        }
 
- // Run pricing engine
- $pricing = $this->pricing->calculate($deal, $endedAt);
+        return DB::transaction(function () use ($order, $item, $newQuantity) {
+            $diff = $newQuantity - $item->quantity;
 
- // Update deal fields
- $deal->update([
- 'ended_at' => $endedAt,
- 'duration_minutes' => $pricing['actual_minutes'],
- 'billable_duration_minutes' => $pricing['billable_minutes'],
- 'pricing_rule_id' => $pricing['pricing_rule_id'],
- 'applied_price' => $pricing['price'],
- 'status' => 'closed',
- 'closed_by' => $data['closed_by'] ?? auth()->id(),
- ]);
+            // Handle inventory adjustment
+            if ($diff !== 0 && $item->product) {
+                foreach ($item->product->ingredients as $ingredient) {
+                    if ($ingredient->rawMaterial) {
+                        $materialDiff = $ingredient->quantity * abs($diff);
+                        if ($diff > 0) {
+                            $ingredient->rawMaterial->decrement('current_stock', $materialDiff);
+                        } else {
+                            $ingredient->rawMaterial->increment('current_stock', $materialDiff);
+                        }
+                    }
+                }
+            }
 
- // Add session charge to order (if price > 0)
- $order = $deal->order;
- if ($pricing['price'] > 0) {
- // Remove old session item if re-closing
- $order->items()->where('item_type', 'session')->delete();
+            // Preserve unit discount proportion if present
+            $oldQty = max(1, $item->quantity);
+            $currentDisc = (float) ($item->discount_amount ?: 0);
+            $unitDisc = $currentDisc > 0 ? ($currentDisc / $oldQty) : 0;
+            $newTotalDisc = round($unitDisc * $newQuantity, 2);
 
- $order->items()->create([
- 'item_type' => 'session',
- 'name' => 'Session Charge — ' . $deal->workspaceType->name,
- 'quantity' => 1,
- 'unit_price' => $pricing['price'],
- 'total' => $pricing['price'],
- ]);
- }
+            $newTotal = max(0, ($item->unit_price * $newQuantity) - $newTotalDisc);
 
- $order->recalculate();
+            $item->update([
+                'quantity' => $newQuantity,
+                'discount_amount' => $newTotalDisc,
+                'total' => $newTotal,
+            ]);
 
- return $deal->fresh(['customer', 'room', 'workspaceType', 'order.items']);
- });
- }
+            $order->recalculate();
 
- // ──────────────────────────────────────────────────
- // 4. PAY ORDER
- // ──────────────────────────────────────────────────
+            return $item->fresh();
+        });
+    }
 
- /**
- * Register a payment against an order.
- *
- * Supports multiple payments (cash + instapay + wallet split).
- */
- public function pay(Order $order, array $payments): Order
- {
- abort_if($order->status === 'paid', 422, 'Order is already paid.');
+    // ──────────────────────────────────────────────────
+    // 3. CLOSE DEAL
+    // ──────────────────────────────────────────────────
 
- return DB::transaction(function () use ($order, $payments) {
- foreach ($payments as $paymentData) {
- if (empty($paymentData['amount']) || $paymentData['amount'] <= 0) {
- continue;
- }
+    /**
+     * Close the deal:
+     * - Record end time
+     * - Run pricing engine
+     * - Add session charge to the order
+     * - Update deal & order status
+     */
+    public function close(Deal $deal, array $data = []): Deal
+    {
+        abort_if($deal->status !== 'open', 422, 'Deal is already closed or cancelled.');
 
- Payment::create([
- 'payment_number' => Payment::generateNumber(),
- 'order_id' => $order->id,
- 'customer_id' => $order->customer_id,
- 'type' => 'income',
- 'method' => $paymentData['method'],
- 'amount' => $paymentData['amount'],
- 'reference' => $paymentData['reference'] ?? null,
- 'paid_at' => now(),
- 'received_by' => auth()->id(),
- 'notes' => $paymentData['notes'] ?? null,
- ]);
- }
+        return DB::transaction(function () use ($deal, $data) {
+            $endedAt = isset($data['ended_at'])
+            ? Carbon::parse($data['ended_at'])
+            : now();
 
- // Recompute paid_amount from payments table
- $totalPaid = $order->payments()->where('type', 'income')->sum('amount');
- $remaining = max(0, $order->total - $totalPaid);
+            // Run pricing engine
+            $pricing = $this->pricing->calculate($deal, $endedAt);
 
- $order->update([
- 'paid_amount' => $totalPaid,
- 'remaining_amount' => $remaining,
- 'status' => $remaining <= 0 ? 'paid' : 'partially_paid',
- 'closed_at' => $remaining <= 0 ? now() : null,
- 'closed_by' => $remaining <= 0 ? auth()->id() : null,
- ]);
+            // Update deal fields
+            $deal->update([
+                'ended_at' => $endedAt,
+                'duration_minutes' => $pricing['actual_minutes'],
+                'billable_duration_minutes' => $pricing['billable_minutes'],
+                'pricing_rule_id' => $pricing['pricing_rule_id'],
+                'applied_price' => $pricing['price'],
+                'status' => 'closed',
+                'closed_by' => $data['closed_by'] ?? auth()->id(),
+            ]);
 
- return $order->fresh(['items', 'payments']);
- });
- }
+            // Add session charge to order (if price > 0)
+            $order = $deal->order;
+            if ($pricing['price'] > 0) {
+                // Remove old session item if re-closing
+                $order->items()->where('item_type', 'session')->delete();
+
+                $order->items()->create([
+                    'item_type' => 'session',
+                    'name' => 'Session Charge — '.$deal->workspaceType->name,
+                    'quantity' => 1,
+                    'unit_price' => $pricing['price'],
+                    'total' => $pricing['price'],
+                ]);
+            }
+
+            $order->recalculate();
+
+            return $deal->fresh(['customer', 'room', 'workspaceType', 'order.items']);
+        });
+    }
+
+    // ──────────────────────────────────────────────────
+    // 4. PAY ORDER
+    // ──────────────────────────────────────────────────
+
+    /**
+     * Register a payment against an order.
+     *
+     * Supports multiple payments (cash + instapay + wallet split).
+     */
+    public function pay(Order $order, array $payments): Order
+    {
+        abort_if($order->status === 'paid', 422, 'Order is already paid.');
+
+        return DB::transaction(function () use ($order, $payments) {
+            foreach ($payments as $paymentData) {
+                if (empty($paymentData['amount']) || $paymentData['amount'] <= 0) {
+                    continue;
+                }
+
+                Payment::create([
+                    'payment_number' => Payment::generateNumber(),
+                    'order_id' => $order->id,
+                    'customer_id' => $order->customer_id,
+                    'type' => 'income',
+                    'method' => $paymentData['method'],
+                    'amount' => $paymentData['amount'],
+                    'reference' => $paymentData['reference'] ?? null,
+                    'paid_at' => now(),
+                    'received_by' => auth()->id(),
+                    'notes' => $paymentData['notes'] ?? null,
+                ]);
+            }
+
+            // Recompute paid_amount from payments table
+            $totalPaid = $order->payments()->where('type', 'income')->sum('amount');
+            $remaining = max(0, $order->total - $totalPaid);
+
+            $order->update([
+                'paid_amount' => $totalPaid,
+                'remaining_amount' => $remaining,
+                'status' => $remaining <= 0 ? 'paid' : 'partially_paid',
+                'closed_at' => $remaining <= 0 ? now() : null,
+                'closed_by' => $remaining <= 0 ? auth()->id() : null,
+            ]);
+
+            return $order->fresh(['items', 'payments']);
+        });
+    }
 }

@@ -4,6 +4,101 @@
 
 @section('content')
 
+    @if(Auth::guard('customer')->check() && Auth::guard('customer')->user()->isTeacher())
+        @php
+            $teacherProfile = Auth::guard('customer')->user()->teacher();
+            $tPaid = $teacherProfile->totalEarnings();
+            $tPending = $teacherProfile->pendingCommission();
+            $tTotal = $tPaid + $tPending;
+            $tStudents = $teacherProfile->totalVisits();
+            $tQrUrl = $teacherProfile->qrUrl();
+            $tShareMsg = urlencode("مرحباً بكم يا شباب! 🎓\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tQrUrl);
+            $tWhatsappUrl = "https://api.whatsapp.com/send?text={$tShareMsg}";
+        @endphp
+        <!-- Teacher Earnings & Boost Card (شاشة أرباح المدرس وزرار زيادة أرباحك) -->
+        <div class="solid-card rounded-[28px] p-5 bg-gradient-to-br from-white via-white to-[#EBF4E8] border border-[#DCE8D4] shadow-[0_8px_24px_rgba(48,51,52,0.06)] relative overflow-hidden">
+            <!-- Background Decorative Pattern -->
+            <div class="absolute -left-6 -bottom-6 w-28 h-28 rounded-full bg-[#4E8F35]/5 pointer-events-none"></div>
+
+            <div class="flex items-start justify-between relative z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-[#4E8F35] text-white flex items-center justify-center font-black text-base shadow-sm flex-shrink-0">
+                        🎓
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h2 class="text-sm font-black text-[#303334]">أرباحك كـ مدرس معتمد</h2>
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-[#4E8F35] text-white">نشط</span>
+                        </div>
+                        <p class="text-[11px] text-[#73777A] mt-0.5 font-medium">
+                            نسبة عمولتك: <strong class="text-[#4E8F35] font-bold">{{ $teacherProfile->commission_rate }}%</strong> على كل طالب
+                        </p>
+                    </div>
+                </div>
+
+                <!-- زرار زيادة أرباحك -->
+                <button type="button" onclick="openBoostModal()"
+                        class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-[#4E8F35] to-[#79B84A] text-white text-xs font-black shadow-[0_3px_12px_rgba(78,143,53,0.3)] hover:opacity-95 active:scale-95 transition">
+                    <span>🚀</span>
+                    <span>زيادة أرباحك</span>
+                </button>
+            </div>
+
+            <!-- عدادات الأرباح (يشوف كسب كام وكام) -->
+            <div class="grid grid-cols-3 gap-2.5 mt-4 pt-4 border-t border-[#E5E2DC]/80 relative z-10">
+                <!-- 1. المستلم فعلياً -->
+                <div class="p-2.5 rounded-2xl bg-white border border-[#E5E2DC] flex flex-col justify-between shadow-2xs">
+                    <span class="text-[10px] text-[#73777A] font-bold flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#4E8F35]"></span>
+                        <span>مستلم كاش</span>
+                    </span>
+                    <div class="mt-1">
+                        <span class="text-sm font-black text-[#4E8F35] font-mono">{{ number_format($tPaid, 2) }}</span>
+                        <span class="text-[9px] text-[#73777A] font-bold">ج.م</span>
+                    </div>
+                </div>
+
+                <!-- 2. المعلق الجاهز للتحصيل -->
+                <div class="p-2.5 rounded-2xl bg-white border border-[#E5E2DC] flex flex-col justify-between shadow-2xs">
+                    <span class="text-[10px] text-[#73777A] font-bold flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                        <span>معلق قيد الصرف</span>
+                    </span>
+                    <div class="mt-1">
+                        <span class="text-sm font-black text-amber-600 font-mono">{{ number_format($tPending, 2) }}</span>
+                        <span class="text-[9px] text-[#73777A] font-bold">ج.م</span>
+                    </div>
+                </div>
+
+                <!-- 3. إجمالي ما حققته -->
+                <div class="p-2.5 rounded-2xl bg-[#EBF4E8] border border-[#DCE8D4] flex flex-col justify-between shadow-2xs">
+                    <span class="text-[10px] text-[#4E8F35] font-black flex items-center gap-1">
+                        <span>💰</span>
+                        <span>إجمالي كسبت</span>
+                    </span>
+                    <div class="mt-1">
+                        <span class="text-sm font-black text-[#303334] font-mono">{{ number_format($tTotal, 2) }}</span>
+                        <span class="text-[9px] text-[#73777A] font-bold">ج.م</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Action: عرض تفاصيل الطلاب -->
+            <div class="mt-3.5 pt-2.5 border-t border-[#E5E2DC]/80 flex items-center justify-between text-xs relative z-10">
+                <span class="text-[11px] text-[#73777A]">
+                    حضر لك حتى الآن: <strong class="text-[#303334] font-bold">{{ $tStudents }} طالب</strong>
+                </span>
+
+                <a href="{{ route('portal.teacher') }}" class="text-[#4E8F35] hover:text-[#3F742B] font-black text-xs flex items-center gap-1 group">
+                    <span>عرض أسماء الطلاب والتقرير</span>
+                    <svg class="w-3.5 h-3.5 transform rotate-180 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    @endif
+
     <!-- 1. Hero Card: Active Session or Guest Check-in (Solid Charcoal & Primary Green Theme) -->
     @if($activeDeal)
         <div class="solid-card-charcoal rounded-[28px] p-5 relative overflow-hidden shadow-[0_8px_24px_rgba(48,51,52,0.18)]">
@@ -580,5 +675,116 @@
             alert('تعذر إرسال البلاغ حالياً.');
         });
     }
+
+    function openBoostModal() {
+        const m = document.getElementById('boostModal');
+        if (m) {
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+    }
+
+    function closeBoostModal() {
+        const m = document.getElementById('boostModal');
+        if (m) {
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+    }
+
+    function copyTeacherLink(url) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(showTeacherToast);
+        } else {
+            const temp = document.createElement('input');
+            temp.value = url;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showTeacherToast();
+        }
+    }
+
+    function showTeacherToast() {
+        const toast = document.getElementById('teacher-toast');
+        if (toast) {
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    }
 </script>
+
+@if(Auth::guard('customer')->check() && Auth::guard('customer')->user()->isTeacher())
+    @php
+        $teacherObj = Auth::guard('customer')->user()->teacher();
+        $tUrl = $teacherObj->qrUrl();
+        $tMsg = urlencode("مرحباً بكم يا شباب! 🎓\nلتسجيل الحضور وتأكيد جلستكم في DDT WORKING SPACE، امسحوا الرابط ده:\n" . $tUrl);
+        $tWhatsapp = "https://api.whatsapp.com/send?text={$tMsg}";
+    @endphp
+    <!-- Boost Earnings Modal (طرق زيادة أرباحك) -->
+    <div id="boostModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] p-6 max-w-sm w-full text-center relative border border-[#E5E2DC] shadow-2xl animate-fade-in">
+            <button type="button" onclick="closeBoostModal()"
+                    class="absolute top-4 left-4 w-8 h-8 rounded-full bg-[#F5F3EE] flex items-center justify-center text-[#73777A] hover:text-[#303334]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#4E8F35] to-[#79B84A] text-white flex items-center justify-center mx-auto mb-2.5 text-2xl shadow-sm">
+                🚀
+            </div>
+
+            <h3 class="text-sm font-black text-[#303334]">خطة زيادة أرباحك مع DDT</h3>
+            <p class="text-[11px] text-[#73777A] mt-0.5">
+                كل طالب يدخل ويسجل عبر الباركود يمنحك عمولة فورية بنسبة <strong class="text-[#4E8F35]">{{ $teacherObj->commission_rate }}%</strong>!
+            </p>
+
+            <!-- 3 Simple Boost Steps -->
+            <div class="my-4 text-right space-y-2.5 bg-[#F5F3EE] p-3.5 rounded-2xl border border-[#E5E2DC] text-xs">
+                <div class="flex items-start gap-2">
+                    <span class="w-5 h-5 rounded-full bg-[#4E8F35] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                    <span class="text-[#303334]"><strong>شارك الرابط في جروب الواتساب:</strong> دعوة سريعة لطلابك لتأكيد حضورهم عبر الباركود.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                    <span class="w-5 h-5 rounded-full bg-[#4E8F35] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                    <span class="text-[#303334]"><strong>اعرض الباركود في بداية الكورس:</strong> الطلاب يمسحون الباركود بكاميرا الموبايل فور وصولهم.</span>
+                </div>
+                <div class="flex items-start gap-2">
+                    <span class="w-5 h-5 rounded-full bg-[#4E8F35] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                    <span class="text-[#303334]"><strong>أرباح مستمرة:</strong> يتم احتساب الكوميشن فورياً وإضافته لحسابك في لوحة المدرس.</span>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <a href="{{ $tWhatsapp }}" target="_blank"
+                   class="w-full py-2.5 px-4 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-black shadow-xs flex items-center justify-center gap-2 active:scale-95 transition">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    <span>مشاركة رسالة الدعوة عبر واتساب</span>
+                </a>
+
+                <button type="button" onclick="copyTeacherLink('{{ $tUrl }}')"
+                        class="w-full py-2.5 px-4 rounded-full bg-[#F5F3EE] hover:bg-[#EBF4E8] text-[#303334] text-xs font-bold border border-[#E5E2DC] flex items-center justify-center gap-2 active:scale-95 transition">
+                    <svg class="w-4 h-4 text-[#73777A]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span>نسخ رابط الحضور المباشر</span>
+                </button>
+
+                <a href="{{ route('portal.teacher') }}"
+                   class="w-full py-2 px-4 rounded-full text-[#4E8F35] hover:text-[#3F742B] text-xs font-black block text-center mt-1">
+                    عرض لوحة الأرباح والطلاب بالكامل ←
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Toast -->
+    <div id="teacher-toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 bg-[#303334] text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-lg transition-all duration-300 opacity-0 pointer-events-none">
+        تم نسخ رابط الحضور بنجاح 📋
+    </div>
+@endif
 @endsection

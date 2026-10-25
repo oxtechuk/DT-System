@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -33,7 +34,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
@@ -49,11 +50,19 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'role_user');
     }
 
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────
 
     public function hasPermission(string $permissionName): bool
     {
-        if (!$this->role) return false;
+        if (! $this->role) {
+            return false;
+        }
+
         return $this->role->permissions()->where('name', $permissionName)->exists();
     }
 
@@ -62,14 +71,20 @@ class User extends Authenticatable
         return $this->status === 'active';
     }
 
+    public function isTeacher(): bool
+    {
+        return $this->role?->slug === 'teacher';
+    }
+
     /** Initials for avatar fallback */
     public function initials(): string
     {
         $parts = explode(' ', $this->name);
-        $init  = mb_substr($parts[0], 0, 1);
+        $init = mb_substr($parts[0], 0, 1);
         if (count($parts) > 1) {
             $init .= mb_substr($parts[1], 0, 1);
         }
+
         return mb_strtoupper($init);
     }
 }

@@ -203,43 +203,51 @@
 {{-- ════════════════════════════════════════════════════════ --}}
 {{-- 1.5 TOP TOTALS BAR (شريط إجماليات المفتوح والمقفول والمديونيات) --}}
 {{-- ════════════════════════════════════════════════════════ --}}
-<div class="bg-[#F8F7F4] border-b border-[#E5E2DC] px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 font-bold z-10">
-    <div class="flex items-center gap-3 flex-wrap">
+<div class="bg-white border-b border-slate-200/80 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 font-bold z-10 shadow-2xs">
+    <div class="flex items-center gap-2.5 flex-wrap">
         {{-- Open Sessions Total --}}
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 shadow-2xs">
-            <span class="size-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span class="font-extrabold text-[#303334]">إجمالي الجلسات المفتوحة:</span>
-            <span class="font-mono font-black text-sm text-emerald-700" id="top-open-sessions-total">{{ number_format($totalOpenSessionsValue, 2) }} <span class="text-[10px] font-bold">ج.م</span></span>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100/70 border border-slate-200/90 rounded-xl text-slate-700 transition-all">
+            <span class="size-2 rounded-full bg-[#4E8F35] shadow-xs"></span>
+            <span class="text-slate-600 font-bold">جلسات مفتوحة:</span>
+            <span class="font-mono font-black text-sm text-[#4E8F35]" id="top-open-sessions-total">{{ number_format($totalOpenSessionsValue, 2) }} <span class="text-[10px] font-normal text-slate-500">ج.م</span></span>
         </div>
 
         {{-- Closed Sessions Total Today --}}
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 shadow-2xs">
-            <span class="size-2.5 rounded-full bg-blue-600"></span>
-            <span class="font-extrabold text-[#303334]">إجمالي المقفولة اليوم:</span>
-            <span class="font-mono font-black text-sm text-blue-700" id="top-closed-sessions-total">{{ number_format($totalClosedSessionsValueToday, 2) }} <span class="text-[10px] font-bold">ج.م</span></span>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100/70 border border-slate-200/90 rounded-xl text-slate-700 transition-all">
+            <span class="size-2 rounded-full bg-slate-400"></span>
+            <span class="text-slate-600 font-bold">المقفولة اليوم:</span>
+            <span class="font-mono font-black text-sm text-slate-800" id="top-closed-sessions-total">{{ number_format($totalClosedSessionsValueToday, 2) }} <span class="text-[10px] font-normal text-slate-500">ج.م</span></span>
         </div>
 
         {{-- Pending Debt Total --}}
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-900 shadow-2xs">
-            <span class="size-2.5 rounded-full bg-rose-600"></span>
-            <span class="font-extrabold text-[#303334]">إجمالي المديونيات المعلقة:</span>
-            <span class="font-mono font-black text-sm text-rose-700" id="top-debt-total">{{ number_format($totalUnpaidDebtValue, 2) }} <span class="text-[10px] font-bold">ج.م</span></span>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100/70 border border-slate-200/90 rounded-xl text-slate-700 transition-all">
+            <span class="size-2 rounded-full bg-amber-500"></span>
+            <span class="text-slate-600 font-bold">المديونيات المعلقة:</span>
+            <span class="font-mono font-black text-sm text-amber-700" id="top-debt-total">{{ number_format($totalUnpaidDebtValue, 2) }} <span class="text-[10px] font-normal text-slate-500">ج.م</span></span>
         </div>
     </div>
 
-    {{-- Controls: Hide Empty Rooms Toggle & Shift Verification --}}
+    {{-- Controls: Close Shift, Drawer Check, Hide Empty Rooms --}}
     <div class="flex items-center gap-2">
-        <button type="button" onclick="toggleHideEmptyRooms()" id="btn-toggle-empty-rooms"
-                class="px-3 py-1.5 rounded-xl bg-white border border-[#E5E2DC] hover:border-[#4E8F35] text-[#303334] text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer">
-            <span class="size-2.5 rounded-full bg-slate-300" id="indicator-empty-rooms"></span>
-            <span id="label-empty-rooms">إخفاء الغرف الخالية</span>
+        @if($currentShift)
+        <button type="button" onclick="openCloseShiftModal()"
+                class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <span>تقفيل الوردية</span>
         </button>
+        @endif
 
         <a href="{{ url('/shifts/current') }}" target="_blank"
-           class="px-3 py-1.5 rounded-xl bg-white border border-[#E5E2DC] hover:border-amber-500 text-slate-800 text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5">
+           class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5">
             <svg width="14" height="14" class="text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span>فحص الوردية والدرج</span>
+            <span>فحص الدرج والوردية</span>
         </a>
+
+        <button type="button" onclick="toggleHideEmptyRooms()" id="btn-toggle-empty-rooms"
+                class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer">
+            <span class="size-2 rounded-full bg-slate-300" id="indicator-empty-rooms"></span>
+            <span id="label-empty-rooms">إخفاء الغرف الخالية</span>
+        </button>
     </div>
 </div>
 
@@ -434,7 +442,6 @@
 </div>
 @endforeach
 </div>
- </section>
 
 
 {{-- VIEW 2: Unpaid Closed Sessions (المديونيات المعلقة) --}}
@@ -527,6 +534,7 @@
     </div>
     @endforelse
 </div>
+ </section>
 
  {{-- ── COLUMN 2 (CENTER): قائمة البوفيه والمشروبات (Cafe & Products) ── --}}
  <section class="flex-1 bg-[#F8F7F4] flex flex-col overflow-hidden border-s border-[#E5E2DC]">
@@ -677,81 +685,70 @@
  </div>
 
  {{-- Itemized Order List --}}
- <div class="flex-1 overflow-y-auto p-3.5 space-y-2.5" id="co-order-items-list">
+ <div class="flex-1 overflow-y-auto p-3.5 space-y-2.5" id="co-order-items-list" style="min-height: 200px;">
  {{-- Dynamically filled via JS --}}
  </div>
 
- {{-- Summary & Totals --}}
- <div class="p-4 bg-slate-50 border-t border-slate-200 shrink-0 space-y-2.5">
- <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
- <span>حساب الوقت والمساحة:</span>
+ {{-- Summary & Totals (Compact & Sleek) --}}
+ <div class="px-3.5 py-2.5 bg-slate-50 border-t border-slate-200 shrink-0 space-y-1.5">
+ <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-600 font-semibold">
+ <div class="flex items-center justify-between bg-white px-2 py-1 rounded-lg border border-slate-200">
+ <span>الوقت:</span>
  <span class="font-mono font-extrabold text-slate-900" id="co-time-subtotal">0.00 ج.م</span>
  </div>
- <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
- <span>مشروبات وطلبات البوفيه:</span>
+ <div class="flex items-center justify-between bg-white px-2 py-1 rounded-lg border border-slate-200">
+ <span>الطلبات:</span>
  <span class="font-mono font-extrabold text-slate-900" id="co-products-subtotal">0.00 ج.م</span>
  </div>
- <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
- <span>الخصم (ج.م):</span>
- <input type="number" id="co-discount-input" value="0" min="0" onchange="calculateTotal()"
- class="w-24 bg-white border border-slate-300 text-end px-2.5 py-1 rounded-lg text-xs text-rose-600 font-mono font-black outline-none focus:border-rose-400">
  </div>
 
- <div class="pt-3 border-t border-slate-200 flex items-center justify-between">
- <span class="font-black text-sm text-slate-900">المبلغ المطلوب سداده:</span>
- <span class="font-black text-2xl text-[#4E8F35] font-mono" id="co-total-amount">
- 0.00 <span class="text-xs font-normal text-slate-500">ج.م</span>
-                        </span>
-                    </div>
-                </div>
+ <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-200">
+ <div class="flex items-center gap-1.5">
+ <span class="text-xs font-bold text-slate-700">الخصم:</span>
+ <input type="number" id="co-discount-input" value="0" min="0" step="0.5" oninput="onGeneralDiscountInput(this.value)"
+ placeholder="0"
+ class="w-20 bg-white border border-slate-300 text-center px-2 py-1 rounded-lg text-xs text-rose-600 font-mono font-black outline-none focus:border-rose-400">
+ <span class="text-[10px] text-slate-400 font-bold">ج.م</span>
+ </div>
+ <div class="flex items-baseline gap-1.5 text-end">
+ <span class="text-xs font-bold text-slate-600">المطلوب:</span>
+ <span class="font-black text-xl text-[#4E8F35] font-mono leading-none" id="co-total-amount">
+ 0.00 <span class="text-[10px] font-normal text-slate-500">ج.م</span>
+ </span>
+ </div>
+ </div>
+ </div>
 
-                {{-- Payment Methods & Fast Change --}}
-                <div class="p-4 bg-white border-t border-slate-200 shrink-0 space-y-3">
-                    {{-- Payment Method Buttons --}}
-                    <div class="grid grid-cols-3 gap-2 text-center text-xs font-extrabold">
-                        <button type="button" onclick="selectPaymentMethod('cash')" id="btn-pay-cash"
-                                class="pay-method-btn py-2.5 rounded-xl border-2 border-[#4E8F35] bg-[#EBF4E8] text-[#4E8F35] transition-all cursor-pointer flex items-center justify-center gap-1.5">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
-                            <span>كاش نقدي</span>
-                        </button>
-                        <button type="button" onclick="selectPaymentMethod('instapay')" id="btn-pay-instapay"
-                                class="pay-method-btn py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
-                            <span>إنستاباي</span>
-                        </button>
-                        <button type="button" onclick="selectPaymentMethod('wallet')" id="btn-pay-wallet"
-                                class="pay-method-btn py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
-                            <span>محفظة</span>
-                        </button>
-                    </div>
+ {{-- Compact Payment & Checkout Row (مضموم بزرار وسلكت بوكس وديفولت كاش) --}}
+ <div class="p-3 bg-white border-t border-slate-200 shrink-0 space-y-2">
+ <div class="flex items-center gap-2">
+ <div class="flex-1 min-w-0">
+ <label class="block text-[10px] font-bold text-slate-500 mb-0.5">طريقة الدفع:</label>
+ <select id="co-payment-method" onchange="selectPaymentMethod(this.value)"
+ class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-800 outline-none focus:border-[#4E8F35] focus:bg-white transition cursor-pointer">
+ <option value="cash" selected>💵 كاش نقدي (افتراضي)</option>
+ <option value="instapay">📱 إنستاباي</option>
+ <option value="wallet">👛 محفظة إلكترونية</option>
+ <option value="card">💳 كارت بنكي</option>
+ </select>
+ </div>
+ <div class="w-28 shrink-0">
+ <label class="block text-[10px] font-bold text-slate-500 mb-0.5">المدفوع (ج.م):</label>
+ <input type="number" id="co-paid-amount" step="0.5" min="0" oninput="onPaidAmountInput(this.value)"
+ class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs font-mono font-bold text-slate-800 text-center outline-none focus:border-[#4E8F35] focus:bg-white transition"
+ placeholder="المبلغ كامل">
+ </div>
+ </div>
 
-                    {{-- Fast Change Calculator (كاش فقط) --}}
-                    <div id="cash-change-box" class="space-y-2">
-                        <div class="flex items-center gap-2 text-xs">
-                            <span class="text-slate-500 text-[11px] font-bold">المستلم:</span>
-                            <div class="grid grid-cols-4 gap-1.5 flex-1">
-                                <button type="button" onclick="setReceivedCash(50)" class="py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono font-bold">50</button>
-                                <button type="button" onclick="setReceivedCash(100)" class="py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono font-bold">100</button>
-                                <button type="button" onclick="setReceivedCash(200)" class="py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono font-bold">200</button>
-                                <button type="button" onclick="setReceivedCash(500)" class="py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-mono font-bold">500</button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between text-xs px-3 py-2 bg-[#EBF4E8] rounded-xl border border-[#DCE8D4]">
-                            <span class="text-[#4E8F35] font-bold">الباقي للعميل:</span>
-                            <span class="font-black font-mono text-[#4E8F35]" id="co-change-amount">0.00 ج.م</span>
-                        </div>
-                    </div>
-
-                    {{-- Big Close & Pay Button --}}
-                    <button type="button" onclick="executeCheckoutAndPay()" id="btn-submit-checkout"
-                            class="w-full py-3.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white font-black text-sm rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        <span>إنهاء الجلسة والتحصيل (F9)</span>
-                    </button>
-                </div>
+ {{-- Compact Finish & Pay Button (F9) --}}
+ <button type="button" onclick="executeCheckoutAndPay()" id="btn-submit-checkout"
+ class="w-full py-2.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white font-extrabold text-xs rounded-xl transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
+ <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+ <polyline points="20 6 9 17 4 12"/>
+ </svg>
+ <span>إنهاء الجلسة والتحصيل (F9)</span>
+ </button>
+ </div>
             </div>
 
         </section>
@@ -847,7 +844,7 @@
  {{-- ════════════════════════════════════════════════════════ --}}
 
  {{-- Modal 1: جلسة جديدة (New Session) --}}
- <div id="modal-new-session" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+ <div id="modal-new-session-placeholder" class="hidden">
     <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-800">
         <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
             <div>
@@ -876,7 +873,16 @@
             <div class="space-y-4 text-xs">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">وقت البدء *</label>
+                        
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block font-bold text-slate-700">وقت البدء *</label>
+                            <div class="flex items-center gap-1">
+                                <button type="button" onclick="adjustEditStartedTime(-15)" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] text-slate-600 font-bold" title="تقديم 15 دقيقة">-15 د</button>
+                                <button type="button" onclick="adjustEditStartedTime(-30)" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] text-slate-600 font-bold" title="تقديم 30 دقيقة">-30 د</button>
+                                <button type="button" onclick="adjustEditStartedTime(-60)" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] text-slate-600 font-bold" title="تقديم ساعة">-1 س</button>
+                                <button type="button" onclick="resetEditStartedTimeToNow()" class="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-[10px] text-emerald-700 font-bold">الآن</button>
+                            </div>
+                        </div>
                         <input type="datetime-local" id="es-started-at" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold focus:border-[#4E8F35] outline-none">
                     </div>
                     <div>
@@ -999,6 +1005,14 @@
         </form>
     </div>
 </div>
+
+{{-- Modal 1: بدء جلسة جديدة (New Session Modal) --}}
+<div id="modal-new-session" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-800">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <div>
+                <h3 class="font-extrabold text-base text-slate-900">بدء جلسة عمل جديدة (F2)</h3>
+                <p class="text-xs text-slate-400">اختر العميل والغرفة ونوع الجلسة</p>
             </div>
             <button type="button" onclick="closeModal('modal-new-session')" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold transition-all">
                 <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
@@ -1308,16 +1322,388 @@
     </div>
 </div>
 
+ 
+{{-- Modal: تقفيل الوردية ومطابقة النقدية بالدرج --}}
+@if($currentShift)
+<div id="modal-close-shift" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-800">
+        {{-- Header with Title & X close button --}}
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <div>
+                <h3 class="font-extrabold text-base text-slate-900 flex items-center gap-2">
+                    <span class="size-7 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-black text-sm">🔒</span>
+                    <span>تقفيل وتسليم الوردية</span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">
+                    الوردية رقم <strong class="font-mono text-slate-700">#{{ $currentShift->id }}</strong> — المسؤول: <strong class="text-slate-800">{{ $currentShift->user->name ?? 'الكاشير' }}</strong>
+                </p>
+            </div>
+            <button type="button" onclick="closeModal('modal-close-shift')" class="size-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold transition-all cursor-pointer" title="إغلاق للرجوع">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        {{-- Notice if open deals exist --}}
+        @if($activeDeals->count() > 0)
+        <div class="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+            <svg class="size-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>
+                <span class="font-bold block">تنبيه: توجد {{ $activeDeals->count() }} جلسة مفتوحة حالياً!</span>
+                <span class="text-[11px] text-amber-800">يجب إنهاء الجلسات أو محاسبتها أولاً قبل إغلاق الوردية وترحيل الحسابات.</span>
+            </div>
+        </div>
+        @endif
+
+        {{-- Expected Cash in Drawer Display --}}
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center mb-5">
+            <span class="text-xs font-bold text-slate-500 block mb-1">السعر المتوقع بالدرج (Expected Cash)</span>
+            <div class="text-3xl font-black font-mono text-[#4E8F35]" id="expected-drawer-val" data-expected="{{ $expectedDrawerCash }}">
+                {{ number_format($expectedDrawerCash, 2) }} <span class="text-sm font-bold text-slate-500">ج.م</span>
+            </div>
+            <div class="mt-2 text-[11px] text-slate-400 font-semibold flex items-center justify-center gap-2">
+                <span>عهدة البداية: {{ number_format($currentShift->opening_cash, 2) }} ج.م</span>
+                <span>•</span>
+                <span>كاش اليوم: {{ number_format($todayCashTotal, 2) }} ج.م</span>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('shifts.close', $currentShift) }}" id="form-close-shift" onsubmit="return validateCloseShiftForm(event)">
+            @csrf
+            <input type="hidden" name="actual_cash" id="cs-actual-cash" value="{{ $expectedDrawerCash }}">
+
+            {{-- 2 Choice Buttons: مطابق / غير مطابق --}}
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <button type="button" onclick="setShiftMatchMode('matched')" id="btn-shift-matched"
+                        class="p-3.5 rounded-2xl border-2 border-[#4E8F35] bg-[#EBF4E8] text-[#4E8F35] font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                    <span class="text-lg">✓</span>
+                    <span>مطابق تماماً</span>
+                    <span class="text-[10px] font-normal opacity-80">(المبلغ الفعلي = المتوقع)</span>
+                </button>
+
+                <button type="button" onclick="setShiftMatchMode('mismatched')" id="btn-shift-mismatched"
+                        class="p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-slate-700 font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer">
+                    <span class="text-lg">≠</span>
+                    <span>غير مطابق</span>
+                    <span class="text-[10px] font-normal opacity-80">(يوجد عجز أو زيادة)</span>
+                </button>
+            </div>
+
+            {{-- Matched State Success message --}}
+            <div id="cs-matched-notice" class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 mb-4">
+                <span class="text-base text-emerald-600">✓</span>
+                <span>النقدية بالدرج مطابقة للمتوقع ({{ number_format($expectedDrawerCash, 2) }} ج.م) بدون أي فارق.</span>
+            </div>
+
+            {{-- Discrepancy Section (Shown when mismatched) --}}
+            <div id="cs-mismatched-section" class="hidden space-y-3 mb-4 p-4 rounded-2xl bg-amber-50/70 border border-amber-200">
+                <div>
+                    <label class="block text-xs font-bold text-slate-800 mb-1">المبلغ الفعلي الموجود بالدرج (بالعد) *</label>
+                    <div class="relative">
+                        <input type="number" step="0.5" id="cs-actual-cash-input" oninput="onShiftActualCashInput()"
+                               placeholder="أدخل المبلغ الفعلي بالدرج..."
+                               class="w-full bg-white border border-amber-300 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold outline-none focus:border-[#4E8F35]">
+                        <span class="absolute end-3 top-2.5 text-xs text-slate-500 font-bold">ج.م</span>
+                    </div>
+                </div>
+
+                {{-- Difference Display --}}
+                <div id="cs-diff-badge" class="p-2.5 rounded-xl text-xs font-bold flex items-center justify-between">
+                    <span>الفارق:</span>
+                    <span id="cs-diff-amount" class="font-mono font-black">0.00 ج.م</span>
+                </div>
+
+                {{-- Admin Password requirement when diff > 0.01 --}}
+                <div id="cs-admin-auth-box" class="pt-2 border-t border-amber-200/80">
+                    <label class="block text-xs font-bold text-slate-800 mb-1">🔒 كلمة سر الأدمن / المدير للموافقة على الفارق *</label>
+                    <input type="password" name="admin_password" id="cs-admin-password" placeholder="أدخل كلمة سر الأدمن..."
+                           class="w-full bg-white border border-amber-300 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-[#4E8F35]">
+                </div>
+            </div>
+
+            {{-- Closing Notes --}}
+            <div class="mb-4">
+                <label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات الإغلاق (اختياري)</label>
+                <textarea name="closing_notes" rows="2" placeholder="ملاحظات حول تسليم الوردية أو العهدة..."
+                          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-[#4E8F35] focus:bg-white"></textarea>
+            </div>
+
+            {{-- Action Buttons: Confirm & Cancel / Return --}}
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+                <button type="button" onclick="closeModal('modal-close-shift')"
+                        class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer">
+                    إلغاء للرجوع
+                </button>
+                <button type="submit" @if($activeDeals->count() > 0) disabled title="أنهِ الجلسات المفتوحة أولاً" @endif
+                        id="btn-confirm-close-shift"
+                        class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl text-xs font-black shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+                    <span>تأكيد تقفيل الوردية</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
+
+{{-- Modal: تطبيق خصم على صنف محدد --}}
+<div id="modal-item-discount" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 shadow-2xl text-slate-800">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <div>
+                <h3 class="font-extrabold text-base text-slate-900 flex items-center gap-2">
+                    <span class="size-7 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-xs">%</span>
+                    <span>خصم على الصنف</span>
+                </h3>
+                <p class="text-xs text-slate-400" id="idm-item-title">تحديد الخصم على المنتج</p>
+            </div>
+            <button type="button" onclick="closeModal('modal-item-discount')" class="size-8 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-900 flex items-center justify-center font-bold transition-all cursor-pointer">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <form id="form-item-discount" onsubmit="submitItemDiscount(event)">
+            <input type="hidden" id="idm-item-id">
+            <input type="hidden" id="idm-unit-price">
+            <input type="hidden" id="idm-quantity">
+
+            {{-- Item Info Summary --}}
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 mb-4 flex items-center justify-between text-xs">
+                <div>
+                    <span class="font-extrabold text-slate-900 block" id="idm-item-name">شاي</span>
+                    <span class="text-slate-500 font-mono" id="idm-item-calc">5 × 20.00 ج.م</span>
+                </div>
+                <div class="text-end">
+                    <span class="text-[10px] text-slate-400 block font-bold">الإجمالي الأصلي</span>
+                    <span class="font-mono font-black text-slate-900 text-sm" id="idm-original-total">100.00 ج.م</span>
+                </div>
+            </div>
+
+            <div class="space-y-3.5 text-xs">
+                {{-- Input 1: Discount per unit --}}
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">
+                        خصم على القطعة الواحدة (ج.م)
+                    </label>
+                    <div class="relative">
+                        <input type="number" step="0.5" min="0" id="idm-unit-discount" oninput="onUnitDiscountInput(this.value)"
+                               placeholder="مثال: 5 ج.م للقطعة"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold outline-none focus:border-[#4E8F35] focus:bg-white">
+                        <span class="absolute end-3 top-2.5 text-xs text-slate-400 font-bold">ج.م / قطعة</span>
+                    </div>
+                </div>
+
+                {{-- Input 2: Total Discount on this Item --}}
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">
+                        أو إجمالي الخصم على الصنف بالكامل (ج.م)
+                    </label>
+                    <div class="relative">
+                        <input type="number" step="0.5" min="0" id="idm-total-discount" oninput="onTotalDiscountInput(this.value)"
+                               placeholder="مثال: 25 ج.م على الكل"
+                               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold outline-none focus:border-[#4E8F35] focus:bg-white">
+                        <span class="absolute end-3 top-2.5 text-xs text-slate-400 font-bold">ج.م إجمالي</span>
+                    </div>
+                </div>
+
+                {{-- Net Price Preview Box --}}
+                <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between font-bold">
+                    <div>
+                        <span class="text-emerald-900 block text-[11px]">السعر الصافي بعد الخصم:</span>
+                        <span class="text-[10px] text-emerald-700" id="idm-discount-explain">خصم 0.00 ج.م</span>
+                    </div>
+                    <span class="font-mono font-black text-base text-emerald-700" id="idm-net-total">100.00 ج.م</span>
+                </div>
+
+                {{-- Quick Buttons --}}
+                <div class="flex items-center gap-2 pt-1">
+                    <button type="button" onclick="setItemDiscountZero()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-bold transition cursor-pointer">
+                        إلغاء الخصم (0 ج.م)
+                    </button>
+                    <button type="button" onclick="setQuickUnitDiscount(5)" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-[11px] font-bold border border-amber-200 transition cursor-pointer">
+                        خصم 5 ج.م/قطعة
+                    </button>
+                    <button type="button" onclick="setQuickUnitDiscount(10)" class="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 text-[11px] font-bold border border-amber-200 transition cursor-pointer">
+                        خصم 10 ج.م/قطعة
+                    </button>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeModal('modal-item-discount')" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-all cursor-pointer">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white font-black rounded-xl shadow-xs transition-all cursor-pointer">
+                        تطبيق الخصم
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
  {{-- ════════════════════════════════════════════════════════ --}}
  {{-- 4. JAVASCRIPT STATE ENGINE & WORKFLOW --}}
  {{-- ════════════════════════════════════════════════════════ --}}
  <script>
  // ── State Variables ──
- const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+ const productsCatalog = @json($products);
+    const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
  const APP_URL = "{{ rtrim(url('/'), '/') }}";
  let activeDeal = null;
  let selectedPaymentMethod = 'cash';
  let liveTimerInterval = null;
+
+    // ── Switch Sidebar View Tabs (الغرف / غير مسددة / المسددة) ──
+    function switchSidebarView(view) {
+        document.querySelectorAll('.sidebar-view-tab').forEach(t => {
+            t.classList.remove('bg-[#4E8F35]', 'text-white', 'shadow-xs', 'font-extrabold');
+            t.classList.add('text-[#73777A]', 'font-bold');
+        });
+        const activeTab = document.getElementById(`view-tab-${view}`);
+        if (activeTab) {
+            activeTab.classList.remove('text-[#73777A]', 'font-bold');
+            activeTab.classList.add('bg-[#4E8F35]', 'text-white', 'shadow-xs', 'font-extrabold');
+        }
+
+        document.querySelectorAll('.sidebar-view-content').forEach(c => c.classList.add('hidden'));
+
+        const roomsSubFilters = document.getElementById('rooms-sub-filters');
+        if (view === 'rooms') {
+            const roomsList = document.getElementById('pos-rooms-list');
+            if (roomsList) roomsList.classList.remove('hidden');
+            if (roomsSubFilters) roomsSubFilters.classList.remove('hidden');
+        } else if (view === 'unpaid') {
+            const unpaidList = document.getElementById('pos-unpaid-list');
+            if (unpaidList) unpaidList.classList.remove('hidden');
+            if (roomsSubFilters) roomsSubFilters.classList.add('hidden');
+        } else if (view === 'paid') {
+            const paidList = document.getElementById('pos-paid-list');
+            if (paidList) paidList.classList.remove('hidden');
+            if (roomsSubFilters) roomsSubFilters.classList.add('hidden');
+        }
+    }
+
+    // ── Toggle Hide Empty Rooms ──
+    let hideEmptyRooms = false;
+    function toggleHideEmptyRooms() {
+        hideEmptyRooms = !hideEmptyRooms;
+        const indicator = document.getElementById('indicator-empty-rooms');
+        const label = document.getElementById('label-empty-rooms');
+        if (indicator) {
+            indicator.className = hideEmptyRooms ? 'size-2 rounded-full bg-[#4E8F35]' : 'size-2 rounded-full bg-slate-300';
+        }
+        if (label) {
+            label.textContent = hideEmptyRooms ? 'إظهار الغرف الخالية' : 'إخفاء الغرف الخالية';
+        }
+        document.querySelectorAll('.room-card').forEach(card => {
+            const isOccupied = card.dataset.status === 'occupied';
+            if (hideEmptyRooms && !isOccupied) {
+                card.classList.add('hidden');
+            } else {
+                card.classList.remove('hidden');
+            }
+        });
+    }
+
+    // ── Quick Add Product from inside Checkout Items List ──
+    function quickAddSelectedProduct() {
+        const select = document.getElementById('co-quick-product-select');
+        if (!select || !select.value) {
+            alert('يرجى اختيار صنف أولاً لإضافته.');
+            return;
+        }
+        addProductToActiveSession(select.value);
+    }
+
+    // ── Change Order Item Quantity (+ / -) ──
+    function changeItemQty(itemId, newQty) {
+        if (!activeDeal) return;
+        if (newQty < 1) {
+            if (!confirm('هل تريد حذف هذا الصنف من الفاتورة؟')) return;
+            removeOrderItem(itemId);
+            return;
+        }
+
+        fetch(`${APP_URL}/cashier/deals/${activeDeal.id}/items/${itemId}/quantity`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+            },
+            body: JSON.stringify({ quantity: newQty })
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'تعذر تعديل الكمية.');
+            return data;
+        })
+        .then(data => {
+            loadDealDetails(activeDeal.id);
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message || 'حدث خطأ أثناء تعديل الكمية.');
+        });
+    }
+
+    // ── Open Settle Debt Modal ──
+    function openSettleDebtModal(dealId, remainingAmount, customerName) {
+        document.getElementById('sd-deal-id').value = dealId;
+        document.getElementById('sd-customer-name').textContent = `العميل: ${customerName}`;
+        document.getElementById('sd-remaining-display').textContent = `${parseFloat(remainingAmount).toFixed(2)} ج.م`;
+        document.getElementById('sd-paid-amount').value = parseFloat(remainingAmount).toFixed(2);
+        openModal('modal-settle-debt');
+    }
+
+    // ── Submit Settle Debt ──
+    function submitSettleDebt(e) {
+        e.preventDefault();
+        const dealId = document.getElementById('sd-deal-id').value;
+        const paidAmt = parseFloat(document.getElementById('sd-paid-amount').value || '0');
+        const method = document.getElementById('sd-payment-method').value || 'cash';
+
+        if (paidAmt <= 0) {
+            alert('يرجى إدخال مبلغ صحيح.');
+            return;
+        }
+
+        fetch(`${APP_URL}/cashier/deals/${dealId}/settle-debt`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+            },
+            body: JSON.stringify({
+                paid_amount: paidAmt,
+                amount: paidAmt,
+                payment_method: method,
+            })
+        })
+        .then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'تعذر تسديد المديونية.');
+            return data;
+        })
+        .then(data => {
+            alert(data.message || 'تم تسديد المديونية بنجاح.');
+            closeModal('modal-settle-debt');
+            window.location.reload();
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message || 'حدث خطأ أثناء تسديد المديونية.');
+        });
+    }
+
+    // ── Confirm Overpayment Type ──
+    function confirmOverpaymentType(type) {
+        closeModal('modal-overpayment-prompt');
+    }
+
+    // ── Dismiss Live Toast ──
+    function dismissLiveToast() {
+        const el = document.getElementById('portal-orders-live-toast');
+        if (el) el.classList.add('hidden');
+    }
 
  // ── Clock ──
  function updateClock() {
@@ -1373,7 +1759,7 @@
      }
 
      customerSearchTimeout = setTimeout(() => {
-         fetch(`${APP_URL}/api/v1/customers?search=${encodeURIComponent(query)}&limit=10`, {
+         fetch(`${APP_URL}/cashier/customers/search?search=${encodeURIComponent(query)}&limit=10`, {
              headers: {
                  'Accept': 'application/json',
                  'X-CSRF-TOKEN': CSRF_TOKEN
@@ -1712,7 +2098,7 @@
 
  // ── Load Deal Details into Checkout Panel ──
  function loadDealDetails(dealId) {
- fetch(`${APP_URL}/api/v1/deals/${dealId}`)
+ fetch(`${APP_URL}/cashier/deals/${dealId}`)
  .then(res => res.json())
  .then(data => {
  if (data.data) {
@@ -1741,6 +2127,11 @@
  const customerName = activeDeal.customer ? (activeDeal.customer.name || activeDeal.customer.full_name) : 'عميل مباشر';
  document.getElementById('co-customer-name').textContent = customerName;
  document.getElementById('co-customer-avatar').textContent = customerName.charAt(0);
+ const orderDiscountVal = parseFloat(activeDeal.order ? (activeDeal.order.discount || 0) : 0);
+ const discountInputEl = document.getElementById('co-discount-input');
+ if (discountInputEl) {
+ discountInputEl.value = orderDiscountVal > 0 ? orderDiscountVal : '';
+ }
  document.getElementById('co-room-name').textContent = activeDeal.room ? activeDeal.room.name : 'مساحة عمل عامة';
 
  // Items List
@@ -1755,7 +2146,10 @@
  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
  </div>
  <div>
- <div class="font-extrabold text-slate-900">حساب مدة الجلسة</div>
+ <div class="font-extrabold text-slate-900 flex items-center gap-2">
+  <span>حساب مدة الجلسة</span>
+  <button type="button" onclick="openEditSessionTimeForActiveDeal()" class="text-[10px] text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-0.5 rounded-md border border-blue-200 font-bold cursor-pointer transition" title="تعديل وقت البدء">تعديل الميعاد ✎</button>
+</div>
  <div class="text-[10px] text-slate-400 font-medium">${activeDeal.workspace_type || 'مكتب مشترك'}</div>
  </div>
  </div>
@@ -1768,29 +2162,75 @@
  let productsSubtotal = 0;
  const items = (activeDeal.order && activeDeal.order.items) ? activeDeal.order.items : [];
 
- items.forEach(item => {
- productsSubtotal += parseFloat(item.total || (item.unit_price * item.quantity) || 0);
- const itemEl = document.createElement('div');
- itemEl.className = 'p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs';
- itemEl.innerHTML = `
- <div class="flex items-center gap-2.5 flex-1">
- <div class="w-8 h-8 rounded-lg bg-[#F5F3EE] text-[#303334] flex items-center justify-center font-bold">
- <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
- </div>
- <div>
- <div class="font-extrabold text-slate-900">${item.name}</div>
- <div class="text-[10px] text-slate-400 font-mono font-medium">${parseFloat(item.unit_price).toFixed(2)} ج.م × ${item.quantity}</div>
- </div>
- </div>
- <div class="flex items-center gap-2.5">
- <span class="font-black text-slate-900 font-mono">${parseFloat(item.total).toFixed(2)} ج.م</span>
- <button type="button" onclick="removeOrderItem(${item.id})" class="text-slate-400 hover:text-rose-600 p-1" title="حذف">
- <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+ // Quick Add Product Selector Header inside items list
+ if (typeof productsCatalog !== 'undefined' && productsCatalog && productsCatalog.length > 0) {
+ const quickAddHtml = `
+ <div class="p-2 rounded-xl bg-white border border-slate-200 flex items-center gap-1.5 text-xs shadow-2xs mb-1">
+ <select id="co-quick-product-select" class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700 outline-none focus:border-[#4E8F35] cursor-pointer">
+ <option value="" selected disabled>+ إضافة صنف / مشروب سريع...</option>
+ ${productsCatalog.map(p => `<option value="${p.id}">${p.name} (${parseFloat(p.selling_price).toFixed(2)} ج.م)</option>`).join('')}
+ </select>
+ <button type="button" onclick="quickAddSelectedProduct()" class="px-3 py-1.5 bg-[#4E8F35] hover:bg-[#3F742B] text-white rounded-lg font-extrabold text-xs transition cursor-pointer shrink-0">
+ + إضافة
  </button>
  </div>
  `;
+ itemsContainer.insertAdjacentHTML('beforeend', quickAddHtml);
+ }
+
+ items.forEach(item => {
+ productsSubtotal += parseFloat(item.total || (item.unit_price * item.quantity) || 0);
+ const itemEl = document.createElement('div');
+ itemEl.className = 'p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs shadow-2xs';
+ const hasDiscount = item.discount_amount && parseFloat(item.discount_amount) > 0;
+ const originalTotal = (parseFloat(item.unit_price) * parseInt(item.quantity)).toFixed(2);
+ itemEl.innerHTML = `
+ <div class="flex items-center justify-between gap-2">
+ <div class="flex items-center gap-2 min-w-0 flex-1">
+ <div class="w-7 h-7 rounded-lg bg-[#F5F3EE] text-[#303334] flex items-center justify-center font-bold shrink-0">
+ <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
+ </div>
+ <div class="min-w-0 flex-1">
+ <div class="font-extrabold text-slate-900 truncate text-xs">${item.name}</div>
+ <div class="text-[10px] text-slate-500 font-mono font-semibold">${parseFloat(item.unit_price).toFixed(2)} ج.م للواحدة</div>
+ </div>
+ </div>
+
+ <div class="text-end shrink-0">
+ ${hasDiscount ? `<span class="line-through text-slate-400 text-[10px] font-mono block leading-tight">${originalTotal} ج.م</span>` : ''}
+ <span class="font-black text-slate-900 font-mono text-sm leading-tight">${parseFloat(item.total).toFixed(2)} ج.م</span>
+ </div>
+ </div>
+
+ <div class="flex items-center justify-between pt-1.5 border-t border-slate-200/70">
+ {{-- Quantity Controller: [-] [Qty] [+] --}}
+ <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5">
+ <button type="button" onclick="changeItemQty(${item.id}, ${parseInt(item.quantity) - 1})"
+ class="size-6 rounded flex items-center justify-center text-slate-600 hover:text-rose-600 hover:bg-slate-100 font-black text-sm transition cursor-pointer"
+ title="تقليل الكمية">−</button>
+ <span class="font-mono font-black text-xs px-2 text-slate-900 min-w-5 text-center">${item.quantity}</span>
+ <button type="button" onclick="changeItemQty(${item.id}, ${parseInt(item.quantity) + 1})"
+ class="size-6 rounded flex items-center justify-center text-[#4E8F35] hover:bg-[#EBF4E8] font-black text-sm transition cursor-pointer"
+ title="زيادة الكمية">+</button>
+ </div>
+
+ <div class="flex items-center gap-1.5">
+ {{-- Item Discount Button with Badge --}}
+ <button type="button" onclick="openItemDiscountModal(${item.id}, '${encodeURIComponent(item.name)}', ${item.quantity}, ${item.unit_price}, ${item.discount_amount || 0})" 
+ class="px-2.5 py-1 rounded-lg ${hasDiscount ? 'bg-amber-100 text-amber-900 border-amber-300 font-black' : 'bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border-slate-200 font-bold'} border text-[11px] transition flex items-center gap-1 cursor-pointer" title="تطبيق خصم على هذا الصنف">
+ <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+ <span>${hasDiscount ? `خصم: ${parseFloat(item.discount_amount).toFixed(2)} ج.م` : 'خصم'}</span>
+ </button>
+
+ {{-- Remove Button --}}
+ <button type="button" onclick="removeOrderItem(${item.id})" class="size-7 rounded-lg bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 flex items-center justify-center transition cursor-pointer" title="حذف الصنف">
+ <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+ </button>
+ </div>
+ </div>
+ `;
  itemsContainer.appendChild(itemEl);
- });
+ });;
 
  // Calculate estimated time price
  calculateEstimatedDurationPrice();
@@ -1828,44 +2268,63 @@
  let discount = parseFloat(document.getElementById('co-discount-input').value) || 0;
  let netTotal = Math.max(0, timePrice + productsPrice - discount);
 
- document.getElementById('co-total-amount').innerHTML = `${netTotal.toFixed(2)} <span class="text-xs font-normal text-slate-400">ج.م</span>`;
- calculateChange(netTotal);
- }
+ document.getElementById('co-total-amount').innerHTML = `${netTotal.toFixed(2)} <span class="text-[10px] font-normal text-slate-500">ج.م</span>`;
 
- // ── Cash Change Calculator ──
- let receivedCashAmount = 0;
- function setReceivedCash(amount) {
- receivedCashAmount = amount;
- let total = parseFloat(document.getElementById('co-total-amount').textContent) || 0;
- let change = Math.max(0, receivedCashAmount - total);
- document.getElementById('co-change-amount').textContent = `${change.toFixed(2)} ج.م (من ${amount} ج.م)`;
- }
- function calculateChange(netTotal) {
- if (receivedCashAmount > 0) {
- let change = Math.max(0, receivedCashAmount - netTotal);
- document.getElementById('co-change-amount').textContent = `${change.toFixed(2)} ج.م`;
+ // Auto sync paid amount input if user hasn't set custom manual value
+ const paidInput = document.getElementById('co-paid-amount');
+ if (paidInput && (!paidInput.dataset.manual || paidInput.dataset.manual === 'false')) {
+ paidInput.value = netTotal > 0 ? netTotal.toFixed(2) : '0';
  }
  }
 
- // ── Payment Method Toggle ──
+ let generalDiscountDebounce = null;
+ function onGeneralDiscountInput(val) {
+ calculateTotal();
+ clearTimeout(generalDiscountDebounce);
+ if (!activeDeal || !activeDeal.order) return;
+ generalDiscountDebounce = setTimeout(() => {
+ saveGeneralDiscount(val);
+ }, 500);
+ }
+
+ function saveGeneralDiscount(val) {
+ if (!activeDeal || !activeDeal.order) return;
+ const disc = parseFloat(val) || 0;
+ fetch(`${APP_URL}/cashier/orders/${activeDeal.order.id}/item-discount`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Accept': 'application/json',
+ 'X-CSRF-TOKEN': CSRF_TOKEN,
+ },
+ body: JSON.stringify({
+ item_id: null,
+ discount_amount: disc,
+ })
+ })
+ .then(res => res.json())
+ .then(data => {
+ if (data.success && data.order) {
+ activeDeal.order.discount = data.order.discount;
+ activeDeal.order.total = data.order.total;
+ }
+ })
+ .catch(err => console.error('Error auto-saving discount:', err));
+ }
+
+ function onPaidAmountInput(val) {
+ const paidInput = document.getElementById('co-paid-amount');
+ if (paidInput) {
+ paidInput.dataset.manual = (val !== '' && val !== null) ? 'true' : 'false';
+ }
+ }
+
+ // ── Payment Method Select ──
  function selectPaymentMethod(method) {
  selectedPaymentMethod = method;
- document.querySelectorAll('.pay-method-btn').forEach(btn => {
- btn.classList.remove('border-2', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
- btn.classList.add('border', 'border-slate-200', 'bg-slate-50', 'text-slate-600');
- });
-
- const activeBtn = document.getElementById(`btn-pay-${method}`);
- if (activeBtn) {
- activeBtn.classList.remove('border', 'border-slate-200', 'bg-slate-50', 'text-slate-600');
- activeBtn.classList.add('border-2', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
- }
-
- const changeBox = document.getElementById('cash-change-box');
- if (method === 'cash') {
- changeBox.classList.remove('hidden');
- } else {
- changeBox.classList.add('hidden');
+ const selectEl = document.getElementById('co-payment-method');
+ if (selectEl && selectEl.value !== method) {
+ selectEl.value = method;
  }
  }
 
@@ -1876,7 +2335,7 @@
  return;
  }
 
- fetch(`${APP_URL}/api/v1/deals/${activeDeal.id}/items`, {
+ fetch(`${APP_URL}/cashier/deals/${activeDeal.id}/items`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -1907,7 +2366,7 @@
  function removeOrderItem(itemId) {
  if (!activeDeal || !confirm('هل أنت متأكد من حذف هذا الصنف من الفاتورة؟')) return;
 
- fetch(`${APP_URL}/api/v1/deals/${activeDeal.id}/items/${itemId}`, {
+ fetch(`${APP_URL}/cashier/deals/${activeDeal.id}/items/${itemId}`, {
  method: 'DELETE',
  headers: {
  'Accept': 'application/json',
@@ -1929,7 +2388,7 @@
  const workspaceTypeId = document.getElementById('ns-workspace-type-id').value;
  const notes = document.getElementById('ns-notes').value;
 
- fetch(`${APP_URL}/api/v1/deals`, {
+ fetch(`${APP_URL}/cashier/deals`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -1972,7 +2431,7 @@
      const classification = classificationEl ? classificationEl.value : null;
      const source = sourceEl ? sourceEl.value : null;
 
-     fetch(`${APP_URL}/api/v1/customers`, {
+     fetch(`${APP_URL}/cashier/customers/quick`, {
          method: 'POST',
          headers: {
              'Content-Type': 'application/json',
@@ -2010,7 +2469,7 @@
  }
 
  // ── Checkout, Close & Pay (F9) ──
- function executeCheckoutAndPay() {
+ async function executeCheckoutAndPay() {
  if (!activeDeal) return;
  if (!confirm('تأكيد إنهاء الجلسة وتحصيل المبلغ وإقفال الحساب؟')) return;
 
@@ -2018,7 +2477,29 @@
  btn.disabled = true;
  btn.innerHTML = 'جاري التحصيل والإنهاء...';
 
- fetch(`${APP_URL}/api/v1/deals/${activeDeal.id}/close`, {
+ // 1. Ensure general discount from input is committed
+ const discountVal = parseFloat(document.getElementById('co-discount-input').value) || 0;
+ if (activeDeal.order) {
+ try {
+ await fetch(`${APP_URL}/cashier/orders/${activeDeal.order.id}/item-discount`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Accept': 'application/json',
+ 'X-CSRF-TOKEN': CSRF_TOKEN,
+ },
+ body: JSON.stringify({
+ item_id: null,
+ discount_amount: discountVal,
+ })
+ });
+ } catch (e) {
+ console.error('Error saving final discount:', e);
+ }
+ }
+
+ // 2. Close deal & calculate session price
+ fetch(`${APP_URL}/cashier/deals/${activeDeal.id}/close`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -2030,10 +2511,17 @@
  const data = await res.json();
  if (!res.ok) throw new Error(data.message || 'فشل في إغلاق الجلسة.');
 
+ // Determine paid amount and method
  const totalAmt = parseFloat(document.getElementById('co-total-amount').textContent) || 0;
- 
- if (totalAmt > 0) {
- const payRes = await fetch(`${APP_URL}/api/v1/deals/${activeDeal.id}/pay`, {
+ const paidInput = document.getElementById('co-paid-amount');
+ let paidAmt = (paidInput && paidInput.value !== '') ? parseFloat(paidInput.value) : totalAmt;
+ if (isNaN(paidAmt) || paidAmt < 0) paidAmt = totalAmt;
+
+ const selectEl = document.getElementById('co-payment-method');
+ const method = selectEl ? selectEl.value : (selectedPaymentMethod || 'cash');
+
+ if (paidAmt > 0) {
+ const payRes = await fetch(`${APP_URL}/cashier/deals/${activeDeal.id}/pay`, {
  method: 'POST',
  headers: {
  'Content-Type': 'application/json',
@@ -2042,8 +2530,8 @@
  },
  body: JSON.stringify({
  payments: [{
- method: selectedPaymentMethod,
- amount: totalAmt,
+ method: method,
+ amount: paidAmt,
  }]
  })
  });
@@ -2051,8 +2539,7 @@
  if (!payRes.ok) throw new Error(payData.message || 'فشل في تحصيل المبلغ.');
  }
 
- // Refresh UI
- alert('تم إنهاء الجلسة بنجاح.');
+ alert('تم إنهاء الجلسة والتحصيل بنجاح.');
  window.location.reload();
  })
  .catch(err => {
@@ -2648,6 +3135,344 @@
     pollAlerts();
     setInterval(pollAlerts, 30_000);
 })();
+
+
+
+// ── SHIFT CLOSING POPUP HANDLERS ──
+function openCloseShiftModal() {
+    openModal('modal-close-shift');
+    setShiftMatchMode('matched');
+}
+
+function setShiftMatchMode(mode) {
+    const matchedBtn = document.getElementById('btn-shift-matched');
+    const mismatchedBtn = document.getElementById('btn-shift-mismatched');
+    const matchedNotice = document.getElementById('cs-matched-notice');
+    const mismatchedSec = document.getElementById('cs-mismatched-section');
+    const actualCashInput = document.getElementById('cs-actual-cash');
+    const actualCashVisible = document.getElementById('cs-actual-cash-input');
+    const expectedEl = document.getElementById('expected-drawer-val');
+    const expected = expectedEl ? parseFloat(expectedEl.dataset.expected || '0') : 0;
+
+    if (mode === 'matched') {
+        if (matchedBtn) {
+            matchedBtn.className = 'p-3.5 rounded-2xl border-2 border-[#4E8F35] bg-[#EBF4E8] text-[#4E8F35] font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer';
+        }
+        if (mismatchedBtn) {
+            mismatchedBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-300 text-slate-700 font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer';
+        }
+        if (matchedNotice) matchedNotice.classList.remove('hidden');
+        if (mismatchedSec) mismatchedSec.classList.add('hidden');
+        if (actualCashInput) actualCashInput.value = expected;
+        if (actualCashVisible) actualCashVisible.value = expected;
+    } else {
+        if (matchedBtn) {
+            matchedBtn.className = 'p-3.5 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-emerald-50 hover:border-[#4E8F35] text-slate-700 font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer';
+        }
+        if (mismatchedBtn) {
+            mismatchedBtn.className = 'p-3.5 rounded-2xl border-2 border-amber-500 bg-amber-50 text-amber-900 font-black text-xs flex flex-col items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer';
+        }
+        if (matchedNotice) matchedNotice.classList.add('hidden');
+        if (mismatchedSec) mismatchedSec.classList.remove('hidden');
+        if (actualCashVisible) {
+            actualCashVisible.focus();
+            onShiftActualCashInput();
+        }
+    }
+}
+
+function onShiftActualCashInput() {
+    const expectedEl = document.getElementById('expected-drawer-val');
+    const actualInput = document.getElementById('cs-actual-cash-input');
+    const hiddenActual = document.getElementById('cs-actual-cash');
+    const diffBadge = document.getElementById('cs-diff-badge');
+    const diffAmount = document.getElementById('cs-diff-amount');
+    const adminAuthBox = document.getElementById('cs-admin-auth-box');
+    const adminPassInput = document.getElementById('cs-admin-password');
+
+    const expected = expectedEl ? parseFloat(expectedEl.dataset.expected || '0') : 0;
+    const actual = actualInput ? parseFloat(actualInput.value || '0') : 0;
+    if (hiddenActual) hiddenActual.value = actual;
+
+    const diff = actual - expected;
+
+    if (Math.abs(diff) <= 0.01) {
+        if (diffBadge) diffBadge.className = 'p-2.5 rounded-xl text-xs font-bold flex items-center justify-between bg-emerald-50 text-emerald-800 border border-emerald-200';
+        if (diffAmount) diffAmount.textContent = '0.00 ج.م (مطابق تماماً)';
+        if (adminAuthBox) adminAuthBox.classList.add('hidden');
+        if (adminPassInput) adminPassInput.required = false;
+    } else if (diff < 0) {
+        if (diffBadge) diffBadge.className = 'p-2.5 rounded-xl text-xs font-bold flex items-center justify-between bg-rose-50 text-rose-800 border border-rose-200';
+        if (diffAmount) diffAmount.textContent = `عجز: ${Math.abs(diff).toFixed(2)} ج.م -`;
+        if (adminAuthBox) adminAuthBox.classList.remove('hidden');
+        if (adminPassInput) adminPassInput.required = true;
+    } else {
+        if (diffBadge) diffBadge.className = 'p-2.5 rounded-xl text-xs font-bold flex items-center justify-between bg-indigo-50 text-indigo-800 border border-indigo-200';
+        if (diffAmount) diffAmount.textContent = `زيادة: +${diff.toFixed(2)} ج.م`;
+        if (adminAuthBox) adminAuthBox.classList.remove('hidden');
+        if (adminPassInput) adminPassInput.required = true;
+    }
+}
+
+function validateCloseShiftForm(e) {
+    const actualCash = parseFloat(document.getElementById('cs-actual-cash').value || '0');
+    const expected = parseFloat(document.getElementById('expected-drawer-val')?.dataset.expected || '0');
+    const diff = Math.abs(actualCash - expected);
+
+    if (diff > 0.01) {
+        const pass = document.getElementById('cs-admin-password')?.value;
+        if (!pass) {
+            e.preventDefault();
+            alert('يوجد فارق في النقدية بالدرج! يلزم إدخال كلمة سر الأدمن للموافقة على الإغلاق بفارق.');
+            return false;
+        }
+    }
+    return true;
+}
+
+// ── EDIT SESSION TIME HANDLERS ──
+function openEditSessionTimeForActiveDeal() {
+    if (!activeDeal) return;
+    openEditSessionModal(
+        activeDeal.id,
+        activeDeal.started_at,
+        activeDeal.ended_at || '',
+        activeDeal.room ? activeDeal.room.id : null,
+        activeDeal.applied_price || 0
+    );
+}
+
+function toLocalDatetimeString(dateObj) {
+    const d = new Date(dateObj);
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function openEditSessionModal(dealId, startedAt, endedAt, roomId, appliedPrice) {
+    document.getElementById('es-deal-id').value = dealId;
+
+    const startInput = document.getElementById('es-started-at');
+    if (startInput) {
+        startInput.value = startedAt ? toLocalDatetimeString(startedAt) : toLocalDatetimeString(new Date());
+    }
+
+    const endInput = document.getElementById('es-ended-at');
+    if (endInput) {
+        endInput.value = endedAt ? toLocalDatetimeString(endedAt) : '';
+    }
+
+    const roomSelect = document.getElementById('es-room-id');
+    if (roomSelect && roomId) {
+        roomSelect.value = roomId;
+    }
+
+    const priceInput = document.getElementById('es-applied-price');
+    if (priceInput) {
+        priceInput.value = appliedPrice || '';
+    }
+
+    openModal('modal-edit-session');
+}
+
+function adjustEditStartedTime(minutesDelta) {
+    const startInput = document.getElementById('es-started-at');
+    if (!startInput) return;
+    const currentVal = startInput.value ? new Date(startInput.value) : new Date();
+    currentVal.setMinutes(currentVal.getMinutes() + minutesDelta);
+    startInput.value = toLocalDatetimeString(currentVal);
+}
+
+function resetEditStartedTimeToNow() {
+    const startInput = document.getElementById('es-started-at');
+    if (startInput) startInput.value = toLocalDatetimeString(new Date());
+}
+
+function submitEditSession(e) {
+    e.preventDefault();
+    const dealId = document.getElementById('es-deal-id').value;
+    if (!dealId) return;
+
+    const startedAt = document.getElementById('es-started-at').value;
+    const endedAt = document.getElementById('es-ended-at').value;
+    const roomId = document.getElementById('es-room-id').value;
+    const appliedPrice = document.getElementById('es-applied-price').value;
+
+    fetch(`${APP_URL}/cashier/deals/${dealId}/update-session`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+        },
+        body: JSON.stringify({
+            started_at: startedAt,
+            ended_at: endedAt || null,
+            room_id: roomId || null,
+            applied_price: appliedPrice ? parseFloat(appliedPrice) : null,
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            closeModal('modal-edit-session');
+            alert(data.message || 'تم تحديث ميعاد الجلسة بنجاح.');
+            if (activeDeal && activeDeal.id == dealId) {
+                loadDealDetails(dealId);
+            }
+            // Update running timer attribute on page
+            const timerEl = document.querySelector(`[data-deal-id="${dealId}"] .active-deal-timer`);
+            if (timerEl) {
+                timerEl.dataset.started = startedAt;
+            }
+        } else {
+            alert(data.message || 'تعذر تعديل الجلسة.');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('حدث خطأ أثناء تعديل بيانات الجلسة.');
+    });
+}
+
+function cancelCurrentSession() {
+    const dealId = document.getElementById('es-deal-id').value;
+    if (!dealId || !confirm('هل أنت متأكد من إلغاء هذه الجلسة بالكامل؟')) return;
+
+    fetch(`${APP_URL}/cashier/deals/${dealId}/cancel-session`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        closeModal('modal-edit-session');
+        alert('تم إلغاء الجلسة بنجاح.');
+        window.location.reload();
+    })
+    .catch(err => {
+        console.error(err);
+        alert('حدث خطأ أثناء إلغاء الجلسة.');
+    });
+}
+
+// ── ITEM-LEVEL DISCOUNT HANDLERS ──
+function openItemDiscountModal(itemId, encodedItemName, quantity, unitPrice, currentDiscount) {
+    let itemName = encodedItemName ? decodeURIComponent(encodedItemName) : '';
+    let qty = quantity !== undefined ? parseInt(quantity) : 1;
+    let price = unitPrice !== undefined ? parseFloat(unitPrice) : 0;
+    let currDisc = currentDiscount !== undefined ? parseFloat(currentDiscount || 0) : 0;
+
+    if (activeDeal && activeDeal.order && activeDeal.order.items) {
+        const item = activeDeal.order.items.find(i => i.id == itemId);
+        if (item) {
+            itemName = item.name;
+            qty = parseInt(item.quantity) || 1;
+            price = parseFloat(item.unit_price) || 0;
+            currDisc = parseFloat(item.discount_amount || 0);
+        }
+    }
+
+    document.getElementById('idm-item-id').value = itemId;
+    document.getElementById('idm-item-name').textContent = itemName;
+    document.getElementById('idm-quantity').value = qty;
+    document.getElementById('idm-unit-price').value = price;
+
+    const originalTotal = (qty * price).toFixed(2);
+    document.getElementById('idm-item-calc').textContent = `${qty} × ${price.toFixed(2)} ج.م`;
+    document.getElementById('idm-original-total').textContent = `${originalTotal} ج.م`;
+
+    const unitDisc = qty > 0 ? (currDisc / qty) : 0;
+    document.getElementById('idm-total-discount').value = currDisc > 0 ? currDisc.toFixed(2) : '';
+    document.getElementById('idm-unit-discount').value = unitDisc > 0 ? unitDisc.toFixed(2) : '';
+
+    updateItemDiscountPreview(currDisc);
+    openModal('modal-item-discount');
+}
+
+function onUnitDiscountInput(val) {
+    const qty = parseInt(document.getElementById('idm-quantity').value || '1');
+    const unitDisc = parseFloat(val || 0);
+    const totalDisc = Math.max(0, unitDisc * qty);
+
+    const totalInput = document.getElementById('idm-total-discount');
+    if (totalInput) totalInput.value = totalDisc > 0 ? totalDisc.toFixed(2) : '';
+
+    updateItemDiscountPreview(totalDisc);
+}
+
+function onTotalDiscountInput(val) {
+    const qty = parseInt(document.getElementById('idm-quantity').value || '1');
+    const totalDisc = parseFloat(val || 0);
+    const unitDisc = qty > 0 ? (totalDisc / qty) : 0;
+
+    const unitInput = document.getElementById('idm-unit-discount');
+    if (unitInput) unitInput.value = unitDisc > 0 ? unitDisc.toFixed(2) : '';
+
+    updateItemDiscountPreview(totalDisc);
+}
+
+function setItemDiscountZero() {
+    document.getElementById('idm-unit-discount').value = '';
+    document.getElementById('idm-total-discount').value = '';
+    updateItemDiscountPreview(0);
+}
+
+function setQuickUnitDiscount(val) {
+    document.getElementById('idm-unit-discount').value = val;
+    onUnitDiscountInput(val);
+}
+
+function updateItemDiscountPreview(totalDisc) {
+    const qty = parseInt(document.getElementById('idm-quantity').value || '1') || 1;
+    const unitPrice = parseFloat(document.getElementById('idm-unit-price').value || '0') || 0;
+    const origTotal = qty * unitPrice;
+    const netTotal = Math.max(0, origTotal - totalDisc);
+    const unitDisc = qty > 0 ? (totalDisc / qty) : 0;
+
+    document.getElementById('idm-discount-explain').textContent = `خصم: ${totalDisc.toFixed(2)} ج.م (${unitDisc.toFixed(2)} ج.م/قطعة)`;
+    document.getElementById('idm-net-total').textContent = `${netTotal.toFixed(2)} ج.م`;
+}
+
+function submitItemDiscount(e) {
+    e.preventDefault();
+    if (!activeDeal || !activeDeal.order) {
+        alert('لا توجد فاتورة نشطة لتطبيق الخصم عليها.');
+        return;
+    }
+
+    const itemId = document.getElementById('idm-item-id').value;
+    const totalDisc = parseFloat(document.getElementById('idm-total-discount').value || '0');
+
+    fetch(`${APP_URL}/cashier/orders/${activeDeal.order.id}/item-discount`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+        },
+        body: JSON.stringify({
+            item_id: parseInt(itemId),
+            discount_amount: totalDisc,
+        })
+    })
+    .then(async res => {
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'تعذر تطبيق الخصم.');
+        return data;
+    })
+    .then(data => {
+        closeModal('modal-item-discount');
+        loadDealDetails(activeDeal.id);
+    })
+    .catch(err => {
+        console.error(err);
+        alert(err.message || 'حدث خطأ أثناء تطبيق الخصم.');
+    });
+}
+
+
 </script>
 </body>
 </html>

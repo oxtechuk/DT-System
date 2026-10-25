@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\WorkspaceType;
 use App\Models\PricingRule;
 use App\Models\Room;
 use App\Models\Setting;
+use App\Models\WorkspaceType;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -35,10 +35,12 @@ class SystemSetupSeeder extends Seeder
 
     private function seedPricingRules(): void
     {
-        $shared  = WorkspaceType::where('code', 'shared')->first();
+        $shared = WorkspaceType::where('code', 'shared')->first();
         $private = WorkspaceType::where('code', 'private')->first();
 
-        if (!$shared || !$private) return;
+        if (! $shared || ! $private) {
+            return;
+        }
 
         $from = Carbon::today()->startOfYear()->toDateString();
 
@@ -112,7 +114,10 @@ class SystemSetupSeeder extends Seeder
             ['key' => 'affiliate_discount_value', 'value' => '20',                                 'type' => 'string', 'group' => 'general'],
             ['key' => 'app_banner_title',     'value' => 'فعاليات وورش عمل DDT',                  'type' => 'string', 'group' => 'branding'],
             ['key' => 'app_banner_subtitle',  'value' => 'أكثر من مكان.. مجتمع بيكبر معاك • ورش عمل وجلسات تشبيك', 'type' => 'string', 'group' => 'branding'],
-            ['key' => 'app_banner_button_text','value' => 'تصفح الفعاليات',                       'type' => 'string', 'group' => 'branding'],
+            ['key' => 'app_banner_button_text', 'value' => 'تصفح الفعاليات',                       'type' => 'string', 'group' => 'branding'],
+            // Teacher Commission Settings
+            ['key' => 'teacher_visit_base_value',         'value' => '100',                      'type' => 'string', 'group' => 'teacher'],
+            ['key' => 'teacher_default_commission_rate',  'value' => '10',                       'type' => 'string', 'group' => 'teacher'],
         ];
 
         foreach ($defaults as $setting) {

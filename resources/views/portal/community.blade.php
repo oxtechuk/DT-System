@@ -70,34 +70,7 @@
             </div>
         </div>
     @else
-        <div class="solid-card rounded-[26px] p-5 relative overflow-hidden border border-[#E5E2DC]">
-            <div class="flex items-center justify-between">
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-[#4E8F35] animate-pulse"></span>
-                        <h1 class="text-base font-black text-[#303334]">{{ $bannerTitle }}</h1>
-                    </div>
-                    <p class="text-xs text-[#73777A] font-medium">
-                        {{ $bannerSubtitle }}
-                    </p>
-                </div>
-                <div class="w-11 h-11 rounded-2xl bg-[#EBF4E8] text-[#4E8F35] flex items-center justify-center font-bold border border-[#DCE8D4] shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Quick Stats Chips -->
-            <div class="flex items-center gap-2 mt-3 pt-3 border-t border-[#E5E2DC] text-[11px] text-[#73777A]">
-                <span class="px-2.5 py-1 rounded-full bg-[#F5F3EE] text-[#303334] font-bold border border-[#E5E2DC]">
-                    {{ $events->count() }} فعالية متاحة
-                </span>
-                <span class="px-2.5 py-1 rounded-full bg-[#EBF4E8] text-[#4E8F35] font-bold border border-[#DCE8D4]">
-                    مجاناً لأعضاء DDT
-                </span>
-            </div>
-        </div>
+       
     @endif
 
     <!-- 2. Search & Category Filter Bar (Sticky) -->

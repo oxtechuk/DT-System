@@ -23,8 +23,8 @@ class DealController extends Controller
             'customer:id,full_name,phone',
             'room:id,name,code,color',
             'workspaceType:id,name,code',
-            'order:id,deal_id,total,paid_amount,remaining_amount,status',
-            'order.items:id,order_id,name,quantity,unit_price,total,item_type',
+            'order:id,deal_id,subtotal,discount,total,paid_amount,remaining_amount,status',
+            'order.items:id,order_id,name,quantity,unit_price,discount_amount,total,item_type',
         ]);
 
         if ($status = $request->get('status')) {
@@ -59,8 +59,8 @@ class DealController extends Controller
                 'customer:id,full_name,phone',
                 'room:id,name,code,color',
                 'workspaceType:id,name,code',
-                'order:id,deal_id,total,paid_amount,remaining_amount,status',
-                'order.items:id,order_id,name,quantity,unit_price,total,item_type',
+                'order:id,deal_id,subtotal,discount,total,paid_amount,remaining_amount,status',
+                'order.items:id,order_id,name,quantity,unit_price,discount_amount,total,item_type',
             ])
             ->orderBy('started_at')
             ->get();
@@ -139,14 +139,39 @@ class DealController extends Controller
     // DELETE /api/v1/deals/{deal}/items/{item}
     // Remove an item from the deal's order.
     // ──────────────────────────────────────────────────────
-    public function removeItem(Deal $deal, int $itemId): JsonResponse
+    public function removeItem(Deal $deal, int $item): JsonResponse
     {
-        $this->dealService->removeItem($deal, $itemId);
+        $this->dealService->removeItem($deal, $item);
 
         $deal->order->refresh();
 
         return response()->json([
             'message' => 'Item removed.',
+            'order' => $this->formatOrder($deal->order),
+        ]);
+    }
+
+    // ──────────────────────────────────────────────────────
+    // POST /cashier/deals/{deal}/items/{item}/quantity
+    // Update quantity of an item from Cashier POS.
+    // ──────────────────────────────────────────────────────
+    public function updateItem(Request $request, Deal $deal, int $item): JsonResponse
+    {
+        $validated = $request->validate([
+            'quantity' => 'required|integer|min:0',
+        ]);
+
+        if ($validated['quantity'] === 0) {
+            $this->dealService->removeItem($deal, $item);
+        } else {
+            $this->dealService->updateItemQuantity($deal, $item, $validated['quantity']);
+        }
+
+        $deal->order->refresh();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم تحديث الكمية بنجاح.',
             'order' => $this->formatOrder($deal->order),
         ]);
     }
@@ -237,6 +262,7 @@ class DealController extends Controller
                 'type' => $i->item_type,
                 'quantity' => $i->quantity,
                 'unit_price' => $i->unit_price,
+                'discount_amount' => $i->discount_amount,
                 'total' => $i->total,
             ]),
             'payments' => $order->payments?->map(fn ($p) => [

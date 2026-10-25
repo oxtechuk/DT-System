@@ -10,108 +10,119 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
- /**
- * Show the unified login form.
- */
- public function showLogin()
- {
- // If staff user is logged in
- if (Auth::guard('web')->check()) {
- $user = Auth::guard('web')->user();
- if ($user->relationLoaded('roles') || method_exists($user, 'roles')) {
- $roles = $user->roles()->pluck('slug')->toArray();
- if (in_array('cashier', $roles) || in_array('reception', $roles)) {
- return redirect()->route('cashier');
- }
- }
- return redirect()->route('root');
- }
+    /**
+     * Show the unified login form.
+     */
+    public function showLogin()
+    {
+        // If staff user is logged in
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
+            if ($user->teacher()->exists() || $user->isTeacher()) {
+                return redirect()->route('teacher.dashboard');
+            }
+            if ($user->relationLoaded('roles') || method_exists($user, 'roles')) {
+                $roles = $user->roles()->pluck('slug')->toArray();
+                if (in_array('cashier', $roles) || in_array('reception', $roles)) {
+                    return redirect()->route('cashier');
+                }
+            }
 
- // If customer is logged in
- if (Auth::guard('customer')->check()) {
- return redirect()->route('portal.home');
- }
+            return redirect()->route('root');
+        }
 
- return view('auth.login');
- }
+        // If customer is logged in
+        if (Auth::guard('customer')->check()) {
+            return redirect()->route('portal.home');
+        }
 
- /**
- * Handle unified authentication attempt.
- * Automatically routes Staff/Admin to Dashboard, Cashier to POS, and Customer to Portal.
- */
- public function login(Request $request)
- {
- $request->validate([
- 'login' => ['sometimes', 'string'],
- 'email' => ['sometimes', 'string'],
- 'password' => ['required', 'string'],
- ], [
- 'password.required' => 'يرجى إدخال كلمة المرور',
- ]);
+        return view('auth.login');
+    }
 
- $loginInput = trim($request->input('login') ?: $request->input('email'));
- $password = $request->input('password');
- $remember = $request->boolean('remember');
+    /**
+     * Handle unified authentication attempt.
+     * Automatically routes Staff/Admin to Dashboard, Cashier to POS, and Customer to Portal.
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'login' => ['sometimes', 'string'],
+            'email' => ['sometimes', 'string'],
+            'password' => ['required', 'string'],
+        ], [
+            'password.required' => 'يرجى إدخال كلمة المرور',
+        ]);
 
- if (empty($loginInput)) {
- return back()->withErrors(['login' => 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف'])->onlyInput('login');
- }
+        $loginInput = trim($request->input('login') ?: $request->input('email'));
+        $password = $request->input('password');
+        $remember = $request->boolean('remember');
 
- // ── 1. Check Staff / Admin / Cashier in `users` table ──
- $staffUser = User::where('email', $loginInput)->first();
+        if (empty($loginInput)) {
+            return back()->withErrors(['login' => 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف'])->onlyInput('login');
+        }
 
- if ($staffUser && Hash::check($password, $staffUser->password)) {
- Auth::guard('web')->login($staffUser, $remember);
- $request->session()->regenerate();
+        // ── 1. Check Staff / Admin / Teacher / Cashier in `users` table (by email or phone) ──
+        $staffUser = User::where('email', $loginInput)
+            ->orWhere('phone', $loginInput)
+            ->first();
 
- // Check roles for redirection
- $roles = $staffUser->roles()->pluck('slug')->toArray();
- if (in_array('cashier', $roles) || in_array('reception', $roles)) {
- return redirect()->intended(route('cashier'));
- }
+        if ($staffUser && Hash::check($password, $staffUser->password)) {
+            Auth::guard('web')->login($staffUser, $remember);
+            $request->session()->regenerate();
 
- return redirect()->intended(route('root'));
- }
+            // Redirect teacher directly to teacher dashboard
+            if ($staffUser->teacher()->exists() || $staffUser->isTeacher()) {
+                return redirect()->intended(route('teacher.dashboard'));
+            }
 
- // ── 2. Check Customer in `customers` table (by phone or email) ──
- $customer = Customer::where('phone', $loginInput)
- ->orWhere('email', $loginInput)
- ->first();
+            // Check roles for redirection
+            $roles = $staffUser->roles()->pluck('slug')->toArray();
+            if (in_array('cashier', $roles) || in_array('reception', $roles)) {
+                return redirect()->intended(route('cashier'));
+            }
 
- if ($customer && !empty($customer->password) && Hash::check($password, $customer->password)) {
- if ($customer->status === 'blocked') {
- return back()->withErrors([
- 'login' => 'الحساب معطل حالياً، يرجى مراجعة إدارة مساحة العمل.'
- ])->onlyInput('login');
- }
+            return redirect()->intended(route('root'));
+        }
 
- Auth::guard('customer')->login($customer, $remember);
- $request->session()->regenerate();
+        // ── 2. Check Customer in `customers` table (by phone or email) ──
+        $customer = Customer::where('phone', $loginInput)
+            ->orWhere('email', $loginInput)
+            ->first();
 
- return redirect()->intended(route('portal.home'));
- }
+        if ($customer && ! empty($customer->password) && Hash::check($password, $customer->password)) {
+            if ($customer->status === 'blocked') {
+                return back()->withErrors([
+                    'login' => 'الحساب معطل حالياً، يرجى مراجعة إدارة مساحة العمل.',
+                ])->onlyInput('login');
+            }
 
- return back()->withErrors([
- 'login' => 'بيانات الدخول غير صحيحة، يرجى التأكد من البريد أو رقم الهاتف وكلمة المرور.',
- ])->onlyInput('login');
- }
+            Auth::guard('customer')->login($customer, $remember);
+            $request->session()->regenerate();
 
- /**
- * Log out all guards.
- */
- public function logout(Request $request)
- {
- if (Auth::guard('web')->check()) {
- Auth::guard('web')->logout();
- }
+            return redirect()->intended(route('portal.home'));
+        }
 
- if (Auth::guard('customer')->check()) {
- Auth::guard('customer')->logout();
- }
+        return back()->withErrors([
+            'login' => 'بيانات الدخول غير صحيحة، يرجى التأكد من البريد أو رقم الهاتف وكلمة المرور.',
+        ])->onlyInput('login');
+    }
 
- $request->session()->invalidate();
- $request->session()->regenerateToken();
+    /**
+     * Log out all guards.
+     */
+    public function logout(Request $request)
+    {
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
+        }
 
- return redirect()->route('login');
- }
+        if (Auth::guard('customer')->check()) {
+            Auth::guard('customer')->logout();
+        }
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
 }

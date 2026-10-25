@@ -266,6 +266,14 @@
                                     <span>التقارير وساعات الذروة</span>
                                 </span>
                             </a>
+
+                            @php $isSubActive = request()->is('admin/teachers/commissions*'); @endphp
+                            <a href="{{ route('admin.teachers.commissions') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>تقرير أفيليت وعمولات المدرسين</span>
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </li>
@@ -318,6 +326,15 @@
                                     <span>الفريق والصلاحيات</span>
                                 </span>
                                 <span class="text-[8px] px-1 py-0.2 rounded font-bold bg-[#1E3A8A] text-[#93C5FD] border border-[#1D4ED8]">NEW</span>
+                            </a>
+
+                            @php $isSubActive = request()->is('admin/teachers*') && !request()->is('admin/teachers/commissions*'); @endphp
+                            <a href="{{ route('admin.teachers.index') }}" class="nav-sub-link {{ $isSubActive ? 'nav-sub-active' : '' }}">
+                                <span class="flex items-center gap-1.5">
+                                    <span class="sub-dot"></span>
+                                    <span>المدرسين والأفيليت (QR ونسب الكوميشن)</span>
+                                </span>
+                                <span class="text-[8px] px-1 py-0.2 rounded font-bold bg-[#4E8F35] text-white">QR</span>
                             </a>
                         </div>
                     </div>

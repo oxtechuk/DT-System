@@ -7,12 +7,14 @@ use App\Models\CashierAlertLog;
 use App\Models\CashierAlertSchedule;
 use App\Models\Customer;
 use App\Models\Deal;
+use App\Models\Expense;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Room;
 use App\Models\Shift;
 use App\Models\WorkspaceType;
+use App\Services\DealPricingService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -66,6 +68,15 @@ class CashierController extends Controller
             ->sum(fn ($d) => $d->order ? $d->order->total : 0);
         $totalUnpaidDebtValue = (float) $unpaidClosedDeals->sum(fn ($d) => $d->order ? $d->order->remaining_amount : 0);
 
+        // ── Expected Cash in Drawer for Current Shift ──
+        $expectedDrawerCash = 0.0;
+        if ($currentShift) {
+            $shiftPayments = Payment::where('paid_at', '>=', $currentShift->opened_at)->get();
+            $shiftCashSales = (float) $shiftPayments->where('method', 'cash')->where('type', 'income')->sum('amount');
+            $shiftExpenses = (float) (Expense::where('created_at', '>=', $currentShift->opened_at)->sum('amount') ?? 0);
+            $expectedDrawerCash = (float) $currentShift->opening_cash + $shiftCashSales - $shiftExpenses;
+        }
+
         return view('cashier.index', [
             'rooms' => $rooms,
             'products' => $products,
@@ -73,6 +84,7 @@ class CashierController extends Controller
             'activeCustomerIds' => $activeCustomerIds,
             'workspaceTypes' => $workspaceTypes,
             'currentShift' => $currentShift,
+            'expectedDrawerCash' => $expectedDrawerCash,
             'activeDeals' => $activeDeals,
             'unpaidClosedDeals' => $unpaidClosedDeals,
             'paidDealsToday' => $paidDealsToday,
@@ -131,6 +143,22 @@ class CashierController extends Controller
                 ]);
             }
             $deal->order->recalculate();
+        } elseif ($deal->status === 'closed' && $endedAt) {
+            $pricingService = app(DealPricingService::class);
+            $calc = $pricingService->calculate($deal, $endedAt);
+            $deal->update([
+                'billable_duration_minutes' => $calc['billable_minutes'],
+                'pricing_rule_id' => $calc['pricing_rule_id'],
+                'applied_price' => $calc['price'],
+            ]);
+            $sessionItem = $deal->order?->items()->where('item_type', 'session')->first();
+            if ($sessionItem) {
+                $sessionItem->update([
+                    'unit_price' => $calc['price'],
+                    'total' => $calc['price'],
+                ]);
+                $deal->order->recalculate();
+            }
         }
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -169,13 +197,17 @@ class CashierController extends Controller
      */
     public function applyItemDiscount(Request $request, Order $order)
     {
+        $itemId = $request->input('item_id');
+        if (empty($itemId)) {
+            $itemId = null;
+        }
+
         $validated = $request->validate([
-            'item_id' => 'nullable|exists:order_items,id',
             'discount_amount' => 'required|numeric|min:0',
         ]);
 
-        if (! empty($validated['item_id'])) {
-            $item = $order->items()->findOrFail($validated['item_id']);
+        if (! empty($itemId)) {
+            $item = $order->items()->findOrFail($itemId);
             $disc = (float) $validated['discount_amount'];
             $newTotal = max(0, ($item->unit_price * $item->quantity) - $disc);
             $item->update([
@@ -202,6 +234,13 @@ class CashierController extends Controller
      */
     public function payCustomOrder(Request $request, Order $order)
     {
+        if (! $request->has('paid_amount') && $request->has('amount')) {
+            $request->merge(['paid_amount' => $request->input('amount')]);
+        }
+        if (! $request->has('payment_method') && $request->has('method')) {
+            $request->merge(['payment_method' => $request->input('method')]);
+        }
+
         $validated = $request->validate([
             'paid_amount' => 'required|numeric|min:0.01',
             'payment_method' => 'required|string|in:cash,instapay,wallet,card,other',

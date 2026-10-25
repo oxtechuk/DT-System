@@ -3,15 +3,20 @@
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HubSpotController;
 use App\Http\Controllers\Admin\StaffNotificationController;
+use App\Http\Controllers\Admin\TeacherAdminController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\DealController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\Customer\PortalAuthController;
 use App\Http\Controllers\Customer\PortalController;
+use App\Http\Controllers\QrScanController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\Teacher\TeacherController;
 use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
@@ -106,6 +111,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('cashier')->name('cashier.')->group(function () {
         Route::get('portal-orders', [CashierController::class, 'getPortalOrders'])->name('portal-orders');
         Route::post('orders/{order}/fulfillment', [CashierController::class, 'updateFulfillmentStatus'])->name('orders.fulfillment');
+        // POS Realtime Deals & Customer Endpoints
+        Route::get('customers/search', [CustomerController::class, 'index'])->name('customers.search');
+        Route::post('customers/quick', [CustomerController::class, 'store'])->name('customers.quick');
+        Route::get('deals/{deal}', [DealController::class, 'show'])->name('deals.show');
+        Route::post('deals', [DealController::class, 'store'])->name('deals.store');
+        Route::post('deals/{deal}/close', [DealController::class, 'close'])->name('deals.close');
+        Route::post('deals/{deal}/pay', [DealController::class, 'pay'])->name('deals.pay');
+        Route::post('deals/{deal}/items', [DealController::class, 'addItem'])->name('deals.add-item');
+        Route::delete('deals/{deal}/items/{item}', [DealController::class, 'removeItem'])->name('deals.remove-item');
+        Route::post('deals/{deal}/items/{item}/quantity', [DealController::class, 'updateItem'])->name('deals.update-item-qty');
         Route::get('customers/{customer}/history', [CashierController::class, 'getCustomerHistory'])->name('customers.history');
         Route::post('customers/{customer}/notes', [CashierController::class, 'updateCustomerNotes'])->name('customers.notes');
 
@@ -198,6 +213,7 @@ Route::prefix('app')->group(function () {
         Route::get('loyalty', [PortalController::class, 'loyalty'])->name('portal.loyalty');
         Route::get('profile', [PortalController::class, 'profile'])->name('portal.profile');
         Route::post('profile', [PortalController::class, 'updateProfile'])->name('portal.profile.update');
+        Route::get('teacher-portal', [PortalController::class, 'teacherPortal'])->name('portal.teacher');
         Route::post('feedback', [PortalController::class, 'submitFeedback'])->name('portal.feedback');
         Route::post('report-problem', [PortalController::class, 'reportProblem'])->name('portal.report-problem');
     });
@@ -207,3 +223,36 @@ Route::prefix('app')->group(function () {
 // 10. Standard Fallback Handler (Replaces legacy theme wildcard routes)
 // =========================================================================
 Route::fallback([RoutingController::class, 'notFound']);
+
+// =========================================================================
+// 11. QR Code Scanner — Public (No Auth Required)
+// =========================================================================
+Route::prefix('scan')->name('scan.')->group(function () {
+    Route::get('{qr_code}', [QrScanController::class, 'show'])->name('show');
+    Route::post('{qr_code}/register', [QrScanController::class, 'register'])->name('register');
+    Route::get('{qr_code}/success', [QrScanController::class, 'success'])->name('success');
+});
+
+// =========================================================================
+// 12. Teacher Dashboard Routes (Auth + teacher role)
+// =========================================================================
+Route::middleware('auth')->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('dashboard', [TeacherController::class, 'dashboard'])->name('dashboard');
+    Route::get('visits', [TeacherController::class, 'visits'])->name('visits');
+    Route::get('commissions', [TeacherController::class, 'commissions'])->name('commissions');
+    Route::get('qr-code', [TeacherController::class, 'qrCode'])->name('qr-code');
+});
+
+// =========================================================================
+// 13. Admin Teacher Management Routes
+// =========================================================================
+Route::middleware('auth')->prefix('admin/teachers')->name('admin.teachers.')->group(function () {
+    Route::get('/', [TeacherAdminController::class, 'index'])->name('index');
+    Route::post('/', [TeacherAdminController::class, 'store'])->name('store');
+    Route::get('commissions', [TeacherAdminController::class, 'commissions'])->name('commissions');
+    Route::post('settings', [TeacherAdminController::class, 'updateSettings'])->name('settings');
+    Route::get('{teacher}', [TeacherAdminController::class, 'show'])->name('show');
+    Route::put('{teacher}', [TeacherAdminController::class, 'update'])->name('update');
+    Route::delete('{teacher}', [TeacherAdminController::class, 'destroy'])->name('destroy');
+    Route::post('{teacher}/pay', [TeacherAdminController::class, 'pay'])->name('pay');
+});

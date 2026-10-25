@@ -44,6 +44,31 @@
         </div>
     </div>
 
+    @if($customer->isTeacher())
+        @php
+            $teacherObj = $customer->teacher();
+        @endphp
+        <!-- Teacher Profile Badge & Action -->
+        <div class="solid-card rounded-[26px] p-4.5 bg-gradient-to-r from-white via-white to-[#EBF4E8] border border-[#DCE8D4] flex items-center justify-between gap-3 shadow-xs">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-[#4E8F35] text-white flex items-center justify-center font-bold shadow-xs flex-shrink-0">
+                    🎓
+                </div>
+                <div>
+                    <h3 class="text-xs font-black text-[#303334]">أنت مسجل كمدرس معتمد</h3>
+                    <p class="text-[11px] text-[#738276] mt-0.5">
+                        نسبة عمولتك: <strong class="text-[#4E8F35] font-bold">{{ $teacherObj->commission_rate }}%</strong> • كودك: <strong class="font-mono text-[#303334]">{{ $teacherObj->qr_code }}</strong>
+                    </p>
+                </div>
+            </div>
+
+            <a href="{{ route('portal.teacher') }}" 
+               class="px-4 py-2 rounded-full bg-[#4E8F35] hover:bg-[#3F742B] text-white text-xs font-bold shadow-xs transition active:scale-95 flex-shrink-0">
+                لوحة الأرباح
+            </a>
+        </div>
+    @endif
+
     <!-- Account Details Form (Solid Light Card) -->
     <div class="solid-card rounded-[26px] p-5">
         <h2 class="text-xs font-bold text-[#303334] mb-3.5">تعديل بيانات الحساب</h2>

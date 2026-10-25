@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Room;
 use App\Models\Setting;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -344,5 +345,51 @@ class PortalController extends Controller
         ]);
 
         return response()->json(['success' => true, 'message' => 'تم إرسال بلاغ المشكلة للكاشير وإدارة المكان وسنقوم بالمعالجة فوراً.']);
+    }
+
+    /**
+     * Teacher affiliate & commissions portal in mobile app (/app/teacher-portal).
+     */
+    public function teacherPortal(Request $request)
+    {
+        $customer = $this->currentCustomer();
+        $teacher = $customer->teacher();
+
+        if (! $teacher) {
+            return redirect()->route('portal.home')
+                ->with('error', 'هذه الصفحة مخصصة للمدرسين المعتمدين في مساحة العمل فقط.');
+        }
+
+        $search = trim((string) $request->input('q', ''));
+
+        $visitsQuery = $teacher->visits()
+            ->with(['commission', 'customer'])
+            ->when($search !== '', function ($q) use ($search) {
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('visitor_name', 'like', "%{$search}%")
+                        ->orWhere('visitor_phone', 'like', "%{$search}%");
+                });
+            })
+            ->latest('visited_at');
+
+        $visits = $visitsQuery->paginate(20)->withQueryString();
+
+        $commissions = $teacher->commissions()
+            ->with('visit')
+            ->latest()
+            ->take(15)
+            ->get();
+
+        $now = now();
+        $stats = [
+            'total_students' => $teacher->totalVisits(),
+            'month_students' => $teacher->visits()->whereMonth('visited_at', $now->month)->whereYear('visited_at', $now->year)->count(),
+            'today_students' => $teacher->visits()->whereDate('visited_at', $now->toDateString())->count(),
+            'total_earnings' => $teacher->totalEarnings(),
+            'pending_commission' => $teacher->pendingCommission(),
+            'commission_rate' => (float) $teacher->commission_rate,
+        ];
+
+        return view('portal.teacher', compact('customer', 'teacher', 'visits', 'commissions', 'stats', 'search'));
     }
 }

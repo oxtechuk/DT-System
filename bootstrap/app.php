@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,11 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->statefulApi();
         $middleware->trustProxies(at: '*');
-        $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
+        $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->is('app*')) {
                 return route('portal.login');
             }
+
             return route('login');
         });
     })
